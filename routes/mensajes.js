@@ -200,6 +200,27 @@ estudiante.delete('/mensajes/:id', async (req, res) => {
   }
 });
 
+// Editar un posteo o comentario PROPIO (los privados no se editan).
+estudiante.put('/mensajes/:id', async (req, res) => {
+  try {
+    const id = leerId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'Mensaje inválido.' });
+    const t = leerTexto(req.body);
+    if (t.error) return res.status(400).json({ error: t.error });
+    const yo = await miFila(req);
+    if (!yo) return res.status(404).json({ error: 'No encontramos tus datos en este curso.' });
+    const up = await pool.query(
+      `UPDATE mensajes SET texto = $1
+       WHERE id = $2 AND comision_id = $3 AND student_id = $4 AND autor = 'estudiante' AND tipo IN ('tablon','comentario')
+       RETURNING id`, [t.texto, id, req.estudiante.comisionId, yo.student_id]);
+    if (!up.rows.length) return res.status(404).json({ error: 'No podés editar ese mensaje.' });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'No se pudo editar el mensaje.' });
+  }
+});
+
 // ── Avisos push (estudiante) ──
 estudiante.get('/push/config', (req, res) => res.json({ habilitado: push.habilitado(), publicKey: push.publicKey() }));
 
@@ -362,6 +383,26 @@ docente.post('/comentario', async (req, res) => {
 });
 
 // Moderación: borrar un posteo o comentario (de cualquier autor) de una comisión propia.
+// El docente solo edita lo que escribió él (los posteos de estudiantes se pueden eliminar, no reescribir).
+docente.put('/mensaje/:id', async (req, res) => {
+  try {
+    const id = leerId(req.params.id);
+    if (!id) return res.status(400).json({ error: 'Mensaje inválido.' });
+    const t = leerTexto(req.body);
+    if (t.error) return res.status(400).json({ error: t.error });
+    const up = await pool.query(
+      `UPDATE mensajes SET texto = $1
+       WHERE id = $2 AND autor = 'docente' AND tipo IN ('tablon','comentario')
+         AND comision_id IN (SELECT id FROM comisiones WHERE docente_id = $3)
+       RETURNING id`, [t.texto, id, req.docenteId]);
+    if (!up.rows.length) return res.status(404).json({ error: 'No podés editar ese mensaje.' });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'No se pudo editar el mensaje.' });
+  }
+});
+
 docente.delete('/mensaje/:id', async (req, res) => {
   try {
     const id = leerId(req.params.id);

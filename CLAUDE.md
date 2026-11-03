@@ -81,6 +81,9 @@ Plantilla en `.env.example`. **Nunca** subir `.env` ni secretos al repo.
   `post:<id>`). Al estudiante nunca se le muestran ids de otros estudiantes (solo `propio`).
 - Límites: 1000 caracteres, 5 por minuto y 60 por día por estudiante (se cuenta en `mensajes_cuota`, así borrar
   y reenviar no esquiva el límite).
+- Cada posteo/comentario propio tiene un menú ⋮ (Editar / Eliminar; `menuBtnHTML`, `toggleMsgMenu`, `editarMensaje`).
+  Editar: `PUT /api/estudiante/mensajes/:id` y `PUT /api/docente/mensajes/mensaje/:id` (el docente solo edita lo suyo y
+  puede eliminar cualquier posteo). Los avisos del docente se editan en `com.tablon`. No hay marca "editado".
 - Docente: sección **Mensajes** (conversaciones) y moderación en Inicio (comentar y eliminar). Al publicar un
   aviso se llama a `POST /api/docente/mensajes/aviso-publicado` para notificar a los estudiantes.
 - Push: en iPhone requiere iOS ≥ 16.4 y la app agregada a la pantalla de inicio. Service worker `VERSION` = v4.

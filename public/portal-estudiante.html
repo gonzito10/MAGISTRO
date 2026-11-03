@@ -231,8 +231,16 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
 .tablon-avatar.est{background:var(--green-bg);color:var(--green-text)}
 .tb-empty{text-align:center;color:var(--text3);font-size:13px}
 .tb-tag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--blue-bg);color:var(--blue-text)}
-.tb-del{border:0;background:transparent;color:var(--text3);font:inherit;font-size:12px;cursor:pointer;padding:4px 6px;margin:-4px -2px;text-decoration:underline}
-.tb-del:hover{color:var(--red-text)}
+.tb-dd{position:relative;margin-left:auto;flex-shrink:0}
+.tb-dots{border:0;background:transparent;color:var(--text3);width:32px;height:32px;border-radius:50%;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin:-6px -6px -6px 0;padding:0}
+.tb-dots:hover,.tb-dots[aria-expanded="true"]{background:var(--surface2);color:var(--text)}
+.tb-dots svg{width:18px;height:18px;fill:currentColor}
+.tb-menu{position:absolute;right:0;top:100%;z-index:30;min-width:150px;background:var(--surface);border:0.5px solid var(--border2);border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.18);padding:4px}
+.tb-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--text);font:inherit;font-size:14px;padding:10px 12px;border-radius:7px;cursor:pointer}
+.tb-menu button:hover{background:var(--surface2)}
+.tb-menu button.del{color:var(--red-text)}
+.tb-edit textarea{width:100%;min-height:72px;padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font:inherit;font-size:14px;background:var(--surface);color:var(--text);resize:vertical}
+.tb-edit-f{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
 .tb-com{margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:10px}
 .tb-com-h{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--text3)}
 .tb-com-h b{font-weight:700;color:var(--text)}
@@ -260,7 +268,10 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
 @media (max-width:700px){
   .tb-form input,.tb-comp textarea,.chat-form textarea{font-size:16px}
   .p-btn,.tb-form button{min-height:44px}
-  .tb-del{padding:14px 8px;margin:-14px -4px}
+  .tb-dots{width:44px;height:44px;margin:-10px -10px -10px 0}
+  .tb-menu button{min-height:44px}
+  .tb-edit textarea{font-size:16px}
+  .tb-edit-f button{min-height:44px}
 }
 </style>
 </head>
@@ -1111,14 +1122,14 @@ async function cargarSocial(){
 // ── Tablón ──
 function comentarioHTML(c){
   const doc = c.autor === 'docente';
-  return `<div class="tb-com"><div class="tb-com-h"><b>${escHtml(c.autorNombre || (doc ? 'Docente' : 'Estudiante'))}</b>${doc ? '<span class="tb-tag">Docente</span>' : ''}<span>${fechaHora(c.fecha)}</span>${c.propio ? `<button type="button" class="tb-del" onclick="borrarMensaje('${c.id}')">Eliminar</button>` : ''}</div><div class="tb-com-t">${escHtml(c.texto)}</div></div>`;
+  return `<div class="tb-com"><div class="tb-com-h"><b>${escHtml(c.autorNombre || (doc ? 'Docente' : 'Estudiante'))}</b>${doc ? '<span class="tb-tag">Docente</span>' : ''}<span>${fechaHora(c.fecha)}</span>${c.propio ? menuBtnHTML(c.id, true) : ''}</div><div class="tb-com-t"${c.propio ? ` data-mid="${c.id}"` : ''}>${escHtml(c.texto)}</div></div>`;
 }
 function itemHTML(it, coms){
   return `<div class="tablon-post"><div style="display:flex;gap:12px">
     <div class="tablon-avatar${it.esDocente ? '' : ' est'}">${escHtml(inicialesDe(it.autor))}</div>
     <div style="flex:1;min-width:0">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="tablon-post-author">${escHtml(it.autor)}</span>${it.esDocente ? '<span class="tb-tag">Docente</span>' : ''}${it.fecha ? `<span class="tablon-post-date">${fmtFecha(new Date(it.fecha))}</span>` : ''}${it.propio ? `<button type="button" class="tb-del" onclick="borrarMensaje('${it.id}')">Eliminar</button>` : ''}</div>
-      <div class="tablon-post-text">${escHtml(it.texto)}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="tablon-post-author">${escHtml(it.autor)}</span>${it.esDocente ? '<span class="tb-tag">Docente</span>' : ''}${it.fecha ? `<span class="tablon-post-date">${fmtFecha(new Date(it.fecha))}</span>` : ''}${it.propio ? menuBtnHTML(it.id, true) : ''}</div>
+      <div class="tablon-post-text"${it.propio ? ` data-mid="${it.id}"` : ''}>${escHtml(it.texto)}</div>
       ${coms.map(comentarioHTML).join('')}
       <form class="tb-form" data-parent="${escHtml(it.key)}" onsubmit="return enviarComentario(event,this)">
         <input type="text" maxlength="1000" placeholder="Escribí un comentario…" aria-label="Comentario" autocomplete="off">
@@ -1178,6 +1189,57 @@ async function enviarComentario(ev, form){
     inp.value = '';
     await cargarSocial();
   } catch(e) { avisoTemporal(e.message); btn.disabled = false; }
+  return false;
+}
+// ── Menú ⋮ de cada mensaje (Editar / Eliminar) ──
+function menuBtnHTML(id, puedeEditar){
+  return `<span class="tb-dd"><button type="button" class="tb-dots" aria-label="Más opciones" aria-haspopup="menu" aria-expanded="false" onclick="toggleMsgMenu(this,'${id}',${puedeEditar ? 'true' : 'false'})"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button></span>`;
+}
+function cerrarMsgMenu(){
+  document.querySelectorAll('.tb-menu').forEach(m => {
+    const b = m.parentNode.querySelector('.tb-dots'); if (b) b.setAttribute('aria-expanded', 'false');
+    m.remove();
+  });
+}
+function toggleMsgMenu(btn, id, editar){
+  const dd = btn.parentNode, abierto = dd.querySelector('.tb-menu');
+  cerrarMsgMenu();
+  if (abierto) return;
+  const m = document.createElement('div');
+  m.className = 'tb-menu'; m.setAttribute('role', 'menu');
+  m.innerHTML = (editar ? `<button type="button" role="menuitem" onclick="cerrarMsgMenu();editarMensaje('${id}')">Editar</button>` : '')
+    + `<button type="button" role="menuitem" class="del" onclick="cerrarMsgMenu();borrarMensaje('${id}')">Eliminar</button>`;
+  dd.appendChild(m);
+  btn.setAttribute('aria-expanded', 'true');
+  const f = m.querySelector('button'); if (f) f.focus();
+}
+document.addEventListener('click', e => { if (!e.target.closest('.tb-dd')) cerrarMsgMenu(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const m = document.querySelector('.tb-menu'); if (!m) return;
+  const b = m.parentNode.querySelector('.tb-dots'); cerrarMsgMenu(); if (b) b.focus();
+});
+function editarMensaje(id){
+  const el = document.querySelector('[data-mid="' + id + '"]');
+  if (!el || el.querySelector('textarea')) return;
+  const original = el.textContent;
+  el.dataset.orig = original;
+  el.innerHTML = `<form class="tb-edit" onsubmit="return guardarEdicion(event,'${id}')"><textarea maxlength="1000" aria-label="Editar mensaje"></textarea><div class="tb-edit-f"><button type="button" class="p-btn" onclick="cancelarEdicion('${id}')">Cancelar</button><button type="submit" class="p-btn primary">Guardar</button></div></form>`;
+  const ta = el.querySelector('textarea');
+  ta.value = original; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+}
+function cancelarEdicion(id){
+  const el = document.querySelector('[data-mid="' + id + '"]');
+  if (el && el.dataset.orig != null) el.textContent = el.dataset.orig;
+}
+async function guardarEdicion(ev, id){
+  ev.preventDefault();
+  const form = ev.target, ta = form.querySelector('textarea'), btn = form.querySelector('button[type=submit]');
+  const texto = ta.value.trim();
+  if (!texto) { ta.focus(); return false; }
+  btn.disabled = true;
+  try { await apiJson('/api/estudiante/mensajes/' + id, 'PUT', { texto }); await cargarSocial(); avisoTemporal('Guardado'); }
+  catch(e) { avisoTemporal(e.message); btn.disabled = false; }
   return false;
 }
 async function borrarMensaje(id){
