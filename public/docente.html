@@ -832,51 +832,57 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   #notasStats .stat-val{font-size:20px;}
   #notasStats .stat-lbl{font-size:11px;letter-spacing:0;text-transform:none;}
   #notasTableWrap thead tr.col-row{display:none;}
+  /* Cada vista muestra nro y letras; la situación solo aparece en "Final" */
   #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(3),
   #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(4),
   #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(5),
-  #notasTableWrap[data-col="p1"] tbody td:nth-child(3),
+  #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(6),
   #notasTableWrap[data-col="p1"] tbody td:nth-child(4),
   #notasTableWrap[data-col="p1"] tbody td:nth-child(5),
   #notasTableWrap[data-col="p1"] tbody td:nth-child(6),
   #notasTableWrap[data-col="p1"] tbody td:nth-child(7),
   #notasTableWrap[data-col="p1"] tbody td:nth-child(8),
-  #notasTableWrap[data-col="p1"] tfoot td:nth-child(3),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(9),
   #notasTableWrap[data-col="p1"] tfoot td:nth-child(4),
   #notasTableWrap[data-col="p1"] tfoot td:nth-child(5),
   #notasTableWrap[data-col="p1"] tfoot td:nth-child(6),
   #notasTableWrap[data-col="p1"] tfoot td:nth-child(7),
-  #notasTableWrap[data-col="p1"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(8),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(9){display:none !important;}
   #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(2),
   #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(4),
   #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(5),
+  #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(6),
   #notasTableWrap[data-col="p2"] tbody td:nth-child(2),
   #notasTableWrap[data-col="p2"] tbody td:nth-child(3),
-  #notasTableWrap[data-col="p2"] tbody td:nth-child(5),
   #notasTableWrap[data-col="p2"] tbody td:nth-child(6),
   #notasTableWrap[data-col="p2"] tbody td:nth-child(7),
   #notasTableWrap[data-col="p2"] tbody td:nth-child(8),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(9),
   #notasTableWrap[data-col="p2"] tfoot td:nth-child(2),
   #notasTableWrap[data-col="p2"] tfoot td:nth-child(3),
-  #notasTableWrap[data-col="p2"] tfoot td:nth-child(5),
   #notasTableWrap[data-col="p2"] tfoot td:nth-child(6),
   #notasTableWrap[data-col="p2"] tfoot td:nth-child(7),
-  #notasTableWrap[data-col="p2"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(8),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(9){display:none !important;}
   #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(2),
   #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(3),
   #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(5),
+  #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(6),
   #notasTableWrap[data-col="rec"] tbody td:nth-child(2),
   #notasTableWrap[data-col="rec"] tbody td:nth-child(3),
   #notasTableWrap[data-col="rec"] tbody td:nth-child(4),
   #notasTableWrap[data-col="rec"] tbody td:nth-child(5),
   #notasTableWrap[data-col="rec"] tbody td:nth-child(7),
   #notasTableWrap[data-col="rec"] tbody td:nth-child(8),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(9),
   #notasTableWrap[data-col="rec"] tfoot td:nth-child(2),
   #notasTableWrap[data-col="rec"] tfoot td:nth-child(3),
   #notasTableWrap[data-col="rec"] tfoot td:nth-child(4),
   #notasTableWrap[data-col="rec"] tfoot td:nth-child(5),
   #notasTableWrap[data-col="rec"] tfoot td:nth-child(7),
-  #notasTableWrap[data-col="rec"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(8),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(9){display:none !important;}
   #notasTableWrap[data-col="final"] thead tr.group-row th:nth-child(2),
   #notasTableWrap[data-col="final"] thead tr.group-row th:nth-child(3),
   #notasTableWrap[data-col="final"] thead tr.group-row th:nth-child(4),
@@ -885,13 +891,11 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   #notasTableWrap[data-col="final"] tbody td:nth-child(4),
   #notasTableWrap[data-col="final"] tbody td:nth-child(5),
   #notasTableWrap[data-col="final"] tbody td:nth-child(6),
-  #notasTableWrap[data-col="final"] tbody td:nth-child(8),
   #notasTableWrap[data-col="final"] tfoot td:nth-child(2),
   #notasTableWrap[data-col="final"] tfoot td:nth-child(3),
   #notasTableWrap[data-col="final"] tfoot td:nth-child(4),
   #notasTableWrap[data-col="final"] tfoot td:nth-child(5),
-  #notasTableWrap[data-col="final"] tfoot td:nth-child(6),
-  #notasTableWrap[data-col="final"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(6){display:none !important;}
   #notasTableWrap table{min-width:0 !important;width:100%;}
   #notasTableWrap thead th.left{min-width:0 !important;}
   #notasTableWrap tbody td:first-child button:not(.nm-link){display:none;}
@@ -2625,10 +2629,10 @@ function setNotasCol(c) {
     b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on));
   });
 }
-// En celular la tabla muestra una sola columna de notas: los encabezados de 2 columnas pasan a 1
+// En celular la tabla muestra una sola nota por vez, siempre en número y letras (encabezados de 2 columnas)
 const notasMobileMQ = window.matchMedia('(max-width:700px)');
 function fixNotasHeader() {
-  document.querySelectorAll('#notasTableWrap thead tr.group-row th[data-cs]').forEach(th => { th.colSpan = notasMobileMQ.matches ? 1 : Number(th.dataset.cs); });
+  document.querySelectorAll('#notasTableWrap thead tr.group-row th[data-cs]').forEach(th => { th.colSpan = Number(th.dataset.cs); });
 }
 notasMobileMQ.addEventListener('change', fixNotasHeader);
 // Enter en una nota pasa a la misma columna del estudiante siguiente
