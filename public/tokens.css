@@ -1,0 +1,31 @@
+/* Paleta compartida de Magistro (docente, portal y menú principal).
+ * - :root = tema claro por defecto. En el panel del docente, el tema elegido
+ *   (Configuración) pisa estas variables en línea sobre <html>.
+ * - body.dark-mode = modo oscuro, lo activan docente.html y portal-estudiante.html.
+ *   (--accent no se redefine acá: en el docente lo manda el tema elegido.)
+ * Si cambiás este archivo, subí VERSION en sw.js para que los celulares lo actualicen. */
+:root {
+  --bg: #fdf6f0; --surface: #ffffff; --surface2: #fdf0e6; --sidebar-bg: #fff8f2;
+  --border: rgba(140,60,10,0.12); --border2: rgba(140,60,10,0.22);
+  --text: #2d1206; --text2: #7a4020; --text3: #8d6545; --accent: #c44a12;
+  --green-bg: #eaf3de;  --green-text: #3b6d11;
+  --blue-bg: #e6f1fb;   --blue-text: #185fa5;
+  --red-bg: #fcebeb;    --red-text: #a32d2d;
+  --amber-bg: #fff3d6;  --amber-text: #7a4a00;
+  --gray-bg: #f5ede6;   --gray-text: #6b4530;
+  --purple-bg: #f5edf8; --purple-text: #6b3fa0;
+  --teal-bg: #e3f5f0;   --teal-text: #1a6b55;
+  --radius: 8px; --radius-lg: 12px;
+}
+body.dark-mode {
+  --bg: #1c1410; --surface: #2a201a; --surface2: #241b16; --sidebar-bg: #241b16;
+  --border: rgba(255,200,150,0.12); --border2: rgba(255,200,150,0.22);
+  --text: #f3e9e0; --text2: #d9b99a; --text3: #a98567;
+  --green-bg: #20321a;  --green-text: #8fd66b;
+  --blue-bg: #16283a;   --blue-text: #7db8ef;
+  --red-bg: #3a1f1f;    --red-text: #f28b8b;
+  --amber-bg: #3a2a10;  --amber-text: #f0b94a;
+  --gray-bg: #2a2622;   --gray-text: #c9ab93;
+  --purple-bg: #2a2035; --purple-text: #c9a8f0;
+  --teal-bg: #173028;   --teal-text: #7fd9c0;
+}

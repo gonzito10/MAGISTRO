@@ -42,6 +42,7 @@ public/              Las tres páginas HTML
 public/manifest.webmanifest  Manifest de la PWA (nombre, colores, íconos, accesos directos)
 public/sw.js         Service worker: cachea solo estáticos, NUNCA /api/*
 public/pwa.js        Registra el service worker (lo cargan las tres páginas)
+public/tokens.css    Paleta de colores compartida (claro + body.dark-mode); la cargan las tres páginas
 public/a11y.js       Hace enfocables y activables con teclado los controles hechos con <div onclick>
 public/icons/        Íconos 192, 512, maskable y apple-touch (acanto sobre terracota)
 ```
@@ -144,8 +145,9 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo
       elige a mano en Configuración / portal; desde ahí se respeta su elección
       (`darkPref` en `gd_config` del docente; `magistro_dark` en el portal). La bienvenida ya usaba `prefers-color-scheme`.
-- [ ] Paleta de colores repetida en las 3 páginas: pasarla a un CSS compartido
-      (`public/tokens.css`) y sacar estilos en línea de `docente.html` (≈385).
+- [x] Paleta compartida en `public/tokens.css` (antes repetida en las 3 páginas; el modo oscuro
+      del docente ya no tiene su copia en JS). Verificado pixel a pixel, sin cambios visuales.
+- [ ] Sacar los estilos en línea de `docente.html` (≈385) pasándolos a clases.
 - [ ] Probar con datos reales las secciones Planificación, Trámites y Archivo (las
       revisé con datos de ejemplo).
 - [ ] El texto de los íconos pequeños (≈ 9–11 px en etiquetas) y las tablas densas
