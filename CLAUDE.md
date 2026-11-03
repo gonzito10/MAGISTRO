@@ -147,7 +147,10 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       (`darkPref` en `gd_config` del docente; `magistro_dark` en el portal). La bienvenida ya usaba `prefers-color-scheme`.
 - [x] Paleta compartida en `public/tokens.css` (antes repetida en las 3 páginas; el modo oscuro
       del docente ya no tiene su copia en JS). Verificado pixel a pixel, sin cambios visuales.
-- [ ] Sacar los estilos en línea de `docente.html` (≈385) pasándolos a clases.
+- [~] Estilos en línea de `docente.html`: ya pasé a clases `u-*` (utilidades con `!important`, al
+      comienzo del bloque de CSS) los repetidos: 75 usos, de ≈395 a 320 atributos `style`. Verificado
+      pixel a pixel (secciones y modales). El resto son únicos o dinámicos (`${...}`) o los mueve JS
+      (`display`); conviene pasarlos a clases a medida que se toque cada sección.
 - [ ] Probar con datos reales las secciones Planificación, Trámites y Archivo (las
       revisé con datos de ejemplo).
 - [ ] El texto de los íconos pequeños (≈ 9–11 px en etiquetas) y las tablas densas
