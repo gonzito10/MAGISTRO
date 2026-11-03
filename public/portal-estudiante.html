@@ -191,7 +191,7 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
   .nav .nav-item{flex:1;min-width:0;flex-direction:column;justify-content:center;gap:3px;min-height:60px;
     padding:6px 2px;font-size:12px;text-align:center;white-space:nowrap;border-radius:12px;border:0.5px solid transparent}
   .nav .nav-item svg{width:22px;height:22px}
-  .nav > .nav-item[data-tab="actividades"],.nav > .nav-item[data-tab="textos"]{display:none}
+  .nav > .nav-item[data-tab="actividades"],.nav > .nav-item[data-tab="textos"],.nav > .nav-item[data-tab="mensajes"]{display:none}
   .nav-more{display:flex}
   .lbl-d{display:none}.lbl-m{display:inline}
 
@@ -225,6 +225,42 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
   .metric-label,.act-num.nosept{font-size:11px !important;}
   .materia-item .mi-docente,.badge-pub,.badge-pend{font-size:11.5px;}
   .sidebar-logo-sub{font-size:11px;}
+}
+/* ── Tablón con participación, mensajes y avisos ── */
+.tablon-post-text{overflow-wrap:anywhere}
+.tablon-avatar.est{background:var(--green-bg);color:var(--green-text)}
+.tb-empty{text-align:center;color:var(--text3);font-size:13px}
+.tb-tag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--blue-bg);color:var(--blue-text)}
+.tb-del{border:0;background:transparent;color:var(--text3);font:inherit;font-size:12px;cursor:pointer;padding:4px 6px;margin:-4px -2px;text-decoration:underline}
+.tb-del:hover{color:var(--red-text)}
+.tb-com{margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:10px}
+.tb-com-h{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--text3)}
+.tb-com-h b{font-weight:700;color:var(--text)}
+.tb-com-t{font-size:13px;color:var(--text);margin-top:2px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tb-form{display:flex;gap:8px;margin-top:10px}
+.tb-form input,.tb-comp textarea,.chat-form textarea{flex:1;min-width:0;padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font:inherit;font-size:14px;background:var(--surface);color:var(--text)}
+.tb-comp{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:12px}
+.tb-comp textarea,.chat-form textarea{width:100%;resize:vertical;min-height:64px}
+.tb-comp-f{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.tb-comp-f small{color:var(--text3);font-size:12px}
+.p-btn{padding:9px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.p-btn.primary{background:var(--accent);color:#fff;border-color:transparent;font-weight:600}
+.tb-more{display:block;margin:4px auto 12px}
+.chat{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:12px;margin-bottom:12px;max-height:52vh;overflow-y:auto}
+.chat-vacio{color:var(--text3);font-size:13px;text-align:center;padding:16px}
+.bubble{max-width:82%;padding:8px 12px;border-radius:14px;font-size:14px}
+.bubble.yo{align-self:flex-end;background:var(--blue-bg);color:var(--blue-text)}
+.bubble.doc{align-self:flex-start;background:var(--surface2);color:var(--text)}
+.bubble-txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.bubble-f{font-size:11px;opacity:.8;margin-top:2px}
+.chat-form{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.avisos-card{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text2)}
+.avisos-card span{flex:1;min-width:200px}
+.p-toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));background:var(--text);color:var(--surface);padding:10px 16px;border-radius:10px;font-size:13px;z-index:300;max-width:90vw;text-align:center}
+@media (max-width:700px){
+  .tb-form input,.tb-comp textarea,.chat-form textarea{font-size:16px}
+  .p-btn,.tb-form button{min-height:44px}
+  .tb-del{padding:14px 8px;margin:-14px -4px}
 }
 </style>
 </head>
@@ -297,6 +333,10 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
       <div class="nav-item" data-tab="textos" onclick="switchTab('textos')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Textos
+      </div>
+      <div class="nav-item" data-tab="mensajes" onclick="switchTab('mensajes')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Mensajes
       </div>
       <div class="nav-item nav-more" id="nav-more" onclick="toggleMore()" role="button" aria-haspopup="true" aria-expanded="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
@@ -457,6 +497,8 @@ async function loadAndShowApp(){
     misMateriasCargadas = false;
     document.getElementById('materias-dropdown').classList.remove('open');
     document.getElementById('materias-toggle').classList.remove('open');
+    social = null; feedLimit = 15;
+    if (location.hash === '#mensajes') { currentTab = 'mensajes'; history.replaceState(null, '', location.pathname); }
     showView('app');
     switchTab(currentTab);
   } catch(e) { showView('login'); }
@@ -511,6 +553,8 @@ async function cambiarMateria(comisionId){
 }
 
 async function doLogout(){
+  try { if (window.MagistroPush) await MagistroPush.desactivar('estudiante'); } catch(e){}
+  social = null;
   try { await fetch('/api/logout', { method:'POST', credentials:'same-origin' }); } catch(e){}
   currentData = null;
   document.getElementById('dni-input').value = '';
@@ -525,7 +569,7 @@ function buildMoreSheet(){
   const sheet = document.getElementById('moreSheet');
   if (!sheet) return;
   sheet.innerHTML = '';
-  ['actividades','textos'].forEach(t => {
+  ['mensajes','actividades','textos'].forEach(t => {
     const src = document.querySelector('#main-nav > .nav-item[data-tab="' + t + '"]');
     if (src) { const c = src.cloneNode(true); c.setAttribute('role','menuitem'); sheet.appendChild(c); }
   });
@@ -562,13 +606,14 @@ function switchTab(tab){
   closeMore();
   document.querySelectorAll('.nav-item[data-tab]').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   const moreBtn = document.getElementById('nav-more');
-  if (moreBtn) moreBtn.classList.toggle('active', tab === 'actividades' || tab === 'textos');
+  if (moreBtn) moreBtn.classList.toggle('active', tab === 'actividades' || tab === 'textos' || tab === 'mensajes');
   const content = document.getElementById('main-content');
-  const renderers = { inicio: renderInicio, notas: renderNotas, asistencia: renderAsistencia, cronograma: renderCronograma, actividades: renderActividades, textos: renderTextos };
+  const renderers = { inicio: renderInicio, notas: renderNotas, asistencia: renderAsistencia, cronograma: renderCronograma, actividades: renderActividades, textos: renderTextos, mensajes: renderMensajes };
   content.style.transition = 'opacity .12s ease';
   content.style.opacity = '0';
   setTimeout(() => {
     content.innerHTML = (renderers[tab] || renderInicio)();
+    if (tab === 'inicio' || tab === 'mensajes') { refrescarAvisosCard(); cargarSocial(); }
     requestAnimationFrame(() => {
       content.style.opacity = '1';
       content.querySelectorAll('.bar-fill[data-pct]').forEach(el => {
@@ -644,28 +689,13 @@ function renderInicio(){
     <p>${escHtml(currentData.curso.materia)}${currentData.curso.comision?' · Comisión '+escHtml(currentData.curso.comision):''}${currentData.curso.periodo?' · '+escHtml(currentData.curso.periodo):''}</p>
   </div>`;
 
-  // Tablón (avisos del docente para esta comisión) — contenido principal de Inicio
-  const tablon = currentData.tablon || [];
-  const iniciales = (currentData.curso.docente||'Docente').trim().split(/\s+/).map(p=>p[0]).slice(0,2).join('').toUpperCase() || 'D';
-  if (!tablon.length) {
-    html += `<div class="tablon-post" style="text-align:center;color:var(--text3);font-size:13px">Tu docente todavía no publicó avisos.</div>`;
-  } else {
-    tablon.slice(0, 5).forEach(post => {
-      const fecha = post.fecha ? new Date(post.fecha) : null;
-      html += `<div class="tablon-post">
-        <div style="display:flex;gap:12px">
-          <div class="tablon-avatar">${iniciales}</div>
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span class="tablon-post-author">${escHtml(currentData.curso.docente||'Docente')}</span>
-              ${fecha ? `<span class="tablon-post-date">${fmtFecha(fecha)}</span>` : ''}
-            </div>
-            <div class="tablon-post-text">${escHtml(post.mensaje)}</div>
-          </div>
-        </div>
-      </div>`;
-    });
-  }
+  // Tablón: avisos del docente + posteos y comentarios de la clase — contenido principal de Inicio
+  html += `<div id="avisos-card"></div>
+  <div class="tb-comp">
+    <textarea id="tb-nuevo" maxlength="1000" placeholder="Escribí algo para tu clase…" aria-label="Nuevo posteo en el tablón"></textarea>
+    <div class="tb-comp-f"><small>Lo ven todos los de la comisión.</small><button type="button" class="p-btn primary" onclick="publicarPost(this)">Publicar</button></div>
+  </div>
+  <div id="tablon-feed">${feedHTML()}</div>`;
 
   html += `<div class="metrics" style="grid-template-columns:repeat(2,1fr);margin-top:20px">
     <div class="metric">
@@ -1048,6 +1078,191 @@ function toggleDarkModeStudent(){
 })();
 
 // ── Bootstrap: si ya había sesión de estudiante activa, entrar directo ──
+// ═══════════════════════════════════════════════════════
+// TABLÓN CON PARTICIPACIÓN, MENSAJES PRIVADOS Y AVISOS
+// ═══════════════════════════════════════════════════════
+let social = null;      // { privados, tablon, comentarios } que devuelve el servidor
+let feedLimit = 15;
+
+async function apiJson(url, method, body){
+  const r = await fetch(url, { method, credentials: 'same-origin', headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
+  let j = {}; try { j = await r.json(); } catch(e){}
+  if (r.status === 401) { showView('login'); throw new Error('Tu sesión venció. Volvé a ingresar con tu DNI.'); }
+  if (!r.ok) throw new Error(j.error || 'No se pudo completar la acción.');
+  return j;
+}
+function avisoTemporal(msg){
+  const t = document.createElement('div');
+  t.className = 'p-toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+function inicialesDe(nombre){ return (nombre||'?').trim().split(/\s+/).map(p=>p[0]).slice(0,2).join('').toUpperCase() || '?'; }
+function fechaHora(iso){
+  if (!iso) return '';
+  const d = new Date(iso);
+  return `${fmtFecha(d)} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+}
+
+async function cargarSocial(){
+  try { social = await apiJson('/api/estudiante/mensajes', 'GET'); } catch(e){ return; }
+  refrescarFeed(); refrescarChat();
+}
+
+// ── Tablón ──
+function comentarioHTML(c){
+  const doc = c.autor === 'docente';
+  return `<div class="tb-com"><div class="tb-com-h"><b>${escHtml(c.autorNombre || (doc ? 'Docente' : 'Estudiante'))}</b>${doc ? '<span class="tb-tag">Docente</span>' : ''}<span>${fechaHora(c.fecha)}</span>${c.propio ? `<button type="button" class="tb-del" onclick="borrarMensaje('${c.id}')">Eliminar</button>` : ''}</div><div class="tb-com-t">${escHtml(c.texto)}</div></div>`;
+}
+function itemHTML(it, coms){
+  return `<div class="tablon-post"><div style="display:flex;gap:12px">
+    <div class="tablon-avatar${it.esDocente ? '' : ' est'}">${escHtml(inicialesDe(it.autor))}</div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="tablon-post-author">${escHtml(it.autor)}</span>${it.esDocente ? '<span class="tb-tag">Docente</span>' : ''}${it.fecha ? `<span class="tablon-post-date">${fmtFecha(new Date(it.fecha))}</span>` : ''}${it.propio ? `<button type="button" class="tb-del" onclick="borrarMensaje('${it.id}')">Eliminar</button>` : ''}</div>
+      <div class="tablon-post-text">${escHtml(it.texto)}</div>
+      ${coms.map(comentarioHTML).join('')}
+      <form class="tb-form" data-parent="${escHtml(it.key)}" onsubmit="return enviarComentario(event,this)">
+        <input type="text" maxlength="1000" placeholder="Escribí un comentario…" aria-label="Comentario" autocomplete="off">
+        <button type="submit" class="p-btn">Enviar</button>
+      </form>
+    </div></div></div>`;
+}
+function feedHTML(){
+  const docNombre = (currentData && currentData.curso && currentData.curso.docente) || 'Docente';
+  const items = [];
+  ((currentData && currentData.tablon) || []).forEach(p => items.push({ key: 'aviso:' + p.id, autor: docNombre, esDocente: true, texto: p.mensaje, fecha: p.fecha, propio: false, id: null }));
+  if (social) social.tablon.forEach(p => items.push({ key: 'post:' + p.id, autor: p.autorNombre || 'Estudiante', esDocente: p.autor === 'docente', texto: p.texto, fecha: p.fecha, propio: p.propio, id: p.id }));
+  items.sort((a, b) => String(b.fecha || '').localeCompare(String(a.fecha || '')));
+  if (!items.length) return '<div class="tablon-post tb-empty">Todavía no hay avisos ni posteos. Podés ser el primero en publicar.</div>';
+  const coms = {};
+  (social ? social.comentarios : []).forEach(c => { (coms[c.parent] = coms[c.parent] || []).push(c); });
+  const shown = items.slice(0, feedLimit);
+  let html = shown.map(it => itemHTML(it, coms[it.key] || [])).join('');
+  if (items.length > shown.length) html += '<button type="button" class="p-btn tb-more" onclick="feedLimit += 15; refrescarFeed()">Ver más</button>';
+  return html;
+}
+// Redibuja el feed sin perder lo que se estaba escribiendo en un comentario.
+function refrescarFeed(){
+  const el = document.getElementById('tablon-feed'); if (!el) return;
+  const borradores = {};
+  el.querySelectorAll('.tb-form').forEach(f => { const v = f.querySelector('input').value; if (v) borradores[f.dataset.parent] = v; });
+  const act = document.activeElement && document.activeElement.closest ? document.activeElement.closest('.tb-form') : null;
+  const foco = act ? act.dataset.parent : null;
+  el.innerHTML = feedHTML();
+  el.querySelectorAll('.tb-form').forEach(f => {
+    const inp = f.querySelector('input');
+    if (borradores[f.dataset.parent]) inp.value = borradores[f.dataset.parent];
+    if (foco && f.dataset.parent === foco) inp.focus();
+  });
+}
+async function publicarPost(btn){
+  const ta = document.getElementById('tb-nuevo');
+  const texto = ta.value.trim();
+  if (!texto) { ta.focus(); return; }
+  btn.disabled = true;
+  try {
+    await apiJson('/api/estudiante/tablon', 'POST', { texto });
+    ta.value = '';
+    await cargarSocial();
+    avisoTemporal('Publicado');
+  } catch(e) { avisoTemporal(e.message); }
+  btn.disabled = false;
+}
+async function enviarComentario(ev, form){
+  ev.preventDefault();
+  const inp = form.querySelector('input'), btn = form.querySelector('button');
+  const texto = inp.value.trim();
+  if (!texto) { inp.focus(); return false; }
+  btn.disabled = true;
+  try {
+    await apiJson('/api/estudiante/comentarios', 'POST', { parent: form.dataset.parent, texto });
+    inp.value = '';
+    await cargarSocial();
+  } catch(e) { avisoTemporal(e.message); btn.disabled = false; }
+  return false;
+}
+async function borrarMensaje(id){
+  if (!confirm('¿Eliminar este mensaje?')) return;
+  try { await apiJson('/api/estudiante/mensajes/' + id, 'DELETE'); await cargarSocial(); avisoTemporal('Eliminado'); }
+  catch(e) { avisoTemporal(e.message); }
+}
+
+// ── Mensajes privados con el docente ──
+function chatHTML(){
+  if (!social) return '<div class="chat-vacio">Cargando…</div>';
+  if (!social.privados.length) return '<div class="chat-vacio">Todavía no hay mensajes. Escribile a tu docente.</div>';
+  return social.privados.map(m => `<div class="bubble ${m.autor === 'estudiante' ? 'yo' : 'doc'}"><div class="bubble-txt">${escHtml(m.texto)}</div><div class="bubble-f">${fechaHora(m.fecha)}</div></div>`).join('');
+}
+function renderMensajes(){
+  const doc = (currentData.curso && currentData.curso.docente) || 'tu docente';
+  return `<div class="greeting"><h1>Mensajes</h1><p>Conversación privada con ${escHtml(doc)}.</p></div>
+  <div id="avisos-card"></div>
+  <div class="chat" id="chat-box" aria-live="polite">${chatHTML()}</div>
+  <form class="chat-form" onsubmit="return enviarPrivado(event)">
+    <textarea id="chat-texto" maxlength="1000" placeholder="Escribí tu mensaje…" aria-label="Mensaje para tu docente"></textarea>
+    <button type="submit" class="p-btn primary">Enviar</button>
+  </form>`;
+}
+function refrescarChat(){
+  const box = document.getElementById('chat-box'); if (!box) return;
+  box.innerHTML = chatHTML();
+  box.scrollTop = box.scrollHeight;
+}
+async function enviarPrivado(ev){
+  ev.preventDefault();
+  const ta = document.getElementById('chat-texto'), btn = ev.target.querySelector('button');
+  const texto = ta.value.trim();
+  if (!texto) { ta.focus(); return false; }
+  btn.disabled = true;
+  try {
+    await apiJson('/api/estudiante/mensajes', 'POST', { texto });
+    ta.value = '';
+    await cargarSocial();
+  } catch(e) { avisoTemporal(e.message); }
+  btn.disabled = false;
+  return false;
+}
+
+// ── Avisos al celular ──
+function avisosCardHTML(texto, boton, accion){
+  return `<div class="avisos-card"><span>${texto}</span>${boton ? `<button type="button" class="p-btn primary" onclick="${accion}">${boton}</button>` : ''}</div>`;
+}
+async function refrescarAvisosCard(){
+  const el = document.getElementById('avisos-card');
+  if (!el || !window.MagistroPush) return;
+  const e = await MagistroPush.estado('estudiante');
+  const el2 = document.getElementById('avisos-card'); if (!el2) return;
+  let html = '';
+  if (!e.soportado) html = e.instalar ? avisosCardHTML('Para recibir avisos en tu iPhone, agregá esta app a la pantalla de inicio (Compartir → Agregar a inicio) y abrila desde ahí.') : '';
+  else if (!e.habilitado) html = '';
+  else if (e.permiso === 'denied') html = avisosCardHTML('Bloqueaste los avisos de este navegador. Para recibirlos, activalos desde los ajustes del sitio.');
+  else if (e.activo) html = avisosCardHTML('Avisos activados en este dispositivo. La notificación no muestra el texto del mensaje.', 'Desactivar', 'desactivarAvisos(this)');
+  else html = avisosCardHTML('Recibí un aviso en el celular cuando haya mensajes o posteos nuevos.', 'Activar avisos', 'activarAvisos(this)');
+  el2.innerHTML = html;
+}
+async function activarAvisos(btn){
+  btn.disabled = true;
+  try { await MagistroPush.activar('estudiante'); avisoTemporal('Avisos activados'); }
+  catch(e) { avisoTemporal(e.message); }
+  refrescarAvisosCard();
+}
+async function desactivarAvisos(btn){
+  btn.disabled = true;
+  try { await MagistroPush.desactivar('estudiante'); avisoTemporal('Avisos desactivados'); }
+  catch(e) { avisoTemporal(e.message); }
+  refrescarAvisosCard();
+}
+
+// Al volver a la app (o tocar una notificación) se actualizan los mensajes.
+document.addEventListener('visibilitychange', () => {
+  const app = document.getElementById('view-app');
+  if (document.visibilityState === 'visible' && app && app.style.display !== 'none' && (currentTab === 'inicio' || currentTab === 'mensajes')) cargarSocial();
+});
+window.addEventListener('hashchange', () => {
+  const app = document.getElementById('view-app');
+  if (location.hash === '#mensajes' && app && app.style.display !== 'none') { history.replaceState(null, '', location.pathname); switchTab('mensajes'); }
+});
+
 (async function boot(){
   try {
     const res = await fetch('/api/me', { credentials: 'same-origin' });

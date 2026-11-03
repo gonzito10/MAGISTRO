@@ -2,8 +2,10 @@
  * - Guarda en caché SOLO archivos estáticos (páginas, íconos, fuentes y librerías).
  * - NUNCA toca /api/*: notas, asistencia y sesión siempre vienen del servidor,
  *   así no se muestran datos viejos ni se guarda información de nadie en el celular.
+ * - Recibe avisos push (mensajes y tablón): muestra la notificación y abre la app al tocarla.
+ *   El texto de los mensajes nunca viaja en la notificación.
  * Para forzar una actualización de los archivos guardados, subí el número de VERSION. */
-const VERSION = 'v3';
+const VERSION = 'v4';
 const SHELL = 'magistro-shell-' + VERSION;
 const RUNTIME = 'magistro-runtime-' + VERSION;
 
@@ -86,4 +88,37 @@ self.addEventListener('fetch', function (event) {
   if (EXTERNAL_OK.indexOf(url.hostname) !== -1) {
     event.respondWith(staleWhileRevalidate(request, RUNTIME));
   }
+});
+
+// ── Avisos push ──
+self.addEventListener('push', function (event) {
+  var data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = {}; }
+  var url = typeof data.url === 'string' ? data.url : '/';
+  if (url.charAt(0) !== '/' || url.charAt(1) === '/') url = '/'; // solo rutas de este mismo sitio
+  event.waitUntil(self.registration.showNotification(data.title || 'MAGISTRO', {
+    body: data.body || 'Tenés novedades.',
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    tag: data.tag || 'magistro',
+    renotify: true,
+    data: { url: url }
+  }));
+});
+
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  var url = (event.notification.data && event.notification.data.url) || '/';
+  var base = url.split('#')[0];
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
+      for (var i = 0; i < list.length; i++) {
+        var c = list[i];
+        if (new URL(c.url).pathname === base && 'focus' in c) {
+          return c.focus().then(function (w) { if (w && 'navigate' in w && url.indexOf('#') !== -1) return w.navigate(url); });
+        }
+      }
+      return self.clients.openWindow(url);
+    })
+  );
 });

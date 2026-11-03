@@ -6,15 +6,20 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const docenteRoutes = require('./routes/docente');
 const estudianteRoutes = require('./routes/estudiante');
+const mensajesRoutes = require('./routes/mensajes');
 
 const app = express();
 
+// Los estudiantes solo mandan mensajes cortos: tope chico para sus rutas (va antes del parser general).
+app.use('/api/estudiante', express.json({ limit: '20kb' }));
 app.use(express.json({ limit: '5mb' }));
 app.use(cookieParser());
 
 // API
 app.use('/api', authRoutes);
+app.use('/api/docente/mensajes', mensajesRoutes.docente);
 app.use('/api/docente', docenteRoutes);
+app.use('/api/estudiante', mensajesRoutes.estudiante);
 app.use('/api/estudiante', estudianteRoutes);
 
 // Archivos estáticos: menú principal, la app del docente y el portal del estudiante.

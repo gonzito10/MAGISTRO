@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "migrate": "node db/migrate.js"
+    "migrate": "node db/migrate.js",
+    "vapid": "web-push generate-vapid-keys"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -14,7 +15,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.5"
+    "pg": "^8.11.5",
+    "web-push": "^3.6.7"
   },
   "engines": {
     "node": "22.x"

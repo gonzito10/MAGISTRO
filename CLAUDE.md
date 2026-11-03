@@ -38,10 +38,12 @@ db/migrate.js        npm run migrate: ejecuta schema.sql
 middleware/auth.js   JWT + cookie; requireDocente / requireEstudiante
 routes/auth.js       Registro/login docente, login estudiante por DNI, /me, /logout
 routes/docente.js    GET/PUT /api/docente/state y /config (protegido)
+routes/mensajes.js   Mensajes y tablón con participación: /api/estudiante/mensajes/* y /api/docente/mensajes/*, más suscripción push
+lib/push.js          Web Push (web-push): se activa solo si hay claves VAPID; el texto del mensaje nunca viaja en la notificación
 routes/estudiante.js GET /api/estudiante/mis-materias, /data; POST /cambiar
 public/              Las tres páginas HTML
 public/manifest.webmanifest  Manifest de la PWA (nombre, colores, íconos, accesos directos)
-public/sw.js         Service worker: cachea solo estáticos, NUNCA /api/*
+public/sw.js         Service worker: cachea solo estáticos, NUNCA /api/*; maneja `push` y `notificationclick`
 public/pwa.js        Registra el service worker (lo cargan las tres páginas)
 public/tokens.css    Paleta de colores compartida (claro + body.dark-mode); la cargan las tres páginas
 public/a11y.js       Hace enfocables y activables con teclado los controles hechos con <div onclick>
@@ -65,8 +67,25 @@ public/icons/        Íconos 192, 512, maskable y apple-touch (acanto sobre terr
   **pooled** (host con `-pooler`).
 - `JWT_SECRET`: texto largo y aleatorio.
 - `PG_POOL_MAX` (opcional): conexiones por instancia, por defecto 5.
+- `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (opcionales): avisos push. Se generan una vez con
+  `npm run vapid`. Sin ellas la app funciona igual, sin notificaciones. La clave privada **nunca** va al repo.
 
 Plantilla en `.env.example`. **Nunca** subir `.env` ni secretos al repo.
+
+## Mensajes, tablón y avisos push
+
+- Tablas `mensajes`, `push_subs` y `mensajes_cuota` (en `schema.sql`; `npm run migrate` las crea). Los mensajes
+  **no** viven en `comisiones.data` (el docente guarda su estado completo y pisaría los de los estudiantes).
+  Los avisos del docente siguen en `com.tablon[]`.
+- Tipos: mensaje privado estudiante↔docente, posteo de estudiante en el tablón, comentario (padre `aviso:<id>` o
+  `post:<id>`). Al estudiante nunca se le muestran ids de otros estudiantes (solo `propio`).
+- Límites: 1000 caracteres, 5 por minuto y 60 por día por estudiante (se cuenta en `mensajes_cuota`, así borrar
+  y reenviar no esquiva el límite).
+- Docente: sección **Mensajes** (conversaciones) y moderación en Inicio (comentar y eliminar). Al publicar un
+  aviso se llama a `POST /api/docente/mensajes/aviso-publicado` para notificar a los estudiantes.
+- Push: en iPhone requiere iOS ≥ 16.4 y la app agregada a la pantalla de inicio. Service worker `VERSION` = v4.
+- Identidad del estudiante = solo DNI (decisión de Gonzalo). Riesgo conocido: quien sepa un DNI puede leer y
+  escribir los mensajes de esa persona. Pendiente: evaluar una clave personal (Ley 25.326).
 
 ## Cómo correrlo en local
 
@@ -160,6 +179,9 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       tabla usa los mismos controles. Planificación: resumen con barra de avance, cabecera por unidad
       colapsable (`planToggleUnit`; las unidades ya dictadas arrancan cerradas), fila de dos líneas y próxima
       clase resaltada con scroll automático.
+- [x] Mensajes con estudiantes, tablón abierto a estudiantes (posteos y comentarios) y avisos push (ver sección
+      "Mensajes, tablón y avisos push"). **Falta en producción**: `npm run migrate` sobre Neon y cargar las
+      variables VAPID en Vercel. Sin contadores de no leídos todavía.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo

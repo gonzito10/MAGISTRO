@@ -688,7 +688,7 @@ img.acanto-themed {
   .app-shell{flex-direction:column;padding-bottom:calc(64px + env(safe-area-inset-bottom));}
   .sidebar{display:contents;}
   .sidebar-logo,.sidebar-section-label,.sidebar-actions,
-  #nav-planificacion,#nav-trabajos,#nav-bibliografia{display:none;}
+  #nav-planificacion,#nav-trabajos,#nav-bibliografia,#nav-mensajes{display:none;}
 
   /* Selector de materia y comisión: barra fija arriba, lado a lado */
   .sb-course{position:static;background:var(--sidebar-bg);
@@ -1073,6 +1073,51 @@ img.acanto-themed {
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+/* ── Mensajes con estudiantes y tablón con participación ── */
+.tablon-avatar.est{background:var(--green-bg);color:var(--green-text)}
+.tb-tag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--blue-bg);color:var(--blue-text)}
+.tb-com{margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:10px}
+.tb-com-h{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--text3)}
+.tb-com-h b{font-weight:700;color:var(--text)}
+.tb-com-t{font-size:13px;color:var(--text);margin-top:2px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tb-x{border:0;background:transparent;color:var(--text3);font:inherit;font-size:12px;cursor:pointer;padding:4px 6px;margin:-4px -2px;text-decoration:underline}
+.tb-x:hover{color:var(--red-text)}
+.tb-form{display:flex;gap:8px;margin-top:10px}
+.tb-form input,.mg-form textarea,.mg-top select{min-width:0;padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font:inherit;font-size:14px;background:var(--surface);color:var(--text)}
+.tb-form input{flex:1}
+.tablon-post-text{overflow-wrap:anywhere}
+.avisos-card{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:12px;font-size:13px;color:var(--text2)}
+.avisos-card span{flex:1;min-width:200px}
+.msg-wrap{display:grid;grid-template-columns:300px 1fr;gap:12px;align-items:start}
+.msg-list,.msg-thread{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:12px}
+.mg-top{margin-bottom:8px}
+.mg-top select{width:100%}
+.msg-conv{display:block;width:100%;text-align:left;padding:10px;border:0;border-bottom:0.5px solid var(--border);background:transparent;cursor:pointer;font:inherit;border-radius:8px}
+.msg-conv:last-child{border-bottom:0}
+.msg-conv.on{background:var(--surface2)}
+.msg-conv b{display:block;font-size:13px;color:var(--text)}
+.msg-conv span{display:block;font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mg-empty{color:var(--text3);font-size:13px;text-align:center;padding:18px 8px}
+.mg-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--text)}
+.mg-back{display:none}
+.mg-chat{display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow-y:auto;margin:10px 0}
+.mg-b{max-width:82%;padding:8px 12px;border-radius:14px;font-size:14px}
+.mg-b.yo{align-self:flex-end;background:var(--blue-bg);color:var(--blue-text)}
+.mg-b.el{align-self:flex-start;background:var(--surface2);color:var(--text)}
+.mg-b div:first-child{white-space:pre-wrap;overflow-wrap:anywhere}
+.mg-b small{display:block;font-size:11px;opacity:.8;margin-top:2px}
+.mg-form{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.mg-form textarea{width:100%;resize:vertical;min-height:64px}
+@media (max-width:700px){
+  .msg-wrap{display:block}
+  .msg-wrap.thread .msg-list{display:none}
+  .msg-wrap:not(.thread) .msg-thread{display:none}
+  .mg-back{display:inline-flex}
+  .tb-form input,.mg-form textarea,.mg-top select{font-size:16px}
+  .tb-form button,.mg-form button,.mg-back,.avisos-card button{min-height:44px}
+  .msg-conv{min-height:56px}
+  .tb-x{padding:14px 8px;margin:-14px -4px}
+}
 </style>
 </head>
 <body>
@@ -1189,6 +1234,10 @@ img.acanto-themed {
         <div class="sec-tab" id="nav-bibliografia" onclick="switchSection('bibliografia')">
           <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Bibliografía
+        </div>
+        <div class="sec-tab" id="nav-mensajes" onclick="switchSection('mensajes')">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Mensajes
         </div>
         <div class="sec-tab sec-more" id="nav-more" onclick="toggleMore()" role="button" aria-haspopup="true" aria-expanded="false">
           <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
@@ -2022,7 +2071,7 @@ function renderPanel() {
   initCommission(com);
 
   // Header (always shown)
-  const M_TITLES = {inicio:'Inicio', estudiantes:'Estudiantes', notas:'Notas', asistencia:'Asistencia', trabajos:'Actividades', planificacion:'Planificación', bibliografia:'Bibliografía'};
+  const M_TITLES = {inicio:'Inicio', estudiantes:'Estudiantes', notas:'Notas', asistencia:'Asistencia', trabajos:'Actividades', planificacion:'Planificación', bibliografia:'Bibliografía', mensajes:'Mensajes'};
   const headerHTML = `
     <h1 class="m-title">${M_TITLES[activeSection] || ''}</h1>
     <div class="com-header">
@@ -2045,6 +2094,8 @@ function renderPanel() {
     renderAsistenciaSection(panel, com, headerHTML, '');
   } else if (activeSection === 'trabajos') {
     renderTrabajosSection(panel, com, headerHTML, '');
+  } else if (activeSection === 'mensajes') {
+    renderMensajesSection(panel, com, headerHTML);
   } else if (activeSection === 'bibliografia') {
     renderBiblioSection(panel, com, headerHTML);
   } else {
@@ -2111,10 +2162,9 @@ function renderInicioSection(panel, com, headerHTML) {
   const promAsistencia = comAsistenciaPromedio(com);
   const { total: totalActividades, pendientes: actPendientes } = comActividadesPendientes(com);
   const prox = comProximaClase(com);
-  const tablon = (com.tablon || []).slice().sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
   const iniciales = tablonIniciales();
 
-  let html = headerHTML;
+  let html = headerHTML + '<div id="avisos-card"></div>';
 
   // ── Tablón: composer inline (sin ventana emergente) + feed, estilo Classroom ──
   html += `<div class="tablon-composer-collapsed" id="tablon-composer-collapsed" onclick="expandTablonComposer()">
@@ -2142,12 +2192,7 @@ function renderInicioSection(panel, com, headerHTML) {
 
   <div id="tablon-feed">`;
 
-  if (!tablon.length) {
-    html += `<div style="font-size:12.5px;color:var(--text3);padding:16px 0;text-align:center">Todavía no publicaste ningún aviso. Los estudiantes lo van a ver en la sección Inicio de su portal.</div>`;
-  } else {
-    tablon.forEach(post => { html += renderTablonPostHTML(post, iniciales); });
-  }
-  html += `</div>`;
+  html += tablonFeedHTML(com) + `</div>`;
 
   // ── Estadísticas del curso (secundarias, debajo del tablón) ──
   html += `<div class="metric-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 8px">
@@ -2158,6 +2203,8 @@ function renderInicioSection(panel, com, headerHTML) {
   </div>`;
 
   panel.innerHTML = html;
+  cargarTablonSocial(com);
+  refrescarAvisosCard();
 }
 
 function tablonIniciales(){
@@ -2165,22 +2212,233 @@ function tablonIniciales(){
   return n.split(/\s+/).map(p => p[0]).slice(0,2).join('').toUpperCase() || 'D';
 }
 
-function renderTablonPostHTML(post, iniciales){
-  const fecha = post.fecha ? new Date(post.fecha) : null;
-  return `<div class="tablon-post" data-id="${post.id}">
+// Posteos y comentarios de estudiantes, por comisión (los avisos del docente siguen en com.tablon).
+let tablonSocial = {};
+
+function fmtHoraCorta(iso){
+  if (!iso) return '';
+  const d = new Date(iso);
+  return `${fmtFechaCorta(d)} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function tbComentarioHTML(c){
+  const doc = c.autor === 'docente';
+  return `<div class="tb-com"><div class="tb-com-h"><b>${escHtml(c.autorNombre || (doc ? 'Docente' : 'Estudiante'))}</b>${doc ? '<span class="tb-tag">Docente</span>' : ''}<span>${fmtHoraCorta(c.fecha)}</span><button type="button" class="tb-x" onclick="moderarBorrar('${c.id}')">Eliminar</button></div><div class="tb-com-t">${escHtml(c.texto)}</div></div>`;
+}
+function tablonItemHTML(it, coms, iniciales){
+  const borrar = it.tipo === 'aviso'
+    ? `<span class="tablon-post-delete" onclick="deleteTablonPost('${it.id}')" title="Eliminar aviso">&times;</span>`
+    : `<button type="button" class="tb-x" onclick="moderarBorrar('${it.id}')">Eliminar</button>`;
+  return `<div class="tablon-post" data-id="${escHtml(String(it.id))}">
     <div style="display:flex;gap:12px">
-      <div class="tablon-avatar">${iniciales}</div>
+      <div class="tablon-avatar${it.esDocente ? '' : ' est'}">${it.esDocente ? iniciales : escHtml((it.autor||'?').trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase())}</div>
       <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="tablon-post-author">${escHtml(docenteNombre || 'Docente')}</span>
-          ${fecha ? `<span class="tablon-post-date">${fmtFechaCorta(fecha)}</span>` : ''}
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="tablon-post-author">${escHtml(it.autor)}</span>
+          ${it.esDocente ? '' : '<span class="tb-tag" style="background:var(--green-bg);color:var(--green-text)">Estudiante</span>'}
+          ${it.fecha ? `<span class="tablon-post-date">${fmtFechaCorta(new Date(it.fecha))}</span>` : ''}
+          ${it.tipo === 'post' ? borrar : ''}
         </div>
-        <div class="tablon-post-text">${escHtml(post.mensaje)}</div>
+        <div class="tablon-post-text">${escHtml(it.texto)}</div>
+        ${coms.map(tbComentarioHTML).join('')}
+        <form class="tb-form" data-parent="${escHtml(it.key)}" onsubmit="return enviarComentarioDocente(event,this)">
+          <input type="text" maxlength="1000" placeholder="Comentar…" aria-label="Comentario" autocomplete="off">
+          <button type="submit">Enviar</button>
+        </form>
       </div>
-      <span class="tablon-post-delete" onclick="deleteTablonPost('${post.id}')" title="Eliminar aviso">&times;</span>
+      ${it.tipo === 'aviso' ? borrar : ''}
     </div>
   </div>`;
 }
+function tablonFeedHTML(com){
+  const iniciales = tablonIniciales();
+  const social = tablonSocial[com.id] || { posts: [], comentarios: [] };
+  const items = [];
+  (com.tablon || []).forEach(p => items.push({ tipo: 'aviso', key: 'aviso:' + p.id, id: p.id, autor: docenteNombre || 'Docente', esDocente: true, texto: p.mensaje, fecha: p.fecha }));
+  social.posts.forEach(p => items.push({ tipo: 'post', key: 'post:' + p.id, id: p.id, autor: p.autorNombre || 'Estudiante', esDocente: p.autor === 'docente', texto: p.texto, fecha: p.fecha }));
+  items.sort((a, b) => String(b.fecha || '').localeCompare(String(a.fecha || '')));
+  if (!items.length) {
+    return `<div style="font-size:12.5px;color:var(--text3);padding:16px 0;text-align:center">Todavía no hay avisos ni posteos. Los estudiantes ven el tablón en la sección Inicio de su portal y también pueden publicar y comentar.</div>`;
+  }
+  const coms = {};
+  social.comentarios.forEach(c => { (coms[c.parent] = coms[c.parent] || []).push(c); });
+  return items.map(it => tablonItemHTML(it, coms[it.key] || [], iniciales)).join('');
+}
+// Redibuja el feed sin perder un comentario a medio escribir.
+function refrescarTablonFeed(com){
+  const el = document.getElementById('tablon-feed'); if (!el) return;
+  const borradores = {};
+  el.querySelectorAll('.tb-form').forEach(f => { const v = f.querySelector('input').value; if (v) borradores[f.dataset.parent] = v; });
+  const act = document.activeElement && document.activeElement.closest ? document.activeElement.closest('.tb-form') : null;
+  const foco = act ? act.dataset.parent : null;
+  el.innerHTML = tablonFeedHTML(com);
+  el.querySelectorAll('.tb-form').forEach(f => {
+    const inp = f.querySelector('input');
+    if (borradores[f.dataset.parent]) inp.value = borradores[f.dataset.parent];
+    if (foco && f.dataset.parent === foco) inp.focus();
+  });
+}
+async function apiDocente(url, method, body){
+  const r = await fetch(url, { method: method || 'GET', credentials: 'same-origin', headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
+  let j = {}; try { j = await r.json(); } catch(e){}
+  if (!r.ok) throw new Error(j.error || 'No se pudo completar la acción.');
+  return j;
+}
+async function cargarTablonSocial(com){
+  if (!com) return;
+  try { tablonSocial[com.id] = await apiDocente('/api/docente/mensajes/tablon?comisionId=' + encodeURIComponent(com.id)); }
+  catch(e) { return; } // el curso puede no estar guardado todavía en el servidor
+  const act = getActive();
+  if (act && act.id === com.id && activeSection === 'inicio') refrescarTablonFeed(act);
+}
+async function enviarComentarioDocente(ev, form){
+  ev.preventDefault();
+  const com = getActive(); if (!com) return false;
+  const inp = form.querySelector('input'), btn = form.querySelector('button');
+  const texto = inp.value.trim();
+  if (!texto) { inp.focus(); return false; }
+  btn.disabled = true;
+  try {
+    await apiDocente('/api/docente/mensajes/comentario', 'POST', { comisionId: com.id, parent: form.dataset.parent, texto });
+    inp.value = '';
+    await cargarTablonSocial(com);
+  } catch(e) { showToast(e.message); btn.disabled = false; }
+  return false;
+}
+async function moderarBorrar(id){
+  if (!confirm('¿Eliminar este mensaje del tablón?')) return;
+  const com = getActive(); if (!com) return;
+  try { await apiDocente('/api/docente/mensajes/mensaje/' + id, 'DELETE'); await cargarTablonSocial(com); showToast('Eliminado'); }
+  catch(e) { showToast(e.message); }
+}
+// Después de publicar un aviso: se guarda el estado y se avisa al celular de los estudiantes.
+async function notificarAvisoNuevo(comId){
+  try {
+    clearTimeout(_saveTimer);
+    await _doSaveState();
+    await apiDocente('/api/docente/mensajes/aviso-publicado', 'POST', { comisionId: comId });
+  } catch(e) {}
+}
+
+// ── Avisos al celular (docente) ──
+function avisosCardHTML(texto, boton, accion){
+  return `<div class="avisos-card"><span>${texto}</span>${boton ? `<button type="button" class="primary" onclick="${accion}">${boton}</button>` : ''}</div>`;
+}
+async function refrescarAvisosCard(){
+  if (!document.getElementById('avisos-card') || !window.MagistroPush) return;
+  const e = await MagistroPush.estado('docente');
+  const el = document.getElementById('avisos-card'); if (!el) return;
+  let html = '';
+  if (!e.soportado) html = e.instalar ? avisosCardHTML('Para recibir avisos en tu iPhone, agregá esta app a la pantalla de inicio (Compartir → Agregar a inicio) y abrila desde ahí.') : '';
+  else if (!e.habilitado) html = '';
+  else if (e.permiso === 'denied') html = avisosCardHTML('Bloqueaste los avisos de este navegador. Para recibirlos, activalos desde los ajustes del sitio.');
+  else if (e.activo) html = avisosCardHTML('Avisos activados en este dispositivo: te avisamos cuando un estudiante escribe o publica. La notificación no muestra el texto.', 'Desactivar', 'desactivarAvisosDocente(this)');
+  else html = avisosCardHTML('Recibí un aviso en el celular cuando un estudiante te escriba o publique en el tablón.', 'Activar avisos', 'activarAvisosDocente(this)');
+  el.innerHTML = html;
+}
+async function activarAvisosDocente(btn){
+  btn.disabled = true;
+  try { await MagistroPush.activar('docente'); showToast('Avisos activados'); } catch(e) { showToast(e.message); }
+  refrescarAvisosCard();
+}
+async function desactivarAvisosDocente(btn){
+  btn.disabled = true;
+  try { await MagistroPush.desactivar('docente'); showToast('Avisos desactivados'); } catch(e) { showToast(e.message); }
+  refrescarAvisosCard();
+}
+
+// ═══════════════════════════════════════════════════════
+// SECCIÓN: MENSAJES (conversaciones privadas con estudiantes)
+// ═══════════════════════════════════════════════════════
+let msgState = { comId: null, convs: [], activa: null, nombre: '', mensajes: [] };
+
+function renderMensajesSection(panel, com, headerHTML){
+  _renderedComId = null;
+  if (msgState.comId !== com.id) msgState = { comId: com.id, convs: [], activa: null, nombre: '', mensajes: [] };
+  panel.innerHTML = headerHTML + `<div id="avisos-card"></div>
+    <div class="msg-wrap${msgState.activa ? ' thread' : ''}" id="msgWrap">
+      <div class="msg-list" id="msgList"></div>
+      <div class="msg-thread" id="msgThread"></div>
+    </div>`;
+  pintarConversaciones(com);
+  pintarHilo();
+  refrescarAvisosCard();
+  cargarConversaciones(com);
+  if (msgState.activa) cargarHilo(com);
+}
+function idEstudiante(s){ return s.id || String(s.dni || '').replace(/\D/g, ''); }
+
+function pintarConversaciones(com){
+  const el = document.getElementById('msgList'); if (!el) return;
+  const opciones = com.students.filter(s => idEstudiante(s)).map(s => `<option value="${escHtml(idEstudiante(s))}">${escHtml(s.name)}</option>`).join('');
+  const lista = msgState.convs.map(c => `<button type="button" class="msg-conv${c.studentId === msgState.activa ? ' on' : ''}" onclick="abrirConversacion('${escHtml(c.studentId)}')">
+      <b>${escHtml(c.nombre)}</b><span>${c.ultimoAutor === 'docente' ? 'Vos: ' : ''}${escHtml(c.ultimoTexto)}</span><span>${fmtHoraCorta(c.fecha)}</span></button>`).join('');
+  el.innerHTML = `<div class="mg-top"><select id="msgNuevo" aria-label="Escribir a un estudiante" onchange="if(this.value){abrirConversacion(this.value);this.value=''}"><option value="">Escribir a un estudiante…</option>${opciones}</select></div>
+    ${lista || '<div class="mg-empty">Todavía no hay conversaciones. Cuando un estudiante te escriba, aparece acá.</div>'}`;
+}
+function pintarHilo(){
+  const el = document.getElementById('msgThread'); if (!el) return;
+  if (!msgState.activa) { el.innerHTML = '<div class="mg-empty">Elegí una conversación o escribile a un estudiante.</div>'; return; }
+  const burbujas = msgState.mensajes.length
+    ? msgState.mensajes.map(m => `<div class="mg-b ${m.autor === 'docente' ? 'yo' : 'el'}"><div>${escHtml(m.texto)}</div><small>${fmtHoraCorta(m.fecha)}</small></div>`).join('')
+    : '<div class="mg-empty">Todavía no hay mensajes en esta conversación.</div>';
+  el.innerHTML = `<div class="mg-head"><button type="button" class="mg-back" onclick="cerrarConversacion()" aria-label="Volver a las conversaciones">‹ Volver</button><span>${escHtml(msgState.nombre)}</span></div>
+    <div class="mg-chat" id="mgChat" aria-live="polite">${burbujas}</div>
+    <form class="mg-form" onsubmit="return enviarRespuesta(event)">
+      <textarea id="mgTexto" maxlength="1000" placeholder="Escribí tu mensaje…" aria-label="Mensaje para el estudiante"></textarea>
+      <button type="submit" class="primary">Enviar</button>
+    </form>`;
+  const ch = document.getElementById('mgChat'); if (ch) ch.scrollTop = ch.scrollHeight;
+}
+async function cargarConversaciones(com){
+  try { msgState.convs = (await apiDocente('/api/docente/mensajes/conversaciones?comisionId=' + encodeURIComponent(com.id))).conversaciones || []; }
+  catch(e) { return; }
+  if (activeSection === 'mensajes' && getActive() && getActive().id === com.id) pintarConversaciones(com);
+}
+async function cargarHilo(com){
+  if (!msgState.activa) return;
+  try { msgState.mensajes = (await apiDocente('/api/docente/mensajes/conversacion?comisionId=' + encodeURIComponent(com.id) + '&studentId=' + encodeURIComponent(msgState.activa))).mensajes || []; }
+  catch(e) { msgState.mensajes = []; }
+  if (activeSection === 'mensajes') pintarHilo();
+}
+function abrirConversacion(studentId){
+  const com = getActive(); if (!com) return;
+  const est = com.students.find(s => idEstudiante(s) === studentId);
+  const conv = msgState.convs.find(c => c.studentId === studentId);
+  msgState.activa = studentId;
+  msgState.nombre = (est && est.name) || (conv && conv.nombre) || 'Estudiante';
+  msgState.mensajes = [];
+  const w = document.getElementById('msgWrap'); if (w) w.classList.add('thread');
+  pintarConversaciones(com); pintarHilo(); cargarHilo(com);
+}
+function cerrarConversacion(){
+  msgState.activa = null; msgState.mensajes = [];
+  const w = document.getElementById('msgWrap'); if (w) w.classList.remove('thread');
+  const com = getActive(); if (com) pintarConversaciones(com);
+  pintarHilo();
+}
+async function enviarRespuesta(ev){
+  ev.preventDefault();
+  const com = getActive(); if (!com || !msgState.activa) return false;
+  const ta = document.getElementById('mgTexto'), btn = ev.target.querySelector('button');
+  const texto = ta.value.trim();
+  if (!texto) { ta.focus(); return false; }
+  btn.disabled = true;
+  try {
+    await apiDocente('/api/docente/mensajes/conversacion', 'POST', { comisionId: com.id, studentId: msgState.activa, texto });
+    ta.value = '';
+    await cargarHilo(com);
+    cargarConversaciones(com);
+  } catch(e) { showToast(e.message); }
+  btn.disabled = false;
+  return false;
+}
+// Al volver a la app (o tocar una notificación) se actualiza lo que se está mirando.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  const com = getActive(); if (!com) return;
+  if (activeSection === 'mensajes') { cargarConversaciones(com); cargarHilo(com); }
+  else if (activeSection === 'inicio') cargarTablonSocial(com);
+});
 
 function fmtFechaCorta(d){
   const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -2213,6 +2471,7 @@ function publishTablonPost(){
   collapseTablonComposer();
   renderPanel();
   showToast('Aviso publicado');
+  notificarAvisoNuevo(com.id);
 }
 function deleteTablonPost(id){
   if (!confirm('¿Eliminar este aviso del tablón?')) return;
@@ -2228,7 +2487,7 @@ function switchSection(sec) {
   activeSection = sec;
   _renderedComId = null;
   // Update sidebar nav active state
-  ['inicio','estudiantes','notas','asistencia','planificacion','trabajos','bibliografia','tramites','archivo','configuracion'].forEach(s => {
+  ['inicio','estudiantes','notas','asistencia','planificacion','trabajos','bibliografia','mensajes','tramites','archivo','configuracion'].forEach(s => {
     const el = document.getElementById('nav-' + s);
     if (el) el.classList.toggle('active', s === sec);
     const mel = document.getElementById('more-' + s);
@@ -2245,7 +2504,7 @@ function switchSection(sec) {
 function initMoreSheet(){
   const sheet = document.getElementById('moreSheet');
   if (!sheet || sheet.childElementCount) return;
-  ['planificacion','trabajos','bibliografia','tramites','archivo','configuracion','logout'].forEach((s, i) => {
+  ['planificacion','trabajos','bibliografia','mensajes','tramites','archivo','configuracion','logout'].forEach((s, i) => {
     const src = document.getElementById('nav-' + s);
     if (!src) return;
     if (s === 'tramites') { const sep = document.createElement('div'); sep.className = 'more-sep'; sheet.appendChild(sep); }
@@ -6087,6 +6346,7 @@ async function authRegister(ev){
 }
 
 async function logout(){
+  try { if (window.MagistroPush) await MagistroPush.desactivar('docente'); } catch(e){}
   try { await fetch('/api/logout', { method:'POST', credentials:'same-origin' }); } catch(e){}
   location.reload();
 }
