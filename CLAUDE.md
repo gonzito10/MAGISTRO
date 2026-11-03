@@ -153,5 +153,6 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       (`display`); conviene pasarlos a clases a medida que se toque cada sección.
 - [ ] Probar con datos reales las secciones Planificación, Trámites y Archivo (las
       revisé con datos de ejemplo).
-- [ ] El texto de los íconos pequeños (≈ 9–11 px en etiquetas) y las tablas densas
-      (controles de 36 px) siguen por debajo de lo ideal en celular.
+- [x] Etiquetas pequeñas en celular: piso de 11 px en docente y portal (bloque "Celular: ningún texto
+      por debajo de 11 px"); no cambia el escritorio ni la impresión/PDF. Las tablas densas mantienen
+      controles de 36 px a propósito (para que entren en pantalla).

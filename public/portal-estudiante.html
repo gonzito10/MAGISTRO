@@ -220,6 +220,12 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+/* Celular: ningún texto por debajo de 11 px */
+@media (max-width:760px){
+  .metric-label,.act-num.nosept{font-size:11px !important;}
+  .materia-item .mi-docente,.badge-pub,.badge-pend{font-size:11.5px;}
+  .sidebar-logo-sub{font-size:11px;}
+}
 </style>
 </head>
 <body>

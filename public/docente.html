@@ -745,6 +745,15 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 .u-center{text-align:center!important}
 .u-th-plain{text-align:center;font-weight:normal;background:#e8e6e0!important}
 
+/* Celular: ningún texto por debajo de 11 px (en impresión/PDF no cambia nada) */
+@media (max-width:700px){
+  .metric-card-label,.biblio-card-type,.sum-chip,
+  thead tr.group-row th,.works-table thead tr.wg-row th,
+  th[style*="font-size:10px"],[style*="font-size:9px"]{font-size:11px !important;}
+  .sidebar-section-label,.sidebar-logo-sub{font-size:11px;}
+  .unit-chip-del{font-size:11px;}
+}
+
 /* ── Resumen del estudiante ── */
 .est-click{cursor:pointer;}
 .est-link:hover{color:var(--accent);text-decoration:underline;}
