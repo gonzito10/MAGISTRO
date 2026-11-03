@@ -1044,12 +1044,23 @@ function applyDarkModeStudent(on){
   document.getElementById('dark-toggle-icon').innerHTML = on
     ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'
     : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+// Si el estudiante nunca eligió, se sigue la preferencia del sistema
+function toggleDarkModeStudent(){
+  const on = !document.body.classList.contains('dark-mode');
+  applyDarkModeStudent(on);
   try { localStorage.setItem('magistro_dark', on ? '1' : '0'); } catch(e){}
 }
-function toggleDarkModeStudent(){
-  applyDarkModeStudent(!document.body.classList.contains('dark-mode'));
-}
-try { if (localStorage.getItem('magistro_dark') === '1') applyDarkModeStudent(true); } catch(e){}
+(function(){
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  let saved = null;
+  try { saved = localStorage.getItem('magistro_dark'); } catch(e){}
+  applyDarkModeStudent(saved === null ? mq.matches : saved === '1');
+  mq.addEventListener('change', () => {
+    let s = null; try { s = localStorage.getItem('magistro_dark'); } catch(e){}
+    if (s === null) applyDarkModeStudent(mq.matches);
+  });
+})();
 
 // ── Bootstrap: si ya había sesión de estudiante activa, entrar directo ──
 (async function boot(){

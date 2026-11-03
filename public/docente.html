@@ -2009,16 +2009,24 @@ function updateTabActiveStyle(t) {
 }
 
 function saveConfig() {
-  try { localStorage.setItem('gd_config', JSON.stringify({theme:activeTheme, icon:activeIcon, darkMode:darkMode})); } catch(e){}
+  try { localStorage.setItem('gd_config', JSON.stringify({theme:activeTheme, icon:activeIcon, darkMode:darkMode, darkPref:darkPref})); } catch(e){}
 }
 function loadConfig() {
   try {
     const c = JSON.parse(localStorage.getItem('gd_config')||'{}');
     if (c.theme && THEMES[c.theme]) applyTheme(c.theme);
     if (c.icon  && ICONS[c.icon])  { activeIcon=c.icon; }
-    if (c.darkMode) applyDarkMode(true);
+    // Modo oscuro: 'on'/'off' si el docente lo eligió; si no, sigue al sistema
+    darkPref = c.darkPref || (c.darkMode ? 'on' : 'auto');
   } catch(e){}
+  if (darkPref === 'on' || (darkPref === 'auto' && systemDark.matches)) applyDarkMode(true);
 }
+let darkPref = 'auto';
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+systemDark.addEventListener('change', () => {
+  if (darkPref !== 'auto') return;
+  if (darkMode !== systemDark.matches) { applyDarkMode(systemDark.matches); if (typeof renderPanel === 'function') try { renderPanel(); } catch(e){} }
+});
 
 let darkMode = false;
 const DARK_VARS = {
@@ -2046,7 +2054,7 @@ function applyDarkMode(on){
   updateTabActiveStyle(THEMES[activeTheme]);
   saveConfig();
 }
-function toggleDarkMode(){ applyDarkMode(!darkMode); renderPanel(); }
+function toggleDarkMode(){ darkPref = darkMode ? 'off' : 'on'; applyDarkMode(!darkMode); renderPanel(); }
 
 function renderConfiguracion(panel) {
   panel.innerHTML = `

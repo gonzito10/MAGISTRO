@@ -141,8 +141,9 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [x] Bienvenida con avance automático (o toque) y aviso sin conexión en el login del portal.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
-- [ ] Modo oscuro: ya existe como opción manual en Configuración y en el portal; falta
-      que siga la preferencia del sistema y que la bienvenida use el mismo mecanismo.
+- [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo
+      elige a mano en Configuración / portal; desde ahí se respeta su elección
+      (`darkPref` en `gd_config` del docente; `magistro_dark` en el portal). La bienvenida ya usaba `prefers-color-scheme`.
 - [ ] Paleta de colores repetida en las 3 páginas: pasarla a un CSS compartido
       (`public/tokens.css`) y sacar estilos en línea de `docente.html` (≈385).
 - [ ] Probar con datos reales las secciones Planificación, Trámites y Archivo (las
