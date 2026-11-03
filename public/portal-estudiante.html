@@ -241,7 +241,7 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
 .tb-form input,.tb-comp textarea,.chat-form textarea{flex:1;min-width:0;padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font:inherit;font-size:14px;background:var(--surface);color:var(--text)}
 .tb-comp{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:12px}
 .tb-comp textarea,.chat-form textarea{width:100%;resize:vertical;min-height:64px}
-.tb-comp-f{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.tb-comp-f{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:8px}
 .tb-comp-f small{color:var(--text3);font-size:12px}
 .p-btn{padding:9px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
 .p-btn.primary{background:var(--accent);color:#fff;border-color:transparent;font-weight:600}
@@ -686,14 +686,13 @@ function renderInicio(){
 
   let html = `<div class="greeting">
     <h1>${saludoHora()}, ${escHtml(nombre)}</h1>
-    <p>${escHtml(currentData.curso.materia)}${currentData.curso.comision?' · Comisión '+escHtml(currentData.curso.comision):''}${currentData.curso.periodo?' · '+escHtml(currentData.curso.periodo):''}</p>
   </div>`;
 
   // Tablón: avisos del docente + posteos y comentarios de la clase — contenido principal de Inicio
   html += `<div id="avisos-card"></div>
   <div class="tb-comp">
     <textarea id="tb-nuevo" maxlength="1000" placeholder="Escribí algo para tu clase…" aria-label="Nuevo posteo en el tablón"></textarea>
-    <div class="tb-comp-f"><small>Lo ven todos los de la comisión.</small><button type="button" class="p-btn primary" onclick="publicarPost(this)">Publicar</button></div>
+    <div class="tb-comp-f"><button type="button" class="p-btn primary" onclick="publicarPost(this)">Publicar</button></div>
   </div>
   <div id="tablon-feed">${feedHTML()}</div>`;
 
@@ -1133,7 +1132,7 @@ function feedHTML(){
   ((currentData && currentData.tablon) || []).forEach(p => items.push({ key: 'aviso:' + p.id, autor: docNombre, esDocente: true, texto: p.mensaje, fecha: p.fecha, propio: false, id: null }));
   if (social) social.tablon.forEach(p => items.push({ key: 'post:' + p.id, autor: p.autorNombre || 'Estudiante', esDocente: p.autor === 'docente', texto: p.texto, fecha: p.fecha, propio: p.propio, id: p.id }));
   items.sort((a, b) => String(b.fecha || '').localeCompare(String(a.fecha || '')));
-  if (!items.length) return '<div class="tablon-post tb-empty">Todavía no hay avisos ni posteos. Podés ser el primero en publicar.</div>';
+  if (!items.length) return '';
   const coms = {};
   (social ? social.comentarios : []).forEach(c => { (coms[c.parent] = coms[c.parent] || []).push(c); });
   const shown = items.slice(0, feedLimit);
