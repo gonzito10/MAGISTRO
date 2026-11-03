@@ -2264,7 +2264,7 @@ function tablonFeedHTML(com){
   social.posts.forEach(p => items.push({ tipo: 'post', key: 'post:' + p.id, id: p.id, autor: p.autorNombre || 'Estudiante', esDocente: p.autor === 'docente', texto: p.texto, fecha: p.fecha }));
   items.sort((a, b) => String(b.fecha || '').localeCompare(String(a.fecha || '')));
   if (!items.length) {
-    return `<div style="font-size:12.5px;color:var(--text3);padding:16px 0;text-align:center">Todavía no hay avisos ni posteos. Los estudiantes ven el tablón en la sección Inicio de su portal y también pueden publicar y comentar.</div>`;
+    return '';
   }
   const coms = {};
   social.comentarios.forEach(c => { (coms[c.parent] = coms[c.parent] || []).push(c); });
