@@ -2,7 +2,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fdf6f0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Magistro">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<script src="/pwa.js" defer></script>
 <title>Portal de Estudiantes — MAGISTRO</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap');
@@ -186,6 +194,12 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
   .sidebar-logo,.student-card{display:none}
   .nav{flex-direction:row;flex-wrap:wrap}
   .metrics{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Celular: elementos táctiles cómodos y sin zoom al tocar un campo */
+@media (max-width:700px){
+  button,select,a.btn{min-height:44px;}
+  input:not([type=checkbox]):not([type=radio]){min-height:44px;font-size:16px!important;}
 }
 </style>
 </head>

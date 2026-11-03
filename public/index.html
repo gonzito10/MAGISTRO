@@ -2,7 +2,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fdf6f0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Magistro">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<script src="/pwa.js" defer></script>
 <title>MAGISTRO</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap');
@@ -69,6 +77,12 @@ body{
 <style>
   @keyframes splashDot{0%,80%,100%{opacity:.2;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}
   .splash-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.2;animation:splashDot 1.2s ease-in-out infinite}
+
+/* Celular: elementos táctiles cómodos y sin zoom al tocar un campo */
+@media (max-width:700px){
+  button,select,a.btn{min-height:44px;}
+  input:not([type=checkbox]):not([type=radio]){min-height:44px;font-size:16px!important;}
+}
 </style>
 <script>
 (function(){

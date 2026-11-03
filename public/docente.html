@@ -2,9 +2,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fdf6f0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Magistro">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <title>Gestión Docente</title>
 <link rel="icon" id="app-favicon" type="image/svg+xml" href="">
+<script src="/pwa.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -662,18 +669,66 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   background: var(--surface);
 }
 
+/* ── Escritorio: lo que solo existe en el celular queda oculto ── */
+.sec-more, .more-sheet, .more-backdrop { display:none; }
+
+/* ── Celular: barra inferior + selector de curso arriba ── */
 @media(max-width:700px){
-  .app-shell{flex-direction:column;}
-  .sidebar{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap;padding:0.75rem;gap:0.5rem;border-right:none;border-bottom:0.5px solid var(--border2);}
-  .sidebar-logo{display:none;}
-  .sidebar-section-label{display:none;}
-  .section-tabs{flex-direction:row;flex-wrap:wrap;}
-  .sidebar-actions{flex-direction:row;margin-top:0;}
-  .stats{grid-template-columns:repeat(2,1fr);}
+  .app-shell{flex-direction:column;padding-bottom:calc(64px + env(safe-area-inset-bottom));}
+  .sidebar{display:contents;}
+  .sidebar-logo,.sidebar-section-label,.sidebar-actions,
+  #nav-planificacion,#nav-trabajos,#nav-bibliografia{display:none;}
+
+  /* Selector de materia y comisión: barra fija arriba, lado a lado */
+  .sb-course{position:sticky;top:0;z-index:70;background:var(--sidebar-bg);
+    border-bottom:0.5px solid var(--border2);
+    padding:calc(8px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 8px calc(12px + env(safe-area-inset-left));}
+  .com-bar{flex-direction:row;gap:8px;}
+  #matSelectorWrap,.com-sub-wrap{flex:1;min-width:0;}
+  .com-sub-wrap{padding-left:0;border-left:none;}
+  .com-dropdown{min-width:min(300px,86vw);}
+  .com-sub-wrap .com-dropdown{left:auto;right:0;}
+
+  /* Barra inferior: 4 secciones + "Más" */
+  .sb-nav{position:fixed;left:0;right:0;bottom:0;z-index:95;background:var(--sidebar-bg);
+    border-top:0.5px solid var(--border2);
+    padding:0 calc(4px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(4px + env(safe-area-inset-left));}
+  #sectionTabs{flex-direction:row;gap:0;}
+  #sectionTabs .sec-tab{flex:1;min-width:0;width:auto;flex-direction:column;justify-content:center;
+    gap:3px;min-height:60px;padding:6px 2px;font-size:12px;text-align:center;white-space:nowrap;border-radius:12px;}
+  #sectionTabs .sec-tab svg{width:22px;height:22px;}
+  .sec-more{display:flex;}
+  .sec-tab.sec-more svg{fill:currentColor;stroke:none;}
+
+  /* Hoja "Más": el resto de las secciones y Cerrar sesión */
+  .more-backdrop{position:fixed;inset:0;z-index:85;background:rgba(40,15,5,.28);}
+  body.more-open .more-backdrop{display:block;}
+  .more-sheet{position:fixed;left:8px;right:8px;bottom:calc(68px + env(safe-area-inset-bottom));z-index:90;
+    background:var(--surface);border:0.5px solid var(--border2);border-radius:16px;
+    box-shadow:0 10px 36px rgba(0,0,0,.22);padding:6px;flex-direction:column;gap:0;
+    max-height:calc(100vh - 160px);overflow-y:auto;}
+  body.more-open .more-sheet{display:flex;}
+  .more-sheet .sec-tab{width:100%;flex-direction:row;justify-content:flex-start;gap:14px;
+    min-height:48px;padding:10px 14px;font-size:15px;text-align:left;}
+  .more-sheet .sec-tab svg{width:20px;height:20px;}
+  .more-sheet .more-sep{height:0.5px;background:var(--border2);margin:4px 8px;}
+
+  .main-content{padding:1rem 1rem 2rem;}
+  .toast{bottom:calc(76px + env(safe-area-inset-bottom));}
+
+  /* Grillas de estadísticas: 2 columnas (también las que traen estilo en línea) */
+  .stats,.metric-grid{grid-template-columns:repeat(2,1fr)!important;}
   .clase-fields{grid-template-columns:1fr;}
-  .main-content{padding:1rem 1rem 3rem;}
+
+  /* Elementos táctiles: mínimo cómodo para el dedo; las tablas quedan más densas */
+  button,select,.com-selector-btn,input[type=button],input[type=submit]{min-height:44px;min-width:44px;}
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea{min-height:44px;}
+  /* 16px evita que iOS haga zoom al tocar un campo */
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea{font-size:16px!important;}
+  table button,.table-wrap button,.att-table-wrap button{min-height:36px;min-width:36px;}
+  table input,table select,.table-wrap input,.table-wrap select{min-height:38px;}
 }
-@media print { .tabs-bar,.toolbar,.overlay,.toast,.section-tabs,.sidebar,.att-toolbar button,.plan-setup{display:none!important;} body{background:#fff;} .main-content{padding:0;} .table-wrap,.att-table-wrap{border:none;border-radius:0;} }
+@media print { .tabs-bar,.toolbar,.overlay,.toast,.section-tabs,.sidebar,.sb-course,.sb-nav,.more-sheet,.more-backdrop,.att-toolbar button,.plan-setup{display:none!important;} body{background:#fff;} .main-content{padding:0;} .table-wrap,.att-table-wrap{border:none;border-radius:0;} }
 </style>
 </head>
 <body>
@@ -728,7 +783,7 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
     </div>
 
     <!-- Materia + Comisión selector -->
-    <div>
+    <div class="sb-course">
       <div class="sidebar-section-label">Curso</div>
       <div class="com-bar" id="comBar">
 
@@ -759,7 +814,7 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
     </div>
 
     <!-- Main nav -->
-    <div>
+    <div class="sb-nav">
       <div class="sidebar-section-label">Secciones</div>
       <div class="section-tabs" id="sectionTabs">
         <div class="sec-tab active" id="nav-inicio" onclick="switchSection('inicio')">
@@ -790,6 +845,10 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
           <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Bibliografía
         </div>
+        <div class="sec-tab sec-more" id="nav-more" onclick="toggleMore()" role="button" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+          Más
+        </div>
       </div>
     </div>
 
@@ -816,6 +875,10 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
     </div>
 
   </aside>
+
+  <!-- Hoja "Más" (celular): se arma por JS clonando los botones del menú lateral -->
+  <div class="more-backdrop" id="moreBackdrop" onclick="closeMore()"></div>
+  <div class="more-sheet" id="moreSheet" role="menu" aria-label="Más secciones"></div>
 
   <!-- Main content -->
   <div class="main-content">
@@ -1621,7 +1684,7 @@ function renderInicioSection(panel, com, headerHTML) {
   html += `</div>`;
 
   // ── Estadísticas del curso (secundarias, debajo del tablón) ──
-  html += `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 8px">
+  html += `<div class="metric-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 8px">
     <div class="metric-card"><div class="metric-card-label">Estudiantes</div><div class="metric-card-val">${com.students.length}</div></div>
     <div class="metric-card"><div class="metric-card-label">Próxima clase</div><div class="metric-card-val" style="font-size:15px">${prox ? fmtFechaCorta(prox.fecha) : '—'}</div><div class="metric-card-sub">${prox ? tipoLabelInicio(prox.clase.tipo) : 'Sin clases próximas'}</div></div>
     <div class="metric-card"><div class="metric-card-label">Asistencia promedio</div><div class="metric-card-val" style="color:${promAsistencia===null?'var(--text3)':promAsistencia>=75?'var(--green-text)':promAsistencia>=50?'var(--amber-text)':'var(--red-text)'}">${promAsistencia===null?'—':promAsistencia+'%'}</div></div>
@@ -1702,9 +1765,44 @@ function switchSection(sec) {
   ['inicio','estudiantes','notas','asistencia','planificacion','trabajos','bibliografia','tramites','archivo','configuracion'].forEach(s => {
     const el = document.getElementById('nav-' + s);
     if (el) el.classList.toggle('active', s === sec);
+    const mel = document.getElementById('more-' + s);
+    if (mel) mel.classList.toggle('active', s === sec);
   });
+  // En el celular, "Más" se marca cuando la sección activa vive en esa hoja
+  const moreBtn = document.getElementById('nav-more');
+  if (moreBtn) moreBtn.classList.toggle('active', !['inicio','estudiantes','notas','asistencia'].includes(sec));
+  closeMore();
   fadeRenderPanel();
 }
+
+// ── Hoja "Más" (solo se ve en celular; el CSS la oculta en escritorio) ──
+function initMoreSheet(){
+  const sheet = document.getElementById('moreSheet');
+  if (!sheet || sheet.childElementCount) return;
+  ['planificacion','trabajos','bibliografia','tramites','archivo','configuracion','logout'].forEach((s, i) => {
+    const src = document.getElementById('nav-' + s);
+    if (!src) return;
+    if (s === 'tramites') { const sep = document.createElement('div'); sep.className = 'more-sep'; sheet.appendChild(sep); }
+    const c = src.cloneNode(true);
+    c.id = 'more-' + s;
+    c.removeAttribute('style');
+    c.setAttribute('role', 'menuitem');
+    if (s === 'logout') c.style.color = 'var(--red-text)';
+    sheet.appendChild(c);
+  });
+}
+function toggleMore(){
+  const open = !document.body.classList.contains('more-open');
+  document.body.classList.toggle('more-open', open);
+  const b = document.getElementById('nav-more');
+  if (b) b.setAttribute('aria-expanded', String(open));
+}
+function closeMore(){
+  document.body.classList.remove('more-open');
+  const b = document.getElementById('nav-more');
+  if (b) b.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMore(); });
 
 // Transición sutil (fade) cada vez que se recarga el panel principal
 function fadeRenderPanel(){
@@ -5153,6 +5251,7 @@ async function enterApp(){
   const ok = await loadState();
   loadConfig();
   renderTabs();
+  initMoreSheet();
   ['inicio','estudiantes','notas','asistencia','planificacion','trabajos','bibliografia','configuracion'].forEach(s => {
     const el = document.getElementById('nav-' + s);
     if (el) el.classList.toggle('active', s === activeSection);
@@ -5177,6 +5276,15 @@ async function boot(){
   } catch(e) {}
   // No hay sesión válida: mostrar el login
   document.getElementById('auth-gate').style.display = 'flex';
+  // Sin internet no se puede validar la sesión: avisarlo en vez de parecer un login común
+  if (!navigator.onLine) {
+    const er = document.getElementById('auth-error');
+    if (er) {
+      er.textContent = 'Sin conexión. Conectate a internet para ingresar: tus datos se guardan en línea.';
+      er.style.display = 'block';
+    }
+    window.addEventListener('online', () => location.reload(), { once: true });
+  }
 }
 
 window.addEventListener('beforeunload', saveStateBeacon);

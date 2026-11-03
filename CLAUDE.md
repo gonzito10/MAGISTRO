@@ -39,6 +39,10 @@ routes/auth.js       Registro/login docente, login estudiante por DNI, /me, /log
 routes/docente.js    GET/PUT /api/docente/state y /config (protegido)
 routes/estudiante.js GET /api/estudiante/mis-materias, /data; POST /cambiar
 public/              Las tres páginas HTML
+public/manifest.webmanifest  Manifest de la PWA (nombre, colores, íconos, accesos directos)
+public/sw.js         Service worker: cachea solo estáticos, NUNCA /api/*
+public/pwa.js        Registra el service worker (lo cargan las tres páginas)
+public/icons/        Íconos 192, 512, maskable y apple-touch (acanto sobre terracota)
 ```
 
 ## Modelo de datos (resumen)
@@ -84,6 +88,15 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
   absolutas.
 - En Vercel `express.static()` se ignora: todo estático va en `public/`.
 - Manejar errores en Express y responder JSON, no páginas de error por defecto.
+- **PWA**: el service worker no debe cachear ni interceptar `/api/*` (datos de
+  notas, asistencia y sesión). Páginas con red primero; estáticos y librerías
+  externas (fuentes, CDN) desde caché. Si cambiás íconos o archivos estáticos
+  y no se ven en un celular que ya la instaló, subí `VERSION` en `sw.js`.
+- **Celular** (≤700 px): en `docente.html` la navegación es una barra inferior
+  (Inicio, Estudiantes, Notas, Asistencia, Más) y el selector de curso va
+  arriba. La hoja "Más" se arma por JS clonando los botones del menú lateral
+  (`initMoreSheet`). Elementos táctiles de al menos 44 px (en tablas, 36 px) y
+  campos a 16 px para evitar el zoom de iOS.
 - No cambiar el formato JSON de `data` sin migrar los datos existentes.
 - Textos de la interfaz y mensajes de error: en español.
 
@@ -105,9 +118,18 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 
 - [x] Código movido a la raíz del repo y adaptado a Vercel (app exportada, pool
       serverless, `.gitignore`, `.env.example`).
-- [ ] Crear el proyecto en Vercel, cargar variables y desplegar.
-- [ ] Verificar el flujo completo en producción (registro, guardado, portal por DNI).
-- [ ] **Convertir en PWA** (objetivo original): `manifest.json`, íconos, service
-      worker que **no cachee `/api/*`** (para no mostrar notas o asistencia
-      viejas), enlazarlo en las tres páginas HTML.
-- [ ] Definir si la PWA es para docentes, estudiantes o ambos.
+- [x] Proyecto desplegado en Vercel (https://magistro.vercel.app), registro y login probados.
+- [x] **PWA** armada: manifest, íconos, service worker sin caché de `/api`, metas
+      (`theme-color`, `apple-touch-icon`, `viewport-fit`), una sola PWA para
+      docentes y estudiantes (accesos directos a cada portal).
+- [x] Navegación móvil con barra inferior y elementos táctiles de 44 px en `docente.html`.
+- [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
+      iPhone: Safari → Compartir → "Agregar a inicio").
+- [ ] Mejoras de diseño pendientes: contraste del texto secundario (≈3:1, debería
+      ser 4,5:1), estilo de foco visible, `prefers-reduced-motion`, modo oscuro en
+      toda la app (hoy solo en la bienvenida), pantalla de bienvenida sin "Click
+      para continuar" al abrir la app instalada, paleta repetida en las 3 páginas.
+- [ ] Revisar en celular las secciones Planificación, Actividades, Bibliografía,
+      Trámites, Archivo, Configuración y el portal del estudiante ya logueado.
+- [ ] Sin conexión la app abre, pero los datos requieren internet (aviso en el login
+      del docente; falta el mismo aviso en el portal del estudiante).
