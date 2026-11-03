@@ -659,7 +659,7 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 }
 
 /* ── Escritorio: lo que solo existe en el celular queda oculto ── */
-.sec-more, .more-sheet, .more-backdrop, .course-chip, .course-sheet, .course-backdrop { display:none; }
+.sec-more, .more-sheet, .more-backdrop, .course-chip, .course-sheet, .course-backdrop, .m-title { display:none; }
 
 /* ── Celular: barra inferior + selector de curso arriba ── */
 @media(max-width:700px){
@@ -669,7 +669,7 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   #nav-planificacion,#nav-trabajos,#nav-bibliografia{display:none;}
 
   /* Selector de materia y comisión: barra fija arriba, lado a lado */
-  .sb-course{position:sticky;top:0;z-index:70;background:var(--sidebar-bg);
+  .sb-course{position:static;background:var(--sidebar-bg);
     border-bottom:0.5px solid var(--border2);
     padding:calc(8px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 8px calc(12px + env(safe-area-inset-left));}
   .com-bar{flex-direction:row;gap:8px;}
@@ -680,6 +680,7 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 
   /* Selector de curso en celular: un solo botón + hoja con todos los cursos */
   .com-bar,.com-header{display:none;}
+  .m-title{display:block;font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin:4px 0 12px;color:var(--text);}
   .course-chip{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:6px 12px;
     background:var(--surface);border:1px solid var(--border2);border-radius:12px;color:var(--text);font:inherit;text-align:left;cursor:pointer;}
   .course-chip svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
@@ -1913,7 +1914,9 @@ function renderPanel() {
   initCommission(com);
 
   // Header (always shown)
+  const M_TITLES = {inicio:'Inicio', estudiantes:'Estudiantes', notas:'Notas', asistencia:'Asistencia', trabajos:'Actividades', planificacion:'Planificación', bibliografia:'Bibliografía'};
   const headerHTML = `
+    <h1 class="m-title">${M_TITLES[activeSection] || ''}</h1>
     <div class="com-header">
       <div class="com-header-text" style="display:flex;align-items:flex-start;gap:8px">
         <div>
