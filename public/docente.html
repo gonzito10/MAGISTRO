@@ -659,7 +659,7 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 }
 
 /* ── Escritorio: lo que solo existe en el celular queda oculto ── */
-.sec-more, .more-sheet, .more-backdrop { display:none; }
+.sec-more, .more-sheet, .more-backdrop, .course-chip, .course-sheet, .course-backdrop { display:none; }
 
 /* ── Celular: barra inferior + selector de curso arriba ── */
 @media(max-width:700px){
@@ -677,6 +677,49 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   .com-sub-wrap{padding-left:0;border-left:none;}
   .com-dropdown{min-width:min(300px,86vw);}
   .com-sub-wrap .com-dropdown{left:auto;right:0;}
+
+  /* Selector de curso en celular: un solo botón + hoja con todos los cursos */
+  .com-bar,.com-header{display:none;}
+  .course-chip{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:6px 12px;
+    background:var(--surface);border:1px solid var(--border2);border-radius:12px;color:var(--text);font:inherit;text-align:left;cursor:pointer;}
+  .course-chip svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .course-chip .cc-ico{stroke:var(--accent);}
+  .course-chip .cc-chev{stroke:var(--text2);}
+  .cc-text{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .cc-mat{font-size:15px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cc-com{font-size:12px;color:var(--text2);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .course-backdrop{position:fixed;inset:0;z-index:105;background:rgba(40,15,5,.5);}
+  body.course-open .course-backdrop{display:block;}
+  .course-sheet{position:fixed;left:0;right:0;bottom:0;z-index:110;background:var(--surface);color:var(--text);
+    border-radius:20px 20px 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom));max-height:88vh;
+    flex-direction:column;gap:10px;box-shadow:0 -8px 30px rgba(0,0,0,.25);}
+  body.course-open .course-sheet{display:flex;}
+  body.course-open{overflow:hidden;}
+  .cs-handle{width:40px;height:4px;border-radius:2px;background:var(--border2);align-self:center;flex-shrink:0;}
+  .cs-head{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .cs-head h2{font-size:20px;margin:0;}
+  .cs-body{overflow-y:auto;flex:1;min-height:0;display:flex;flex-direction:column;gap:14px;}
+  .cs-mat-head{display:flex;align-items:center;gap:2px;margin-bottom:4px;}
+  .cs-mat-name{flex:1;min-width:0;font-size:13px;font-weight:700;color:var(--text2);}
+  .cs-mat-name small{font-weight:500;color:var(--text3);font-size:12px;}
+  .cs-ico-btn{width:44px;height:44px;flex-shrink:0;border:0;background:transparent;border-radius:10px;color:var(--text3);
+    display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;cursor:pointer;padding:0;}
+  .cs-ico-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .cs-row{display:flex;align-items:center;gap:0;margin-bottom:8px;}
+  .cs-item{flex:1;min-width:0;min-height:56px;display:flex;align-items:center;gap:10px;padding:8px 12px;
+    border:1px solid var(--border2);background:var(--surface);border-radius:12px;font:inherit;text-align:left;color:var(--text);cursor:pointer;}
+  .cs-item.active{border:2px solid var(--accent);background:var(--surface2);}
+  .cs-item-t{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .cs-item-t b{font-size:15px;}
+  .cs-item-t span{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cs-item .cs-check{width:22px;height:22px;flex-shrink:0;fill:none;stroke:var(--accent);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+  .cs-empty{font-size:13px;color:var(--text3);padding:4px 2px 8px;}
+  .cs-add{min-height:44px;width:100%;border:1px dashed var(--border2);background:transparent;border-radius:12px;
+    color:var(--accent);font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+  .cs-foot{display:flex;gap:8px;flex-shrink:0;}
+  .cs-foot button{flex:1;min-height:48px;border-radius:12px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+    border:1px solid var(--border2);background:var(--surface);color:var(--text);}
+  .cs-foot button.primary{border-color:var(--accent);background:var(--accent);color:#fff;font-weight:700;}
 
   /* Barra inferior: 4 secciones + "Más" */
   .sb-nav{position:fixed;left:0;right:0;bottom:0;z-index:95;background:var(--sidebar-bg);
@@ -866,6 +909,11 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
     <!-- Materia + Comisión selector -->
     <div class="sb-course">
       <div class="sidebar-section-label">Curso</div>
+      <button class="course-chip" id="courseChip" type="button" onclick="openCourseSheet()" aria-haspopup="dialog" aria-expanded="false" aria-label="Cambiar de curso">
+        <svg class="cc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg>
+        <span class="cc-text"><span class="cc-mat" id="ccMat">Sin materias</span><span class="cc-com" id="ccCom"></span></span>
+        <svg class="cc-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
       <div class="com-bar" id="comBar">
 
         <!-- Materia selector -->
@@ -958,6 +1006,8 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   </aside>
 
   <!-- Hoja "Más" (celular): se arma por JS clonando los botones del menú lateral -->
+  <div class="course-backdrop" id="courseBackdrop" onclick="closeCourseSheet()"></div>
+  <div class="course-sheet" id="courseSheet" role="dialog" aria-modal="true" aria-labelledby="cs-title"></div>
   <div class="more-backdrop" id="moreBackdrop" onclick="closeMore()"></div>
   <div class="more-sheet" id="moreSheet" role="menu" aria-label="Más secciones"></div>
 
@@ -1448,7 +1498,108 @@ function renderTabs() {
   } else {
     subWrap.style.display = 'none';
   }
+  updateCourseChip();
 }
+
+// ── Selector de curso en celular (hoja inferior) ──
+function updateCourseChip() {
+  const mat = document.getElementById('ccMat'), com = document.getElementById('ccCom');
+  if (!mat || !com) return;
+  const m = materias.find(x => x.id === activeMateriaId);
+  const c = commissions.find(x => x.id === activeId && !x.archived);
+  mat.textContent = m ? m.nombre : (materias.length ? 'Elegí una materia' : 'Sin materias');
+  com.textContent = c ? 'Comisión ' + (c.comision || c.tabLabel || '—') + cuatrimestreSuffix(c)
+    : (m ? 'Sin comisiones' : 'Tocá para crear tu primera materia');
+}
+function csBtn(cls, label, html, fn) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = cls; if (label) b.setAttribute('aria-label', label); if (label) b.title = label;
+  b.innerHTML = html; b.addEventListener('click', fn); return b;
+}
+function renderCourseSheet() {
+  const sh = document.getElementById('courseSheet');
+  if (!sh) return;
+  sh.innerHTML = '';
+  const handle = document.createElement('div'); handle.className = 'cs-handle'; sh.appendChild(handle);
+  const head = document.createElement('div'); head.className = 'cs-head';
+  head.innerHTML = '<h2 id="cs-title">Elegí un curso</h2>';
+  head.appendChild(csBtn('cs-ico-btn', 'Cerrar', '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>', closeCourseSheet));
+  sh.appendChild(head);
+
+  const body = document.createElement('div'); body.className = 'cs-body';
+  const dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  if (!materias.length) {
+    const e = document.createElement('div'); e.className = 'cs-empty'; e.textContent = 'No hay materias todavía.'; body.appendChild(e);
+  }
+  materias.forEach(mat => {
+    const g = document.createElement('div');
+    const mh = document.createElement('div'); mh.className = 'cs-mat-head';
+    const nm = document.createElement('div'); nm.className = 'cs-mat-name'; nm.textContent = mat.nombre;
+    mh.appendChild(nm);
+    mh.appendChild(csBtn('cs-ico-btn', 'Renombrar materia', '<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+      () => { const id = mat.id; closeCourseSheet(); setTimeout(() => openEditMateria(id), 50); }));
+    mh.appendChild(csBtn('cs-ico-btn', 'Eliminar materia', '×',
+      () => { const id = mat.id; closeCourseSheet(); setTimeout(() => deleteMateria(id), 50); }));
+    g.appendChild(mh);
+
+    const coms = comisionesDeMateria(mat.id);
+    if (!coms.length) { const e = document.createElement('div'); e.className = 'cs-empty'; e.textContent = 'Esta materia no tiene comisiones.'; g.appendChild(e); }
+    coms.forEach(com => {
+      const row = document.createElement('div'); row.className = 'cs-row';
+      const isActive = com.id === activeId;
+      const it = document.createElement('button'); it.type = 'button'; it.className = 'cs-item' + (isActive ? ' active' : '');
+      if (isActive) it.setAttribute('aria-current', 'true');
+      const t = document.createElement('span'); t.className = 'cs-item-t';
+      const b = document.createElement('b'); b.textContent = 'Comisión ' + (com.comision || com.tabLabel || '—') + cuatrimestreSuffix(com);
+      const sp = document.createElement('span');
+      const days = (com.planning?.days || []).map(d => dayNames[d]).join(' y ');
+      sp.textContent = [com.horario || days, com.aula, (com.students?.length || 0) + ' estudiantes'].filter(Boolean).join(' · ');
+      t.appendChild(b); t.appendChild(sp); it.appendChild(t);
+      if (isActive) it.insertAdjacentHTML('beforeend', '<svg class="cs-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>');
+      it.addEventListener('click', () => {
+        if (com.id !== activeId && activeSection === 'notas' && !confirmLeaveNotas()) return;
+        activeMateriaId = mat.id; activeId = com.id;
+        saveState(); closeCourseSheet(); renderTabs(); fadeRenderPanel();
+      });
+      row.appendChild(it);
+      row.appendChild(csBtn('cs-ico-btn', 'Archivar comisión', '<svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
+        () => { const id = com.id; closeCourseSheet(); setTimeout(() => archiveCourse(id), 50); }));
+      row.appendChild(csBtn('cs-ico-btn', 'Eliminar comisión', '×',
+        () => { const id = com.id; closeCourseSheet(); setTimeout(() => closeTab(id), 50); }));
+      g.appendChild(row);
+    });
+    const add = document.createElement('button'); add.type = 'button'; add.className = 'cs-add'; add.textContent = '+ Agregar comisión';
+    add.addEventListener('click', () => { activeMateriaId = mat.id; closeCourseSheet(); openNewCourseMenu(); });
+    g.appendChild(add);
+    body.appendChild(g);
+  });
+  sh.appendChild(body);
+
+  const foot = document.createElement('div'); foot.className = 'cs-foot';
+  const hasCourse = !!commissions.find(c => c.id === activeId && !c.archived);
+  if (hasCourse) {
+    const ed = document.createElement('button'); ed.type = 'button'; ed.textContent = 'Editar este curso';
+    ed.addEventListener('click', () => { closeCourseSheet(); openEditCourse(); });
+    foot.appendChild(ed);
+  }
+  const nm2 = document.createElement('button'); nm2.type = 'button'; nm2.className = 'primary'; nm2.textContent = '+ Nueva materia';
+  nm2.addEventListener('click', () => { closeCourseSheet(); openNewMateria(); });
+  foot.appendChild(nm2);
+  sh.appendChild(foot);
+}
+function openCourseSheet() {
+  closeMore(); closeAllDropdowns();
+  renderCourseSheet();
+  document.body.classList.add('course-open');
+  document.getElementById('courseChip')?.setAttribute('aria-expanded', 'true');
+  setTimeout(() => { const a = document.querySelector('#courseSheet .cs-item.active') || document.querySelector('#courseSheet .cs-ico-btn'); if (a) a.focus(); }, 0);
+}
+function closeCourseSheet() {
+  document.body.classList.remove('course-open');
+  const c = document.getElementById('courseChip');
+  if (c) { c.setAttribute('aria-expanded', 'false'); }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.body.classList.contains('course-open')) closeCourseSheet(); });
 
 function toggleMatDropdown() {
   const btn = document.getElementById('matSelectorBtn');

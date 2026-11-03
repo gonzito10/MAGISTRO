@@ -96,7 +96,11 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
   y no se ven en un celular que ya la instaló, subí `VERSION` en `sw.js`.
 - **Celular** (≤700 px): en `docente.html` la navegación es una barra inferior
   (Inicio, Estudiantes, Notas, Asistencia, Más) y el selector de curso va
-  arriba. La hoja "Más" se arma por JS clonando los botones del menú lateral
+  arriba como **un solo botón** (`#courseChip`: materia + comisión) que abre una
+  hoja inferior (`renderCourseSheet`) con todos los cursos agrupados por materia;
+  ahí también se renombra/elimina materia, se archiva/elimina comisión, se edita el
+  curso y se agregan comisiones o materias. En celular se oculta el título del curso
+  (`.com-header`) y la barra de dos selectores (`.com-bar`); en escritorio sigue el menú lateral. La hoja "Más" se arma por JS clonando los botones del menú lateral
   (`initMoreSheet`). Elementos táctiles de al menos 44 px (en tablas, 36 px) y
   campos a 16 px para evitar el zoom de iOS. El portal del estudiante usa el mismo
   patrón (barra inferior: Inicio, Notas, Asistencia, Cronograma, Más) y mantiene el
@@ -140,6 +144,8 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       una ficha (modal en escritorio, hoja inferior en celular) con notas, asistencia
       y trabajos entregados (`openStudentSummary` / `studentSummaryHTML`).
 - [x] Bienvenida con avance automático (o toque) y aviso sin conexión en el login del portal.
+- [x] Selector de curso en celular: botón único + hoja inferior (maqueta "A" elegida por el docente).
+- [ ] Pendiente de diseño en celular: modo "Hoy" en Asistencia y Notas por columna (hay maquetas en el lienzo "Magistro: maquetas celular").
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo
