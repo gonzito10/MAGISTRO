@@ -158,7 +158,8 @@ input.nota:disabled { background:var(--surface2); color:var(--text3); cursor:not
 .comment-btn:hover{background:var(--surface2);color:var(--text2)}
 .comment-btn.has-comment{color:var(--accent)}
 .comment-btn svg{width:14px;height:14px}
-.let-cell{display:flex;align-items:center;justify-content:center;gap:2px}
+.let-cell{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px}
+.let-cell .let{text-align:center;min-width:0}
 select.rec { font-size:12px; padding:5px 6px; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--surface); color:var(--text); font-family:inherit; }
 select.rec:disabled { background:var(--surface2); color:var(--text3); cursor:not-allowed; }
 .auto { color:var(--text2); font-size:12px; }
