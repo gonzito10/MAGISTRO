@@ -739,6 +739,57 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 }
 @media print { .tabs-bar,.toolbar,.overlay,.toast,.section-tabs,.sidebar,.sb-course,.sb-nav,.more-sheet,.more-backdrop,.att-toolbar button,.plan-setup{display:none!important;} body{background:#fff;} .main-content{padding:0;} .table-wrap,.att-table-wrap{border:none;border-radius:0;} }
 
+/* ── Resumen del estudiante ── */
+.est-click{cursor:pointer;}
+.est-link:hover{color:var(--accent);text-decoration:underline;}
+.sum-modal{width:min(580px,94vw);padding:0;}
+.sum-head{display:flex;align-items:flex-start;gap:12px;padding:20px 22px 14px;border-bottom:0.5px solid var(--border);}
+.sum-avatar{width:44px;height:44px;border-radius:50%;background:var(--blue-bg);color:var(--blue-text);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;}
+.sum-head h2{font-size:17px;margin:0 0 2px;overflow-wrap:anywhere;}
+.sum-meta{font-size:12.5px;color:var(--text2);line-height:1.5;overflow-wrap:anywhere;}
+.sum-head-btns{display:flex;gap:6px;margin-left:auto;flex-shrink:0;}
+.sum-body{padding:6px 22px 22px;}
+.sum-sec{padding-top:16px;}
+.sum-sec h3{font-size:14px;margin:0 0 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.sum-sec h3 small{font-family:inherit;font-size:12px;font-weight:500;color:var(--text3);}
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.sum-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--radius);padding:10px 12px;min-width:0;}
+.sum-card-l{font-size:11px;color:var(--text3);margin-bottom:4px;}
+.sum-card-v{font-size:20px;font-weight:700;color:var(--text);}
+.sum-empty{color:var(--text3);font-weight:500;}
+.sum-pill{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;margin-top:10px;}
+.sum-pill.green{background:var(--green-bg);color:var(--green-text);}
+.sum-pill.blue{background:var(--blue-bg);color:var(--blue-text);}
+.sum-pill.red{background:var(--red-bg);color:var(--red-text);}
+.sum-pill.gray{background:var(--gray-bg);color:var(--gray-text);}
+.sum-att-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px;}
+.sum-att-pct{font-size:26px;font-weight:700;line-height:1;}
+.sum-att-bar{flex:1;min-width:120px;height:6px;border-radius:3px;background:var(--border);overflow:hidden;}
+.sum-att-bar>div{height:100%;border-radius:3px;}
+.sum-counts{font-size:12.5px;color:var(--text2);}
+.sum-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.sum-chip{display:inline-flex;flex-direction:column;align-items:center;min-width:42px;padding:3px 4px;border-radius:6px;font-size:10.5px;line-height:1.25;background:var(--surface2);color:var(--text3);}
+.sum-chip b{font-size:13px;}
+.sum-chip.P{background:var(--green-bg);color:var(--green-text);}
+.sum-chip.A{background:var(--red-bg);color:var(--red-text);}
+.sum-chip.T{background:var(--amber-bg);color:var(--amber-text);}
+.sum-legend{font-size:11.5px;color:var(--text3);margin-top:8px;}
+.sum-unit{font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;}
+.sum-work{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px;}
+.sum-work:last-child{border-bottom:none;}
+.sum-work-name{min-width:0;overflow-wrap:anywhere;}
+.sum-work-r{display:flex;align-items:center;gap:8px;flex-shrink:0;text-align:right;}
+.sum-work-c{font-size:12px;color:var(--text2);}
+.sum-note{font-size:13px;color:var(--text3);padding:6px 0;}
+@media (max-width:700px){
+  #studentSummaryOverlay{align-items:flex-end;}
+  .sum-modal{width:100%;max-height:90vh;border-radius:16px 16px 0 0;padding-bottom:env(safe-area-inset-bottom);}
+  .sum-head{padding:16px 16px 12px;flex-wrap:wrap;}
+  .sum-head-btns{width:100%;margin-left:0;}
+  .sum-body{padding:4px 16px 20px;}
+  .sum-grid{grid-template-columns:repeat(2,1fr);}
+}
+
 /* Accesibilidad: foco visible para teclado y movimiento reducido */
 :focus-visible{outline:2px solid var(--accent)!important;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){
@@ -916,6 +967,13 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
       <button onclick="closeExport()">Cancelar</button>
       <button class="primary" id="export-btn" onclick="doExport()">Exportar</button>
     </div>
+  </div>
+</div>
+
+<!-- ── Resumen del estudiante ── -->
+<div class="overlay" id="studentSummaryOverlay" onclick="if(event.target===this)closeStudentSummary()">
+  <div class="modal sum-modal" role="dialog" aria-modal="true" aria-labelledby="sum-title">
+    <div id="sum-content"></div>
   </div>
 </div>
 
@@ -2099,10 +2157,10 @@ function renderEstTable(com) {
     const email = s.email || '';
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="dni" style="border-right:0.5px solid var(--border)">${s.dni||'—'}</td>
-      <td class="left" style="border-right:0.5px solid var(--border)">
+      <td class="dni est-click" style="border-right:0.5px solid var(--border)" onclick="estRowClick(event,${i})">${s.dni||'—'}</td>
+      <td class="left est-click" style="border-right:0.5px solid var(--border)" onclick="estRowClick(event,${i})">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
-          <span>${s.name}</span>
+          <span class="est-link" title="Ver resumen del estudiante">${s.name}</span>
           <button onclick="openEditStudent(${i})" title="Editar" style="padding:2px 5px;flex-shrink:0;color:var(--text3);border-color:transparent;background:transparent">
             <svg class="icon" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
@@ -2124,6 +2182,132 @@ function renderEstTable(com) {
       </td>`;
     tbody.appendChild(tr);
   });
+}
+
+// ── Resumen del estudiante (notas, asistencia y trabajos) ──
+let _sumIdx = null;
+function estRowClick(e, i) {
+  if (e.target.closest('button,input,select,textarea,a')) return;
+  openStudentSummary(i);
+}
+function openStudentSummary(i) {
+  const com = getActive();
+  if (!com || !com.students[i]) return;
+  _sumIdx = i;
+  document.getElementById('sum-content').innerHTML = studentSummaryHTML(com, i);
+  document.getElementById('studentSummaryOverlay').classList.add('open');
+  const m = document.querySelector('#studentSummaryOverlay .modal');
+  if (m) m.scrollTop = 0;
+  setTimeout(() => { const b = document.getElementById('sum-close'); if (b) b.focus(); }, 0);
+}
+function closeStudentSummary() {
+  document.getElementById('studentSummaryOverlay').classList.remove('open');
+  _sumIdx = null;
+}
+function sumEditStudent() {
+  const i = _sumIdx;
+  closeStudentSummary();
+  if (i !== null) openEditStudent(i);
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && _sumIdx !== null) closeStudentSummary();
+});
+
+function studentSummaryHTML(com, i) {
+  const s = com.students[i];
+  const esc = escHtml;
+  const iniciales = (s.name || '?').split(/[\s,]+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+
+  // ── Notas ──
+  const info = getFinalInfo({ p1: s.p1 ?? '', p2: s.p2 ?? '', rec: s.rec || '', finalManual: s.finalManual || '' });
+  const nv = v => {
+    v = (v === undefined || v === null) ? '' : String(v);
+    if (v === '') return '<span class="sum-empty">—</span>';
+    return v.toUpperCase() === 'A' ? '<span style="font-size:14px">Ausente</span>' : esc(v);
+  };
+  const sit = info.sit || '';
+  const sitCls = /PROMOCION/.test(sit) ? 'green' : /DESAPROB|REPROB|RECURSA/.test(sit) ? 'red' : /APROB/.test(sit) ? 'blue' : 'gray';
+  const sitTxt = sit ? sit.charAt(0) + sit.slice(1).toLowerCase() : 'Sin definir';
+  const showRec = needsRec(s.p1, s.p2) || (s.rec && s.rec !== '');
+  const notasHTML = `
+    <div class="sum-grid">
+      <div class="sum-card"><div class="sum-card-l">1er parcial</div><div class="sum-card-v">${nv(info.p1)}</div></div>
+      <div class="sum-card"><div class="sum-card-l">2do parcial</div><div class="sum-card-v">${nv(info.p2)}</div></div>
+      <div class="sum-card"><div class="sum-card-l">Recuperatorio</div><div class="sum-card-v" style="font-size:15px">${showRec ? (s.rec ? esc(s.rec) : '<span class="sum-empty">Pendiente</span>') : '<span class="sum-empty">No corresponde</span>'}</div></div>
+      <div class="sum-card"><div class="sum-card-l">Nota final</div><div class="sum-card-v">${nv(info.displayFinal)}</div></div>
+    </div>
+    <span class="sum-pill ${sitCls}">${esc(sitTxt)}</span>`;
+
+  // ── Asistencia ──
+  const att = com.attendance || { dates: [], records: {} };
+  const skip = com.skipWeeks || {};
+  const recs = (att.records || {})[s.id] || {};
+  const dates = (att.dates || []).slice().sort().filter(d => !skip[d]);
+  const reg = dates.filter(d => recs[d]);
+  const nP = reg.filter(d => recs[d] === 'P').length;
+  const nT = reg.filter(d => recs[d] === 'T').length;
+  const nA = reg.filter(d => recs[d] === 'A').length;
+  const pct = reg.length ? Math.round(nP / reg.length * 100) : null;
+  const pctColor = pct === null ? 'var(--text3)' : pct >= 75 ? 'var(--green-text)' : pct >= 50 ? 'var(--amber-text)' : 'var(--red-text)';
+  let asistHTML;
+  if (!dates.length) {
+    asistHTML = '<div class="sum-note">Todavía no hay clases cargadas para este curso.</div>';
+  } else {
+    asistHTML = `
+      <div class="sum-att-top">
+        <div class="sum-att-pct" style="color:${pctColor}">${pct === null ? '—' : pct + '%'}</div>
+        <div class="sum-att-bar"><div style="width:${pct || 0}%;background:${pctColor}"></div></div>
+      </div>
+      <div class="sum-counts">${reg.length ? `${nP} presente${nP === 1 ? '' : 's'} · ${nT} tarde${nT === 1 ? '' : 's'} · ${nA} ausente${nA === 1 ? '' : 's'} — ${reg.length} de ${dates.length} clases con asistencia cargada` : 'Todavía no se cargó asistencia.'}</div>
+      <div class="sum-chips" style="margin-top:10px">${dates.map(d => {
+        const v = recs[d] || '';
+        return `<span class="sum-chip ${v}" title="${d}"><span>${d.slice(8, 10)}/${d.slice(5, 7)}</span><b>${v || '·'}</b></span>`;
+      }).join('')}</div>
+      <div class="sum-legend">P presente · T tarde · A ausente · · sin cargar</div>`;
+  }
+
+  // ── Trabajos ──
+  const unitWorks = com.unitWorks || {};
+  const wrec = com.workRecords || {};
+  let total = 0, entregados = 0;
+  const grupos = Object.entries(unitWorks).filter(([, ws]) => ws && ws.length).map(([uid, ws]) => {
+    const u = (com.unidades || []).find(x => x.id === uid);
+    return { u, label: u ? `${toRoman(u.numero)} · ${u.nombre}` : 'Otras actividades', ws };
+  }).sort((a, b) => (a.u ? a.u.numero : 999) - (b.u ? b.u.numero : 999));
+  let trabHTML = '';
+  grupos.forEach(g => {
+    trabHTML += `<div class="sum-unit">${esc(g.label)}</div>`;
+    g.ws.forEach(w => {
+      const r = wrec[`${i}_${w.id}`] || {};
+      total++;
+      if (r.entregado === 'si') entregados++;
+      const badge = r.entregado === 'si' ? '<span class="sum-pill green" style="margin:0">Entregado</span>'
+        : r.entregado === 'no' ? '<span class="sum-pill red" style="margin:0">Sin entregar</span>'
+        : '<span class="sum-pill gray" style="margin:0">Sin datos</span>';
+      trabHTML += `<div class="sum-work"><span class="sum-work-name">${esc(w.name)}</span><span class="sum-work-r">${r.concepto ? `<span class="sum-work-c">${esc(r.concepto)}</span>` : ''}${badge}</span></div>`;
+    });
+  });
+  if (!total) trabHTML = '<div class="sum-note">Todavía no hay actividades cargadas en este curso.</div>';
+
+  const meta = [s.dni ? 'DNI ' + esc(s.dni) : '', s.email ? esc(s.email) : ''].filter(Boolean).join(' · ');
+  return `
+    <div class="sum-head">
+      <div class="sum-avatar">${esc(iniciales)}</div>
+      <div style="min-width:0">
+        <h2 id="sum-title">${esc(s.name)}</h2>
+        <div class="sum-meta">${meta || 'Sin DNI ni email cargados'}</div>
+        ${s.obs ? `<div class="sum-meta" style="margin-top:4px"><b>Observaciones:</b> ${esc(s.obs)}</div>` : ''}
+      </div>
+      <div class="sum-head-btns">
+        <button onclick="sumEditStudent()">Editar</button>
+        <button id="sum-close" onclick="closeStudentSummary()">Cerrar</button>
+      </div>
+    </div>
+    <div class="sum-body">
+      <div class="sum-sec"><h3>Notas</h3>${notasHTML}</div>
+      <div class="sum-sec"><h3>Asistencia</h3>${asistHTML}</div>
+      <div class="sum-sec"><h3>Trabajos <small>${total ? `Entregó ${entregados} de ${total}` : ''}</small></h3>${trabHTML}</div>
+    </div>`;
 }
 
 // called from inline onchange — needs global com reference

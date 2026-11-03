@@ -1,7 +1,7 @@
 // Accesibilidad por teclado para los controles hechos con <div onclick>:
 // los hace enfocables (Tab) y activables con Enter o Espacio.
 (function () {
-  var SEL = '.sec-tab,.nav-item,.materias-toggle,.com-drop-item,.clase-header';
+  var SEL = '.sec-tab,.nav-item,.materias-toggle,.com-drop-item,.clase-header,.est-link';
   function apply(root) {
     (root || document).querySelectorAll(SEL).forEach(function (el) {
       if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');

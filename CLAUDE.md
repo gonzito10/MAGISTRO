@@ -135,6 +135,9 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [x] Revisión en celular de Planificación (filas en dos líneas), Estudiantes, Asistencia,
       Actividades, Bibliografía, Trámites, Archivo y Configuración.
 - [x] Contraste del texto secundario, foco visible, `prefers-reduced-motion`, acceso por teclado.
+- [x] Resumen del estudiante en `docente.html` → Estudiantes: al tocar un nombre se abre
+      una ficha (modal en escritorio, hoja inferior en celular) con notas, asistencia
+      y trabajos entregados (`openStudentSummary` / `studentSummaryHTML`).
 - [x] Bienvenida con avance automático (o toque) y aviso sin conexión en el login del portal.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
