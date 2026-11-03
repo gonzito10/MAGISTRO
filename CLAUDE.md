@@ -42,6 +42,7 @@ public/              Las tres páginas HTML
 public/manifest.webmanifest  Manifest de la PWA (nombre, colores, íconos, accesos directos)
 public/sw.js         Service worker: cachea solo estáticos, NUNCA /api/*
 public/pwa.js        Registra el service worker (lo cargan las tres páginas)
+public/a11y.js       Hace enfocables y activables con teclado los controles hechos con <div onclick>
 public/icons/        Íconos 192, 512, maskable y apple-touch (acanto sobre terracota)
 ```
 
@@ -96,7 +97,13 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
   (Inicio, Estudiantes, Notas, Asistencia, Más) y el selector de curso va
   arriba. La hoja "Más" se arma por JS clonando los botones del menú lateral
   (`initMoreSheet`). Elementos táctiles de al menos 44 px (en tablas, 36 px) y
-  campos a 16 px para evitar el zoom de iOS.
+  campos a 16 px para evitar el zoom de iOS. El portal del estudiante usa el mismo
+  patrón (barra inferior: Inicio, Notas, Asistencia, Cronograma, Más) y mantiene el
+  selector de curso arriba (`buildMoreSheet` arma la hoja).
+- **Accesibilidad**: `--text3` (texto secundario) debe mantener contraste ≥ 4,5:1
+  sobre el fondo de cada paleta (ya ajustado en las 8 paletas); foco visible global
+  con `:focus-visible`; respetar `prefers-reduced-motion`. Los controles nuevos
+  hechos con `<div>` deben entrar en el selector de `a11y.js` o ser `<button>`.
 - No cambiar el formato JSON de `data` sin migrar los datos existentes.
 - Textos de la interfaz y mensajes de error: en español.
 
@@ -123,13 +130,19 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       (`theme-color`, `apple-touch-icon`, `viewport-fit`), una sola PWA para
       docentes y estudiantes (accesos directos a cada portal).
 - [x] Navegación móvil con barra inferior y elementos táctiles de 44 px en `docente.html`.
+- [x] Portal del estudiante en celular: barra inferior y selector de curso visible
+      (antes estaba oculto en pantallas chicas: un estudiante con dos materias no podía cambiar).
+- [x] Revisión en celular de Planificación (filas en dos líneas), Estudiantes, Asistencia,
+      Actividades, Bibliografía, Trámites, Archivo y Configuración.
+- [x] Contraste del texto secundario, foco visible, `prefers-reduced-motion`, acceso por teclado.
+- [x] Bienvenida con avance automático (o toque) y aviso sin conexión en el login del portal.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
-- [ ] Mejoras de diseño pendientes: contraste del texto secundario (≈3:1, debería
-      ser 4,5:1), estilo de foco visible, `prefers-reduced-motion`, modo oscuro en
-      toda la app (hoy solo en la bienvenida), pantalla de bienvenida sin "Click
-      para continuar" al abrir la app instalada, paleta repetida en las 3 páginas.
-- [ ] Revisar en celular las secciones Planificación, Actividades, Bibliografía,
-      Trámites, Archivo, Configuración y el portal del estudiante ya logueado.
-- [ ] Sin conexión la app abre, pero los datos requieren internet (aviso en el login
-      del docente; falta el mismo aviso en el portal del estudiante).
+- [ ] Modo oscuro: ya existe como opción manual en Configuración y en el portal; falta
+      que siga la preferencia del sistema y que la bienvenida use el mismo mecanismo.
+- [ ] Paleta de colores repetida en las 3 páginas: pasarla a un CSS compartido
+      (`public/tokens.css`) y sacar estilos en línea de `docente.html` (≈385).
+- [ ] Probar con datos reales las secciones Planificación, Trámites y Archivo (las
+      revisé con datos de ejemplo).
+- [ ] El texto de los íconos pequeños (≈ 9–11 px en etiquetas) y las tablas densas
+      (controles de 36 px) siguen por debajo de lo ideal en celular.

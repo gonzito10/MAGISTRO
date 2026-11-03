@@ -3,7 +3,7 @@
  * - NUNCA toca /api/*: notas, asistencia y sesión siempre vienen del servidor,
  *   así no se muestran datos viejos ni se guarda información de nadie en el celular.
  * Para forzar una actualización de los archivos guardados, subí el número de VERSION. */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = 'magistro-shell-' + VERSION;
 const RUNTIME = 'magistro-runtime-' + VERSION;
 
@@ -13,6 +13,7 @@ const PRECACHE = [
   '/portal-estudiante.html',
   '/manifest.webmanifest',
   '/pwa.js',
+  '/a11y.js',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/apple-touch-icon.png'

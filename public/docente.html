@@ -12,6 +12,7 @@
 <title>Gestión Docente</title>
 <link rel="icon" id="app-favicon" type="image/svg+xml" href="">
 <script src="/pwa.js" defer></script>
+<script src="/a11y.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -21,7 +22,7 @@
 :root {
   --bg: #fdf6f0; --surface: #ffffff; --surface2: #fdf0e6; --sidebar-bg: #fff8f2;
   --border: rgba(140,60,10,0.12); --border2: rgba(140,60,10,0.22);
-  --text: #2d1206; --text2: #7a4020; --text3: #b8845a; --accent: #c44a12;
+  --text: #2d1206; --text2: #7a4020; --text3: #8d6545; --accent: #c44a12;
   --green-bg:#eaf3de;--green-text:#3b6d11;
   --blue-bg:#e6f1fb;--blue-text:#185fa5;
   --red-bg:#fcebeb;--red-text:#a32d2d;
@@ -720,6 +721,14 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   .stats,.metric-grid{grid-template-columns:repeat(2,1fr)!important;}
   .clase-fields{grid-template-columns:1fr;}
 
+  /* Planificación: la fila de cada clase pasa a dos líneas (el tema abajo) y se oculta el arrastre, que no funciona con el dedo */
+  .drag-handle{display:none;}
+  .clase-header{flex-wrap:wrap;row-gap:6px;}
+  .clase-unidad-badge{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;}
+  .clase-preview{order:10;flex:1 1 100%;white-space:normal;}
+  .clase-chevron{margin-left:auto;}
+  .clase-type-badge{display:none;}
+
   /* Elementos táctiles: mínimo cómodo para el dedo; las tablas quedan más densas */
   button,select,.com-selector-btn,input[type=button],input[type=submit]{min-height:44px;min-width:44px;}
   input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea{min-height:44px;}
@@ -729,6 +738,12 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   table input,table select,.table-wrap input,.table-wrap select{min-height:38px;}
 }
 @media print { .tabs-bar,.toolbar,.overlay,.toast,.section-tabs,.sidebar,.sb-course,.sb-nav,.more-sheet,.more-backdrop,.att-toolbar button,.plan-setup{display:none!important;} body{background:#fff;} .main-content{padding:0;} .table-wrap,.att-table-wrap{border:none;border-radius:0;} }
+
+/* Accesibilidad: foco visible para teclado y movimiento reducido */
+:focus-visible{outline:2px solid var(--accent)!important;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
 </style>
 </head>
 <body>
@@ -1824,49 +1839,49 @@ const THEMES = {
   amanecer: {
     nombre: 'Amanecer', desc: 'Rojo, naranja y dorado',
     colors: ['#7c2020','#d45a2a','#f5a623','#fff8f0'],
-    vars: `--bg:#fdf6f0;--surface:#ffffff;--surface2:#fdf0e6;--border:rgba(140,60,10,0.12);--border2:rgba(140,60,10,0.22);--text:#2d1206;--text2:#7a4020;--text3:#b8845a;--accent:#c44a12;`,
+    vars: `--bg:#fdf6f0;--surface:#ffffff;--surface2:#fdf0e6;--border:rgba(140,60,10,0.12);--border2:rgba(140,60,10,0.22);--text:#2d1206;--text2:#7a4020;--text3:#8d6545;--accent:#c44a12;`,
     tabActive: '#fde8d8', tabColor: '#c44a12', sidebarBg: '#fff8f2',
   },
   pizarra: {
     nombre: 'Pizarra', desc: 'Azul profundo y celeste',
     colors: ['#1e2a3a','#2e7d9f','#3eb8d0','#f0f4f8'],
-    vars: `--bg:#f0f5f8;--surface:#ffffff;--surface2:#e8f2f7;--border:rgba(10,60,100,0.1);--border2:rgba(10,60,100,0.2);--text:#0d1f2d;--text2:#2e5a78;--text3:#6a9ab8;--accent:#2e7d9f;`,
+    vars: `--bg:#f0f5f8;--surface:#ffffff;--surface2:#e8f2f7;--border:rgba(10,60,100,0.1);--border2:rgba(10,60,100,0.2);--text:#0d1f2d;--text2:#2e5a78;--text3:#4d7086;--accent:#2e7d9f;`,
     tabActive: '#d0eaf5', tabColor: '#2e7d9f', sidebarBg: '#f5fafd',
   },
   bosque: {
     nombre: 'Bosque', desc: 'Verde esmeralda y salvia',
     colors: ['#1b3a2f','#2d7a5b','#5cc49a','#f2f8f5'],
-    vars: `--bg:#f2f8f5;--surface:#ffffff;--surface2:#e6f4ed;--border:rgba(10,80,50,0.1);--border2:rgba(10,80,50,0.2);--text:#0d2018;--text2:#1e5c40;--text3:#5a9a7a;--accent:#2d7a5b;`,
+    vars: `--bg:#f2f8f5;--surface:#ffffff;--surface2:#e6f4ed;--border:rgba(10,80,50,0.1);--border2:rgba(10,80,50,0.2);--text:#0d2018;--text2:#1e5c40;--text3:#45765d;--accent:#2d7a5b;`,
     tabActive: '#c8eedd', tabColor: '#2d7a5b', sidebarBg: '#f5fbf7',
   },
   aurora: {
     nombre: 'Aurora', desc: 'Violeta y lila suave',
     colors: ['#3b1f5e','#7c4dbd','#e8a6f0','#faf5ff'],
-    vars: `--bg:#faf5ff;--surface:#ffffff;--surface2:#f2eaff;--border:rgba(80,30,130,0.1);--border2:rgba(80,30,130,0.2);--text:#1e0d3a;--text2:#5a3090;--text3:#a07ac8;--accent:#7c4dbd;`,
+    vars: `--bg:#faf5ff;--surface:#ffffff;--surface2:#f2eaff;--border:rgba(80,30,130,0.1);--border2:rgba(80,30,130,0.2);--text:#1e0d3a;--text2:#5a3090;--text3:#7b5d99;--accent:#7c4dbd;`,
     tabActive: '#ead8ff', tabColor: '#7c4dbd', sidebarBg: '#fdf8ff',
   },
   oceano: {
     nombre: 'Océano', desc: 'Azul marino y cielo',
     colors: ['#0a2a4a','#1565a8','#5ba4e5','#edf5ff'],
-    vars: `--bg:#edf5ff;--surface:#ffffff;--surface2:#dceeff;--border:rgba(5,40,100,0.1);--border2:rgba(5,40,100,0.2);--text:#061830;--text2:#0d3d7a;--text3:#4a80c0;--accent:#1565a8;`,
+    vars: `--bg:#edf5ff;--surface:#ffffff;--surface2:#dceeff;--border:rgba(5,40,100,0.1);--border2:rgba(5,40,100,0.2);--text:#061830;--text2:#0d3d7a;--text3:#3e6ba1;--accent:#1565a8;`,
     tabActive: '#cce0f8', tabColor: '#1565a8', sidebarBg: '#f5faff',
   },
   coral: {
     nombre: 'Coral', desc: 'Rosa y frambuesa',
     colors: ['#6b1a2e','#c44569','#f48fb1','#fff0f5'],
-    vars: `--bg:#fff0f5;--surface:#ffffff;--surface2:#ffe0ec;--border:rgba(120,20,60,0.1);--border2:rgba(120,20,60,0.2);--text:#2d0818;--text2:#8a1a40;--text3:#c06888;--accent:#c44569;`,
+    vars: `--bg:#fff0f5;--surface:#ffffff;--surface2:#ffe0ec;--border:rgba(120,20,60,0.1);--border2:rgba(120,20,60,0.2);--text:#2d0818;--text2:#8a1a40;--text3:#95516a;--accent:#c44569;`,
     tabActive: '#fdd0e0', tabColor: '#c44569', sidebarBg: '#fff8fb',
   },
   carbon: {
     nombre: 'Carbón', desc: 'Gris oscuro y plata',
     colors: ['#1a1a1a','#3a3a3a','#7a7a7a','#f5f5f5'],
-    vars: `--bg:#f5f5f5;--surface:#ffffff;--surface2:#ebebeb;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.2);--text:#1a1a1a;--text2:#4a4a4a;--text3:#888888;--accent:#3a3a3a;`,
+    vars: `--bg:#f5f5f5;--surface:#ffffff;--surface2:#ebebeb;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.2);--text:#1a1a1a;--text2:#4a4a4a;--text3:#686868;--accent:#3a3a3a;`,
     tabActive: '#e0e0e0', tabColor: '#1a1a1a', sidebarBg: '#f8f8f8',
   },
   menta: {
     nombre: 'Menta', desc: 'Verde agua y turquesa',
     colors: ['#1a4a3a','#2aa87a','#80e5c0','#f0fdf8'],
-    vars: `--bg:#f0fdf8;--surface:#ffffff;--surface2:#dcfaee;--border:rgba(10,80,60,0.1);--border2:rgba(10,80,60,0.2);--text:#0a2018;--text2:#147a50;--text3:#4ab890;--accent:#2aa87a;`,
+    vars: `--bg:#f0fdf8;--surface:#ffffff;--surface2:#dcfaee;--border:rgba(10,80,60,0.1);--border2:rgba(10,80,60,0.2);--text:#0a2018;--text2:#147a50;--text3:#30795f;--accent:#2aa87a;`,
     tabActive: '#c0f0dc', tabColor: '#2aa87a', sidebarBg: '#f5fefb',
   },
 };

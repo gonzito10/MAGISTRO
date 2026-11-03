@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/icons/icon-192.png">
 <script src="/pwa.js" defer></script>
+<script src="/a11y.js" defer></script>
 <title>Portal de Estudiantes — MAGISTRO</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap');
@@ -18,7 +19,7 @@
 :root{
   --bg:#fdf6f0;--surface:#ffffff;--surface2:#fdf0e6;
   --border:rgba(140,60,10,0.12);--border2:rgba(140,60,10,0.22);
-  --text:#2d1206;--text2:#7a4020;--text3:#b8845a;--accent:#c44a12;
+  --text:#2d1206;--text2:#7a4020;--text3:#8d6545;--accent:#c44a12;
   --green-bg:#eaf3de;--green-text:#3b6d11;
   --blue-bg:#e6f1fb;--blue-text:#185fa5;
   --red-bg:#fcebeb;--red-text:#a32d2d;
@@ -188,18 +189,57 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
 .att-A{background:var(--red-bg);color:var(--red-text)}
 .att-T{background:var(--amber-bg);color:var(--amber-text)}
 
+/* Escritorio: lo que solo existe en el celular queda oculto */
+.nav-more,.more-sheet,.more-backdrop,.lbl-m{display:none}
+
 @media (max-width:760px){
-  .app-shell{flex-direction:column}
-  .sidebar{width:100%;flex-direction:row;flex-wrap:wrap;padding:0.75rem}
-  .sidebar-logo,.student-card{display:none}
-  .nav{flex-direction:row;flex-wrap:wrap}
+  .app-shell{flex-direction:column;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  .sidebar{display:contents}
+  .sidebar-logo,.student-avatar,.nav-bottom{display:none}
   .metrics{grid-template-columns:repeat(2,1fr)}
+
+  /* Barra superior fija con el nombre y el selector de curso (antes estaba oculto en el celular) */
+  .student-card{display:block;position:sticky;top:0;z-index:70;margin:0;border:none;border-radius:0;
+    border-bottom:0.5px solid var(--border2);background:var(--surface2);
+    padding:calc(8px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 8px calc(14px + env(safe-area-inset-left))}
+  .student-card .materias-toggle{min-height:36px}
+  .materias-dropdown{max-height:50vh;overflow-y:auto}
+
+  /* Barra inferior: Inicio, Notas, Asistencia, Cronograma y Más */
+  .nav{position:fixed;left:0;right:0;bottom:0;z-index:95;flex-direction:row;gap:0;
+    background:var(--surface2);border-top:0.5px solid var(--border2);
+    padding:0 calc(4px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(4px + env(safe-area-inset-left))}
+  .nav .nav-item{flex:1;min-width:0;flex-direction:column;justify-content:center;gap:3px;min-height:60px;
+    padding:6px 2px;font-size:12px;text-align:center;white-space:nowrap;border-radius:12px;border:0.5px solid transparent}
+  .nav .nav-item svg{width:22px;height:22px}
+  .nav > .nav-item[data-tab="actividades"],.nav > .nav-item[data-tab="textos"]{display:none}
+  .nav-more{display:flex}
+  .lbl-d{display:none}.lbl-m{display:inline}
+
+  /* Hoja "Más": Actividades, Textos, modo oscuro y cerrar sesión */
+  .more-backdrop{position:fixed;inset:0;z-index:85;background:rgba(40,15,5,.28)}
+  body.more-open .more-backdrop{display:block}
+  .more-sheet{position:fixed;left:8px;right:8px;bottom:calc(68px + env(safe-area-inset-bottom));z-index:90;
+    background:var(--surface);border:0.5px solid var(--border2);border-radius:16px;
+    box-shadow:0 10px 36px rgba(0,0,0,.22);padding:6px;flex-direction:column}
+  body.more-open .more-sheet{display:flex}
+  .more-sheet .nav-item{flex-direction:row;justify-content:flex-start;gap:14px;min-height:48px;padding:10px 14px;font-size:15px;text-align:left;border:none}
+  .more-sheet .nav-item svg{width:20px;height:20px}
+  .more-sheet .more-sep{height:0.5px;background:var(--border2);margin:4px 8px}
+
+  .main{padding:1rem 1rem 2rem;max-width:none}
 }
 
 /* Celular: elementos táctiles cómodos y sin zoom al tocar un campo */
 @media (max-width:700px){
   button,select,a.btn{min-height:44px;}
   input:not([type=checkbox]):not([type=radio]){min-height:44px;font-size:16px!important;}
+}
+
+/* Accesibilidad: foco visible para teclado y movimiento reducido */
+:focus-visible{outline:2px solid var(--accent)!important;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 </style>
 </head>
@@ -255,11 +295,11 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
       </div>
       <div class="nav-item" data-tab="notas" onclick="switchTab('notas')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Mis notas
+        <span class="lbl-d">Mis notas</span><span class="lbl-m">Notas</span>
       </div>
       <div class="nav-item" data-tab="asistencia" onclick="switchTab('asistencia')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg>
-        Mi asistencia
+        <span class="lbl-d">Mi asistencia</span><span class="lbl-m">Asistencia</span>
       </div>
       <div class="nav-item" data-tab="cronograma" onclick="switchTab('cronograma')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -272,6 +312,10 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
       <div class="nav-item" data-tab="textos" onclick="switchTab('textos')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Textos
+      </div>
+      <div class="nav-item nav-more" id="nav-more" onclick="toggleMore()" role="button" aria-haspopup="true" aria-expanded="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        Más
       </div>
 
       <div class="nav-bottom">
@@ -286,6 +330,9 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
       </div>
     </nav>
   </aside>
+
+  <div class="more-backdrop" id="moreBackdrop" onclick="closeMore()"></div>
+  <div class="more-sheet" id="moreSheet" role="menu" aria-label="Más opciones"></div>
 
   <main class="main" id="main-content"></main>
 </div>
@@ -488,9 +535,49 @@ async function doLogout(){
 // ═══════════════════════════════════════════════════════
 // NAVEGACIÓN Y RENDER
 // ═══════════════════════════════════════════════════════
+// ── Hoja "Más" (solo se ve en celular; el CSS la oculta en escritorio) ──
+function buildMoreSheet(){
+  const sheet = document.getElementById('moreSheet');
+  if (!sheet) return;
+  sheet.innerHTML = '';
+  ['actividades','textos'].forEach(t => {
+    const src = document.querySelector('#main-nav > .nav-item[data-tab="' + t + '"]');
+    if (src) { const c = src.cloneNode(true); c.setAttribute('role','menuitem'); sheet.appendChild(c); }
+  });
+  const sep = document.createElement('div'); sep.className = 'more-sep'; sheet.appendChild(sep);
+  const darkLabel = (document.getElementById('dark-toggle-label') || {}).textContent || 'Modo oscuro';
+  const dark = document.createElement('div');
+  dark.className = 'nav-item'; dark.setAttribute('role','menuitem');
+  dark.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span></span>';
+  dark.lastChild.textContent = darkLabel;
+  dark.onclick = () => { toggleDarkModeStudent(); closeMore(); };
+  sheet.appendChild(dark);
+  const out = document.createElement('div');
+  out.className = 'nav-item'; out.setAttribute('role','menuitem'); out.style.color = 'var(--red-text)';
+  out.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Cerrar sesión</span>';
+  out.onclick = () => { closeMore(); doLogout(); };
+  sheet.appendChild(out);
+}
+function toggleMore(){
+  const open = !document.body.classList.contains('more-open');
+  if (open) buildMoreSheet();
+  document.body.classList.toggle('more-open', open);
+  const b = document.getElementById('nav-more');
+  if (b) b.setAttribute('aria-expanded', String(open));
+}
+function closeMore(){
+  document.body.classList.remove('more-open');
+  const b = document.getElementById('nav-more');
+  if (b) b.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMore(); });
+
 function switchTab(tab){
   currentTab = tab;
+  closeMore();
   document.querySelectorAll('.nav-item[data-tab]').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  const moreBtn = document.getElementById('nav-more');
+  if (moreBtn) moreBtn.classList.toggle('active', tab === 'actividades' || tab === 'textos');
   const content = document.getElementById('main-content');
   const renderers = { inicio: renderInicio, notas: renderNotas, asistencia: renderAsistencia, cronograma: renderCronograma, actividades: renderActividades, textos: renderTextos };
   content.style.transition = 'opacity .12s ease';
@@ -974,6 +1061,11 @@ try { if (localStorage.getItem('magistro_dark') === '1') applyDarkModeStudent(tr
     }
   } catch(e) {}
   showView('login');
+  // Sin internet no se puede validar la sesión: avisarlo
+  if (!navigator.onLine) {
+    showError('login-error', 'Sin conexión. Conectate a internet para ver tus notas y tu asistencia.');
+    window.addEventListener('online', () => location.reload(), { once: true });
+  }
 })();
 </script>
 </body>
