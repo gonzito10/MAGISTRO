@@ -1,6 +1,6 @@
 # MAGISTRO — Gestión Docente online + Portal de Estudiantes
 
-Este paquete convierte tu sistema (que antes guardaba todo en el navegador con
+Este proyecto convierte tu sistema (que antes guardaba todo en el navegador con
 `localStorage`) en una aplicación online real:
 
 - **Base de datos**: PostgreSQL (tablas SQL reales — ver `schema.sql`)
@@ -26,32 +26,43 @@ datos de otro) antes de entregártelo.
 
 ## 2. Subir el código a GitHub
 
-1. Creá un repositorio nuevo en GitHub (puede ser privado).
-2. Subí **toda esta carpeta** (`magistro-backend`) a ese repositorio.
-   - Si no sabés usar git desde la terminal, en github.com podés arrastrar
-     los archivos directamente con "Add file → Upload files".
-   - **No subas** la carpeta `node_modules` ni el archivo `.env` si lo llegás
-     a crear localmente (ya están listados en `.gitignore`).
+El código va en la **raíz** del repositorio (`server.js`, `package.json`,
+`public/`, etc. directamente en la primera pantalla del repo, no dentro de
+otra carpeta). **No subas** `node_modules` ni `.env` (ya están en `.gitignore`).
 
-## 3. Desplegar el backend en Render (gratis)
+## 3. Desplegar en Vercel (gratis)
 
-1. Andá a **https://render.com** y creá una cuenta (podés entrar con GitHub).
-2. Click en **New → Web Service**.
-3. Elegí el repositorio que subiste.
-4. Configurá:
-   - **Name**: `magistro` (o lo que quieras)
-   - **Runtime**: Node
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-   - **Plan**: Free
-5. En la sección **Environment Variables**, agregá:
-   - `DATABASE_URL` → pegá el connection string de Neon (paso 1)
-   - `JWT_SECRET` → cualquier texto largo y aleatorio (podés generarlo en
-     https://randomkeygen.com, elegí una de las claves largas)
-   - `NODE_ENV` → `production`
-6. Click en **Create Web Service**. Render va a instalar todo y levantar el
-   servidor. Al terminar te va a dar una URL pública, algo como
-   `https://magistro.onrender.com`.
+1. Andá a **https://vercel.com** y entrá con tu cuenta de GitHub.
+2. Click en **Add New → Project** y elegí el repositorio de MAGISTRO.
+3. Vercel detecta Express solo. No hace falta configurar Build ni Start
+   Command: dejá todo por defecto (Framework: Express / Other).
+4. Abrí **Environment Variables** y agregá:
+   - `DATABASE_URL` → el connection string de Neon. Usá la versión
+     **pooled** (en Neon, activá "Connection pooling": el host trae
+     `-pooler`).
+   - `JWT_SECRET` → un texto largo y aleatorio
+     (https://randomkeygen.com, una clave larga).
+5. Click en **Deploy**. Al terminar te da una URL pública, algo como
+   `https://magistro.vercel.app`. Cada `git push` a `main` redespliega solo.
+
+Cómo funciona en Vercel:
+
+- Los archivos de `public/` (`index.html`, `docente.html`,
+  `portal-estudiante.html`) los sirve el CDN de Vercel. `express.static()` no
+  se usa allí.
+- Todo `/api/*` lo atiende `server.js` como una única función serverless.
+- `NODE_ENV` ya es `production` en Vercel, así que las cookies de sesión salen
+  con `secure`.
+
+Límites a tener en cuenta (verificar siempre en vercel.com/pricing y
+vercel.com/docs/limits, cambian seguido):
+
+- El plan **Hobby** es solo para uso personal y no comercial.
+- Las funciones tienen un tope de tamaño del cuerpo de la petición (~4,5 MB).
+  El docente guarda todo su estado en un solo `PUT /api/docente/state`; si
+  algún día un estado supera ese tamaño, el guardado falla con un aviso
+  claro (error 413).
+- Hay un tiempo máximo por ejecución de la función en Hobby.
 
 ## 4. Crear las tablas en la base de datos
 
@@ -69,30 +80,28 @@ y corré `npm install` seguido de `npm run migrate`.)
 
 ## 5. ¡Listo! Usar el sistema
 
-- **Docentes**: entrá a `https://tu-app.onrender.com/docente.html`, hacé clic
+- **Docentes**: entrá a `https://tu-app.vercel.app/docente.html`, hacé clic
   en "Registrate" la primera vez, y a partir de ahí "Ingresar" con mail y
   contraseña. Todo lo que cargues se guarda automáticamente en la base de
   datos (ya no depende del navegador ni del dispositivo).
-- **Estudiantes**: entrá a `https://tu-app.onrender.com/portal-estudiante.html`
+- **Estudiantes**: entrá a `https://tu-app.vercel.app/portal-estudiante.html`
   e ingresá tu número de DNI. Vas a ver el cronograma, tus notas y tu
   asistencia de cada curso donde estés cargado (nunca la de tus compañeros).
 
-> **Nota sobre el plan gratuito de Render**: el servicio se "duerme" después
-> de 15 minutos sin uso, y tarda ~30-50 segundos en despertar cuando alguien
-> vuelve a entrar. Los datos NUNCA se pierden (están en Neon, que es aparte).
-> Si eso te molesta, Render tiene un plan pago desde ~$7/mes que evita el
-> dormido.
+> **Nota**: los datos nunca se pierden por cambiar de plataforma: viven en
+> Neon, que es aparte del hosting.
 
 ---
 
 ## Estructura del proyecto
 
 ```
-magistro-backend/
+magistro/   (raíz del repositorio)
 ├── schema.sql              ← tablas SQL (Postgres)
-├── server.js                ← servidor Express
+├── server.js                ← servidor Express (exporta la app para Vercel)
 ├── package.json
 ├── .env.example              ← plantilla de variables de entorno
+├── .gitignore
 ├── db/
 │   ├── pool.js               ← conexión a la base de datos
 │   └── migrate.js            ← script para crear las tablas
@@ -103,6 +112,7 @@ magistro-backend/
 │   ├── docente.js             ← guardar/leer todos los datos (protegido)
 │   └── estudiante.js          ← consultar datos propios (solo lectura)
 └── public/
+    ├── index.html              ← menú principal
     ├── docente.html            ← tu app, con login agregado
     └── portal-estudiante.html  ← portal nuevo de estudiantes
 ```
