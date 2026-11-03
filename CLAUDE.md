@@ -6,7 +6,8 @@ despliegue detallados ver `README.md`.
 
 ## Qué es
 
-- **App del docente** (`public/docente.html`): materias, comisiones, estudiantes,
+- **App del docente** (`public/docente.html`): materias, comisiones, estudiantes
+  (se agregan/importan desde Asistencia),
   notas, asistencia y planificación. Login con mail y contraseña.
 - **Portal del estudiante** (`public/portal-estudiante.html`): solo lectura.
   El estudiante entra con su **DNI** (sin cuenta ni contraseña) y ve su
@@ -95,7 +96,7 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
   externas (fuentes, CDN) desde caché. Si cambiás íconos o archivos estáticos
   y no se ven en un celular que ya la instaló, subí `VERSION` en `sw.js`.
 - **Celular** (≤700 px): en `docente.html` la navegación es una barra inferior
-  (Inicio, Estudiantes, Notas, Asistencia, Más) y el selector de curso va
+  (Inicio, Notas, Asistencia, Más) y el selector de curso va
   arriba como **un solo botón** (`#courseChip`: materia + comisión) que abre una
   hoja inferior (`renderCourseSheet`) con todos los cursos agrupados por materia;
   ahí también se renombra/elimina materia, se archiva/elimina comisión, se edita el
@@ -153,10 +154,7 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       aparece fija solo cuando hay cambios sin guardar. En escritorio no cambia.
 - [x] Celular: el selector de curso (`.sb-course`) ya no es fijo, se va con el scroll; cada sección
       muestra un título (`.m-title`, tabla `M_TITLES` en `renderPanel`) como en las maquetas. Oculto en escritorio.
-- [x] Estudiantes, Actividades y Planificación en celular (maquetas aprobadas; escritorio no cambia):
-      Estudiantes como lista (nombre, DNI, chip de alerta por asistencia <60 % o recursa — `estAlert`;
-      buscador si hay más de 15; email y observaciones se editan en el modal de edición, que ahora incluye
-      Observaciones). Actividades: chips de unidad con scroll horizontal y un trabajo por vez con botones
+- [x] Actividades y Planificación en celular (maquetas aprobadas; escritorio no cambia). Actividades: chips de unidad con scroll horizontal y un trabajo por vez con botones
       Sí / No / — (`worksMHTML`, `setWorkM`). Planificación: resumen con barra de avance, cabecera por unidad
       colapsable (`planToggleUnit`; las unidades ya dictadas arrancan cerradas), fila de dos líneas y próxima
       clase resaltada con scroll automático.
@@ -176,3 +174,11 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [x] Etiquetas pequeñas en celular: piso de 11 px en docente y portal (bloque "Celular: ningún texto
       por debajo de 11 px"); no cambia el escritorio ni la impresión/PDF. Las tablas densas mantienen
       controles de 36 px a propósito (para que entren en pantalla).
+- [x] Se quitó la sección **Estudiantes** (escritorio y celular). "Agregar estudiante" e "Importar listado"
+      están al final de Asistencia; el email y las observaciones se editan en el modal de edición
+      (`openEditStudent`, ahora con Observaciones). Al tocar el nombre de un estudiante en Asistencia o
+      Notas se abre su resumen (`openStudentSummary`, clase `.nm-link`). Un `activeSection` guardado como
+      'estudiantes' se convierte en 'asistencia' al entrar.
+- [x] Asistencia en celular: ya no hay selector Tomar lista / Planilla; la planilla es una pantalla
+      informativa de solo lectura (`openAttPlanilla`, botón "Ver planilla completa"). En escritorio la
+      planilla editable no cambia.
