@@ -153,6 +153,13 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       aparece fija solo cuando hay cambios sin guardar. En escritorio no cambia.
 - [x] Celular: el selector de curso (`.sb-course`) ya no es fijo, se va con el scroll; cada sección
       muestra un título (`.m-title`, tabla `M_TITLES` en `renderPanel`) como en las maquetas. Oculto en escritorio.
+- [x] Estudiantes, Actividades y Planificación en celular (maquetas aprobadas; escritorio no cambia):
+      Estudiantes como lista (nombre, DNI, chip de alerta por asistencia <60 % o recursa — `estAlert`;
+      buscador si hay más de 15; email y observaciones se editan en el modal de edición, que ahora incluye
+      Observaciones). Actividades: chips de unidad con scroll horizontal y un trabajo por vez con botones
+      Sí / No / — (`worksMHTML`, `setWorkM`). Planificación: resumen con barra de avance, cabecera por unidad
+      colapsable (`planToggleUnit`; las unidades ya dictadas arrancan cerradas), fila de dos líneas y próxima
+      clase resaltada con scroll automático.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo

@@ -486,6 +486,7 @@ svg.icon { width:15px; height:15px; vertical-align:-2px; fill:none; stroke:curre
 .clase-type-badge { font-size:11px; font-weight:500; padding:2px 8px; border-radius:999px; flex-shrink:0; }
 .clase-chevron { color:var(--text3); flex-shrink:0; transition:transform 0.15s; }
 .clase-chevron.open { transform:rotate(180deg); }
+.plan-unit-h,.plan-sum-m,.clase-next-chip{display:none;}
 
 .clase-body {
   padding:12px 14px 14px; border-top:0.5px solid var(--border);
@@ -761,6 +762,35 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   .clase-chevron{margin-left:auto;}
   .clase-type-badge{display:none;}
 
+  /* Planificación agrupada por unidad (cabeceras, resumen, próxima clase) */
+  .plan-summary{display:none !important;}
+  .plan-sum-m{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .psm-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--text2);}
+  .psm-top b{color:var(--text);}
+  .psm-bar{height:8px;border-radius:4px;background:var(--surface2);overflow:hidden;}
+  .psm-bar>div{height:100%;background:var(--accent);}
+  .psm-bot{font-size:12px;color:var(--text2);}
+  .classes-container{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;gap:0 !important;display:block !important;}
+  .plan-unit-h{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 12px;background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;}
+  .plan-unit-h:first-child{border-top:0;}
+  .puh-t{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .puh-t b{font-size:14px;}
+  .puh-t small{font-size:12px;color:var(--text2);}
+  .puh-n{font-size:12px;font-weight:700;color:var(--text2);}
+  .puh-chev{width:18px;height:18px;color:var(--text3);transition:transform .15s;}
+  .plan-unit-h.closed .puh-chev{transform:rotate(-90deg);}
+  .clase-card.pu-closed{display:none;}
+  .classes-container .clase-card{border:0;border-radius:0;border-bottom:1px solid var(--border);margin:0;background:transparent;}
+  .classes-container .clase-card .clase-header{display:grid;grid-template-columns:28px 1fr 18px;grid-template-areas:"n d c" "n p c";column-gap:10px;row-gap:0;align-items:center;padding:6px 12px;min-height:52px;background:transparent;}
+  .clase-num{grid-area:n;width:28px;height:28px;font-size:13px;}
+  .clase-date{grid-area:d;font-size:12px;font-weight:700;}
+  .classes-container .clase-preview{grid-area:p;order:0;white-space:nowrap;font-size:14px;}
+  .clase-chevron{grid-area:c;margin-left:0;}
+  .clase-unidad-badge{display:none;}
+  .clase-card.past .clase-header .clase-preview,.clase-card.past .clase-date{color:var(--text3);}
+  .clase-card.next{box-shadow:inset 3px 0 0 var(--accent);background:var(--surface2);}
+  .clase-next-chip{display:inline;font-size:11px;font-weight:700;color:var(--accent);margin-left:4px;}
+
   /* Elementos táctiles: mínimo cómodo para el dedo; las tablas quedan más densas */
   button,select,.com-selector-btn,input[type=button],input[type=submit]{min-height:44px;min-width:44px;}
   input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea{min-height:44px;}
@@ -918,6 +948,9 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 
 /* ── Resumen del estudiante ── */
 .est-click{cursor:pointer;}
+.est-al,.est-meta,.est-search{display:none;}
+.est-chip{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;}
+.est-chip.red{background:var(--red-bg);color:var(--red-text);}
 .est-link:hover{color:var(--accent);text-decoration:underline;}
 .sum-modal{width:min(580px,94vw);padding:0;}
 .sum-head{display:flex;align-items:flex-start;gap:12px;padding:20px 22px 14px;border-bottom:0.5px solid var(--border);}
@@ -965,6 +998,54 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
   .sum-head-btns{width:100%;margin-left:0;}
   .sum-body{padding:4px 16px 20px;}
   .sum-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+/* Celular: Estudiantes como lista (nombre, DNI, alerta); email y observaciones se editan desde la ficha */
+@media (max-width:700px){
+  #importListadoBtn #importLabel{display:none;}
+  #importListadoBtn{width:44px;padding:0;justify-content:center;}
+  .est-meta{display:block;font-size:13px;color:var(--text2);margin:0 0 10px;}
+  .est-search.show{display:block;width:100%;min-height:46px;margin:0 0 10px;padding:0 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;}
+  #est-table,#est-table tbody{display:block;width:100%;}
+  #est-table thead{display:none;}
+  #est-tbody tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"n a" "d a";align-items:center;column-gap:10px;padding:8px 8px 8px 14px;min-height:60px;border-bottom:1px solid var(--border);}
+  #est-tbody td{display:block;border:0 !important;padding:0 !important;text-align:left;}
+  #est-tbody td:nth-child(1){grid-area:d;font-size:12px;color:var(--text2);}
+  #est-tbody td:nth-child(1)::before{content:'DNI ';}
+  #est-tbody td:nth-child(2){grid-area:n;font-size:15px;font-weight:700;}
+  #est-tbody td:nth-child(2) button{display:none;}
+  #est-tbody td:nth-child(3),#est-tbody td:nth-child(4){display:none;}
+  #est-tbody td.est-al{display:block;grid-area:a;}
+  #est-tbody td[colspan]{grid-column:1/-1;}
+}
+
+/* Celular: Actividades, un trabajo por vez */
+.works-m{display:none;}
+@media (max-width:700px){
+  .works-stats,.works-table-wrap{display:none !important;}
+  .works-m{display:block;}
+  .unit-tabs{flex-wrap:nowrap;overflow-x:auto;gap:8px;margin:0 -16px 12px;padding:0 16px;scrollbar-width:none;}
+  .unit-tabs::-webkit-scrollbar{display:none;}
+  .unit-chip{flex:none;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap;}
+  .wm-sum{font-size:13px;color:var(--text2);margin-bottom:10px;}
+  .wm-sum b{color:var(--text);}
+  .wm-tabs{display:flex;gap:2px;background:var(--surface2);border-radius:12px;padding:3px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;}
+  .wm-tab{flex:1 0 auto;min-height:44px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:var(--text2);font:inherit;font-size:13px;font-weight:600;white-space:nowrap;}
+  .wm-tab.on{background:var(--surface);color:var(--accent);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+  .wm-list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .wm-row{display:flex;align-items:center;gap:8px;padding:6px 8px 6px 12px;min-height:60px;border-bottom:1px solid var(--border);}
+  .wm-row:last-child{border-bottom:0;}
+  .wm-n{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .wm-name{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .wm-sub{font-size:12px;color:var(--text2);}
+  .wm-con{min-height:36px;max-width:170px;font-size:13px;padding:0 6px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);}
+  .wm-seg{display:flex;flex:none;background:var(--surface2);border-radius:10px;padding:2px;}
+  .wm-b{width:44px;height:40px;border:0;border-radius:8px;background:transparent;color:var(--text2);font:inherit;font-size:14px;font-weight:700;}
+  .wm-b.on.si{background:var(--green-bg);color:var(--green-text);}
+  .wm-b.on.no{background:var(--red-bg);color:var(--red-text);}
+  .wm-b.on.na{background:var(--surface);color:var(--text);}
+  .wm-del{margin:14px 0;min-height:44px;width:100%;border:1px solid var(--border);background:transparent;border-radius:12px;color:var(--red-text);font:inherit;font-size:13px;}
+  .wm-empty{padding:16px;color:var(--text3);font-size:13px;}
 }
 
 /* Accesibilidad: foco visible para teclado y movimiento reducido */
@@ -1214,6 +1295,10 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
         <label class="u-lbl12">Email</label>
         <input class="u-inp" id="edit-email" type="email" placeholder="Ej: juan.garcia@mail.com"
          >
+      </div>
+      <div>
+        <label class="u-lbl12">Observaciones</label>
+        <input class="u-inp" id="edit-obs" type="text" placeholder="Opcional">
       </div>
     </div>
     <div class="modal-btns">
@@ -2411,6 +2496,8 @@ function renderEstudiantesSection(panel, com, headerHTML, secTabsHTML) {
         <span class="spinner" id="importSpinner"></span>
       </button>
     </div>
+    <div class="est-meta" id="est-meta"></div>
+    <input type="search" id="est-search" class="est-search" placeholder="Buscar por nombre o DNI" aria-label="Buscar estudiante" oninput="estFilter(this.value)">
     <div class="table-wrap">
       <table id="est-table">
         <thead>
@@ -2431,13 +2518,17 @@ function renderEstTable(com) {
   const tbody = document.getElementById('est-tbody'); if (!tbody) return;
   tbody.innerHTML = '';
   if (!com.students.length) {
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:2rem;font-size:13px">No hay estudiantes cargados todavía.</td></tr>';
+    const mt0 = document.getElementById('est-meta'); if (mt0) mt0.textContent = '';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:2rem;font-size:13px">No hay estudiantes cargados todavía.</td></tr>';
     return;
   }
+  let nAl = 0;
   com.students.forEach((s, i) => {
     const obs = s.obs || '';
     const email = s.email || '';
+    const al = estAlert(com, s); if (al) nAl++;
     const tr = document.createElement('tr');
+    tr.dataset.q = ((s.name || '') + ' ' + (s.dni || '')).toLowerCase();
     tr.innerHTML = `
       <td class="dni est-click u-bdr" onclick="estRowClick(event,${i})">${s.dni||'—'}</td>
       <td class="left est-click u-bdr" onclick="estRowClick(event,${i})">
@@ -2461,9 +2552,33 @@ function renderEstTable(com) {
           onchange="com_students_obs(${i}, this.value)"
           onfocus="this.style.background='var(--surface2)';this.style.borderRadius='4px'"
           onblur="this.style.background='transparent'">
-      </td>`;
+      </td>
+      <td class="est-al est-click" onclick="estRowClick(event,${i})">${al ? `<span class="est-chip ${al.cls}">${escHtml(al.txt)}</span>` : ''}</td>`;
     tbody.appendChild(tr);
   });
+  const mt = document.getElementById('est-meta');
+  if (mt) mt.textContent = `${com.students.length} inscripto${com.students.length === 1 ? '' : 's'}` + (nAl ? ` · ${nAl} con alerta` : '');
+  const se = document.getElementById('est-search');
+  if (se) { se.classList.toggle('show', com.students.length > 15); estFilter(se.value); }
+}
+
+// Alerta para la lista del celular: asistencia baja o recursa
+function estAlert(com, s) {
+  const att = com.attendance || { dates: [], records: {} };
+  const skip = com.skipWeeks || {};
+  const recs = (att.records || {})[s.id] || {};
+  const reg = (att.dates || []).filter(d => !skip[d] && recs[d]);
+  if (reg.length >= 3) {
+    const pct = Math.round(reg.filter(d => recs[d] === 'P').length / reg.length * 100);
+    if (pct < 60) return { cls: 'red', txt: 'Asist. ' + pct + '%' };
+  }
+  const info = getFinalInfo({ p1: s.p1 ?? '', p2: s.p2 ?? '', rec: s.rec || '', finalManual: s.finalManual || '' });
+  if (/DESAPROB|REPROB|RECURSA/.test(info.sit || '')) return { cls: 'red', txt: 'Recursa' };
+  return null;
+}
+function estFilter(v) {
+  const q = (v || '').trim().toLowerCase();
+  document.querySelectorAll('#est-tbody tr[data-q]').forEach(tr => { tr.style.display = !q || tr.dataset.q.includes(q) ? '' : 'none'; });
 }
 
 // ── Resumen del estudiante (notas, asistencia y trabajos) ──
@@ -3754,6 +3869,21 @@ function renderPlanificacionSection(panel, com, headerHTML, secTabsHTML) {
     // Build interleaved list: regular classes + skip-week markers in chronological order
     const allPlanDates = getClassDates(p); // all dates including skipped
     let claseIdx = 0; // index into p.clases (only non-skipped)
+    // Pre-pass (celular): estadísticas por unidad y próxima clase
+    const hoyStr = new Date().toISOString().slice(0,10);
+    const ust = {}; let nextIdx = -1, ci0 = 0;
+    allPlanDates.forEach(d => {
+      const ds = d.toISOString().slice(0,10);
+      if (skipWeeks[ds]) return;
+      const c0 = p.clases[ci0]; if (!c0) { ci0++; return; }
+      const k0 = c0.unidad || '';
+      const o = ust[k0] || (ust[k0] = { first: ci0+1, last: ci0+1, total: 0, past: 0 });
+      o.last = ci0+1; o.total++;
+      if (ds < hoyStr) o.past++; else if (nextIdx < 0) nextIdx = ci0;
+      ci0++;
+    });
+    const hasUnits = Object.keys(ust).some(k => k);
+    let lastUKey = null;
     clasesHTML = '<div class="classes-container">';
 
     allPlanDates.forEach(d => {
@@ -3789,15 +3919,30 @@ function renderPlanificacionSection(panel, com, headerHTML, secTabsHTML) {
       const preview   = isExamen ? 'EXAMEN' : (cl.tema || '');
       const _u = (com.unidades||[]).find(u => u.id === cl.unidad);
       const unidadBadge = _u ? `${toRoman(_u.numero)} · ${_u.nombre}` : '';
+      const uKey = cl.unidad || '';
+      if (hasUnits && uKey !== lastUKey) {
+        const st = ust[uKey];
+        const ck = com.id + '|' + uKey;
+        if (!(ck in planClosed)) planClosed[ck] = st.total > 0 && st.past === st.total;
+        const estado = st.past === st.total ? 'dictadas' : (st.past ? 'en curso' : 'por dictar');
+        clasesHTML += `<div class="plan-unit-h${planClosed[ck]?' closed':''}" data-uh="${escHtml(uKey)}" role="button" tabindex="0" aria-expanded="${!planClosed[ck]}" onclick="planToggleUnit(this.dataset.uh)">
+          <div class="puh-t"><b>${_u ? escHtml(toRoman(_u.numero)+' · '+_u.nombre) : 'Sin unidad'}</b><small>Clases ${st.first} a ${st.last} · ${estado}</small></div>
+          <span class="puh-n">${st.past}/${st.total}</span>
+          <svg class="icon puh-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>`;
+      }
+      lastUKey = uKey;
+      const puClosed = hasUnits && planClosed[com.id + '|' + uKey];
+      const isNext = idx === nextIdx;
       clasesHTML += `
-        <div class="clase-card${isPast?' past':''}" id="clase-${idx}" ondragover="dragOver(event,${idx})" ondragleave="dragLeave(event)" ondrop="dragDrop(event,${idx})">
+        <div class="clase-card${isPast?' past':''}${isNext?' next':''}${puClosed?' pu-closed':''}" data-pu="${escHtml(uKey)}" id="clase-${idx}" ondragover="dragOver(event,${idx})" ondragleave="dragLeave(event)" ondrop="dragDrop(event,${idx})">
           <div class="clase-header" onclick="toggleClase(${idx})">
             <div class="drag-handle" draggable="true" onmousedown="event.stopPropagation()" ondragstart="dragStart(event,${idx})" ondragend="dragEnd(event)" title="Arrastrar para reordenar" onclick="event.stopPropagation()">
               <span></span><span></span><span></span><span></span>
             </div>
             <div class="clase-num ${numCls}">${idx+1}</div>
             ${unidadBadge ? '<span class="clase-unidad-badge">'+unidadBadge+'</span>' : ''}
-            <span class="clase-date">${dateStr}</span>
+            <span class="clase-date">${dateStr}${isNext?' <span class="clase-next-chip">Próxima</span>':''}</span>
             <span class="clase-preview ${preview ? (isExamen ? 'examen' : 'filled') : ''}">` + (preview||'Sin contenido cargado') + `</span>
             <span class="badge ${typeCls} clase-type-badge">${typeLabel}</span>
 
@@ -3841,7 +3986,15 @@ function renderPlanificacionSection(panel, com, headerHTML, secTabsHTML) {
     clasesHTML += '</div>';
   }
 
-  panel.innerHTML = headerHTML + secTabsHTML + `
+  const _hoy = new Date().toISOString().slice(0,10);
+  const _pasadas = (() => { let n = 0, i = 0; const sw = com.skipWeeks || {}; getClassDates(p).forEach(d => { const ds = d.toISOString().slice(0,10); if (sw[ds]) return; if (ds < _hoy) n++; i++; }); return Math.min(n, estimado); })();
+  const _conContenido = p.clases.filter(c => c.tema).length;
+  const sumMHTML = estimado ? `<div class="plan-sum-m">
+      <div class="psm-top"><span><b>${estimado} clases</b>${p.days.length ? ' · ' + p.days.map(d => DIAS[d].slice(0,3).toLowerCase()).join(' y ') : ''}</span><span>${p.fechaInicio && p.fechaFin ? p.fechaInicio.slice(8,10)+'/'+p.fechaInicio.slice(5,7)+' – '+p.fechaFin.slice(8,10)+'/'+p.fechaFin.slice(5,7) : ''}</span></div>
+      <div class="psm-bar" role="progressbar" aria-valuenow="${Math.round(_pasadas/estimado*100)}" aria-valuemin="0" aria-valuemax="100"><div style="width:${Math.round(_pasadas/estimado*100)}%"></div></div>
+      <div class="psm-bot">${_pasadas} dictadas · ${_conContenido} con contenido · ${Math.max(0, estimado-_conContenido)} por planificar</div>
+    </div>` : '';
+  panel.innerHTML = headerHTML + secTabsHTML + sumMHTML + `
 
     <div class="plan-summary" style="margin-bottom:1rem">
       ${estimado
@@ -3864,10 +4017,25 @@ function renderPlanificacionSection(panel, com, headerHTML, secTabsHTML) {
         Exportar Planificación Excel
       </button>
     </div>` : ''}`;
+  if (window.matchMedia('(max-width:700px)').matches && _planScrollKey !== com.id) {
+    _planScrollKey = com.id;
+    const nx = panel.querySelector('.clase-card.next');
+    if (nx) setTimeout(() => nx.scrollIntoView({ block: 'center' }), 0);
+  }
 }
 
 
 
+
+const planClosed = {};
+let _planScrollKey = null;
+function planToggleUnit(k) {
+  const com = getActive(); if (!com) return;
+  const ck = com.id + '|' + k;
+  planClosed[ck] = !planClosed[ck];
+  document.querySelectorAll('.plan-unit-h').forEach(h => { if (h.dataset.uh === k) { h.classList.toggle('closed', planClosed[ck]); h.setAttribute('aria-expanded', !planClosed[ck]); } });
+  document.querySelectorAll('.clase-card[data-pu]').forEach(c => { if (c.dataset.pu === k) c.classList.toggle('pu-closed', planClosed[ck]); });
+}
 
 function estimateClases(p, skipWeeks) {
   if (!p.days.length) return 0;
@@ -4639,9 +4807,9 @@ document.addEventListener('keydown',e=>{
 document.getElementById('addStudentOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('addStudentOverlay'))closeAddStudent();});
 
 let _editStudentIdx=null;
-function openEditStudent(i){const com=getActive();if(!com)return;_editStudentIdx=i;const s=com.students[i];document.getElementById('edit-dni').value=s.dni||'';document.getElementById('edit-name').value=s.name||'';document.getElementById('edit-email').value=s.email||'';document.getElementById('edit-name-err').style.display='none';document.getElementById('editStudentOverlay').classList.add('open');setTimeout(()=>document.getElementById('edit-name').focus(),50);}
+function openEditStudent(i){const com=getActive();if(!com)return;_editStudentIdx=i;const s=com.students[i];document.getElementById('edit-dni').value=s.dni||'';document.getElementById('edit-name').value=s.name||'';document.getElementById('edit-email').value=s.email||'';document.getElementById('edit-obs').value=s.obs||'';document.getElementById('edit-name-err').style.display='none';document.getElementById('editStudentOverlay').classList.add('open');setTimeout(()=>document.getElementById('edit-name').focus(),50);}
 function closeEditStudent(){document.getElementById('editStudentOverlay').classList.remove('open');_editStudentIdx=null;}
-function confirmEditStudent(){const com=getActive();if(!com||_editStudentIdx===null)return;const name=document.getElementById('edit-name').value.trim().toUpperCase();const dni=document.getElementById('edit-dni').value.trim();const email=document.getElementById('edit-email').value.trim();if(!name){document.getElementById('edit-name-err').style.display='block';return;}com.students[_editStudentIdx].name=name;com.students[_editStudentIdx].dni=dni;com.students[_editStudentIdx].email=email;com.students.sort((a,b)=>a.name.localeCompare(b.name,'es'));saveState();_renderedComId=null;closeEditStudent();renderPanel();showToast('Datos del alumno actualizados');}
+function confirmEditStudent(){const com=getActive();if(!com||_editStudentIdx===null)return;const name=document.getElementById('edit-name').value.trim().toUpperCase();const dni=document.getElementById('edit-dni').value.trim();const email=document.getElementById('edit-email').value.trim();if(!name){document.getElementById('edit-name-err').style.display='block';return;}com.students[_editStudentIdx].name=name;com.students[_editStudentIdx].dni=dni;com.students[_editStudentIdx].email=email;com.students[_editStudentIdx].obs=document.getElementById('edit-obs').value.trim();com.students.sort((a,b)=>a.name.localeCompare(b.name,'es'));saveState();_renderedComId=null;closeEditStudent();renderPanel();showToast('Datos del alumno actualizados');}
 function confirmDeleteStudent(){const com=getActive();if(!com||_editStudentIdx===null)return;const name=com.students[_editStudentIdx].name;if(!confirm('¿Eliminar a '+name+' del listado?'))return;com.students.splice(_editStudentIdx,1);saveState();_renderedComId=null;closeEditStudent();renderPanel();showToast('Alumno eliminado');}
 document.getElementById('editStudentOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('editStudentOverlay'))closeEditStudent();});
 
@@ -4983,7 +5151,7 @@ function renderTrabajosSection(panel, com, headerHTML, secTabsHTML) {
   const totalSlots = totalStudents * works.length || 1;
 
   worksHTML += `
-    <div class="att-stats" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.25rem">
+    <div class="att-stats works-stats" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.25rem">
       <div class="stat"><div class="stat-val">${works.length}</div><div class="stat-lbl">Actividades</div></div>
       <div class="stat"><div class="stat-val" style="color:var(--green-text)">${entregados}</div><div class="stat-lbl">Entregados</div></div>
       <div class="stat"><div class="stat-val" style="color:var(--red-text)">${sinEntregar}</div><div class="stat-lbl">Sin entregar</div></div>
@@ -5034,7 +5202,54 @@ function renderTrabajosSection(panel, com, headerHTML, secTabsHTML) {
   });
 
   worksHTML += `</tbody></table></div>`;
+  worksHTML += `<div class="works-m" id="worksM">${worksMHTML(com, activeUnitId, works)}</div>`;
   panel.innerHTML = headerHTML + secTabsHTML + worksHTML;
+}
+
+// ── Actividades en celular: un trabajo por vez ──
+const activeWorkM = {};
+function worksMWork(com, unitId, works) {
+  const k = com.id + '|' + unitId;
+  return works.find(w => w.id === activeWorkM[k]) || works[0];
+}
+function worksMHTML(com, unitId, works) {
+  const w = worksMWork(com, unitId, works);
+  const wrec = com.workRecords || {};
+  const CONC = ['Excelente', 'Muy bien', 'Bien', 'Regular', 'Mal'];
+  let nSi = 0;
+  com.students.forEach((s, si) => { if ((wrec[`${si}_${w.id}`] || {}).entregado === 'si') nSi++; });
+  const tot = com.students.length;
+  const pct = tot ? Math.round(nSi / tot * 100) : 0;
+  const tabs = works.map(x => `<button role="tab" aria-selected="${x.id === w.id}" class="wm-tab${x.id === w.id ? ' on' : ''}" onclick="switchWorkM('${x.id}')">${escHtml(x.name)}</button>`).join('');
+  const rows = com.students.map((s, si) => {
+    const r = wrec[`${si}_${w.id}`] || {};
+    const v = r.entregado || '';
+    const sub = v === 'si'
+      ? `<select class="wm-con" aria-label="Conceptual de ${escHtml(s.name)}" onchange="setWorkRecord(${si},'${w.id}','concepto',this.value)"><option value="">Conceptual: —</option>${CONC.map(c => `<option value="${c}"${r.concepto === c ? ' selected' : ''}>${c}</option>`).join('')}</select>`
+      : `<span class="wm-sub">${v === 'no' ? 'Sin entregar' : 'Sin cargar'}</span>`;
+    const b = (val, t) => `<button class="wm-b${v === val ? ' on ' + (val || 'na') : ''}" aria-pressed="${v === val}" onclick="setWorkM(${si},'${w.id}','${val}')">${t}</button>`;
+    return `<div class="wm-row"><div class="wm-n"><span class="wm-name">${escHtml(s.name)}</span>${sub}</div><div class="wm-seg">${b('si', 'Sí')}${b('no', 'No')}${b('', '—')}</div></div>`;
+  }).join('');
+  return `
+    <div class="wm-sum"><b>${works.length}</b> actividad${works.length === 1 ? '' : 'es'} · <b>${nSi} de ${tot}</b> entregaron · ${pct}%</div>
+    <div class="wm-tabs" role="tablist" aria-label="Actividad">${tabs}</div>
+    <div class="wm-list">${rows || '<div class="wm-empty">No hay estudiantes cargados.</div>'}</div>
+    <button class="wm-del" onclick="deleteWork('${unitId}','${w.id}')">Eliminar “${escHtml(w.name)}”</button>`;
+}
+function switchWorkM(id) {
+  const com = getActive(); if (!com) return;
+  activeWorkM[com.id + '|' + activeUnits[com.id]] = id;
+  refreshWorksM();
+}
+function setWorkM(si, wid, val) {
+  setWorkRecord(si, wid, 'entregado', val);
+  refreshWorksM();
+}
+function refreshWorksM() {
+  const com = getActive(); const box = document.getElementById('worksM'); if (!com || !box) return;
+  const u = getPlanningUnits(com).find(x => x.id === activeUnits[com.id]); if (!u) return;
+  const ws = com.unitWorks[u.id] || [];
+  if (ws.length) box.innerHTML = worksMHTML(com, u.id, ws);
 }
 
 function switchUnit(id) {
