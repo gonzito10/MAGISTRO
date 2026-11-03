@@ -788,6 +788,124 @@ select.entrega:disabled, select.concepto:disabled { background:var(--surface2); 
 .u-center{text-align:center!important}
 .u-th-plain{text-align:center;font-weight:normal;background:#e8e6e0!important}
 
+/* ── Notas: una columna por vez (solo celular) ── */
+.notas-col-toggle{display:none;}
+#notasSaveBar{display:contents;}
+@media (max-width:700px){
+  .notas-col-toggle{display:flex;background:var(--gray-bg);border-radius:12px;padding:3px;margin:0 0 12px;}
+  .notas-col-toggle button{flex:1;min-height:44px;border:0;border-radius:10px;background:transparent;color:var(--gray-text);font:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:0 4px;}
+  .notas-col-toggle button.on{background:var(--surface);color:var(--accent);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+  #notasStats{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:6px;}
+  #notasStats .stat:first-child,#notasStats .stat-pct{display:none;}
+  #notasStats .stat{padding:10px 4px;text-align:center;}
+  #notasStats .stat-val{font-size:20px;}
+  #notasStats .stat-lbl{font-size:11px;letter-spacing:0;text-transform:none;}
+  #notasTableWrap thead tr.col-row{display:none;}
+  #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(3),
+  #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(4),
+  #notasTableWrap[data-col="p1"] thead tr.group-row th:nth-child(5),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(3),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(4),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(5),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(6),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(7),
+  #notasTableWrap[data-col="p1"] tbody td:nth-child(8),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(3),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(4),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(5),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(6),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(7),
+  #notasTableWrap[data-col="p1"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(2),
+  #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(4),
+  #notasTableWrap[data-col="p2"] thead tr.group-row th:nth-child(5),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(2),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(3),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(5),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(6),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(7),
+  #notasTableWrap[data-col="p2"] tbody td:nth-child(8),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(2),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(3),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(5),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(6),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(7),
+  #notasTableWrap[data-col="p2"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(2),
+  #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(3),
+  #notasTableWrap[data-col="rec"] thead tr.group-row th:nth-child(5),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(2),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(3),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(4),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(5),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(7),
+  #notasTableWrap[data-col="rec"] tbody td:nth-child(8),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(2),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(3),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(4),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(5),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(7),
+  #notasTableWrap[data-col="rec"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap[data-col="final"] thead tr.group-row th:nth-child(2),
+  #notasTableWrap[data-col="final"] thead tr.group-row th:nth-child(3),
+  #notasTableWrap[data-col="final"] thead tr.group-row th:nth-child(4),
+  #notasTableWrap[data-col="final"] tbody td:nth-child(2),
+  #notasTableWrap[data-col="final"] tbody td:nth-child(3),
+  #notasTableWrap[data-col="final"] tbody td:nth-child(4),
+  #notasTableWrap[data-col="final"] tbody td:nth-child(5),
+  #notasTableWrap[data-col="final"] tbody td:nth-child(6),
+  #notasTableWrap[data-col="final"] tbody td:nth-child(8),
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(2),
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(3),
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(4),
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(5),
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(6),
+  #notasTableWrap[data-col="final"] tfoot td:nth-child(8){display:none !important;}
+  #notasTableWrap table{min-width:0 !important;width:100%;}
+  #notasTableWrap thead th.left{min-width:0 !important;}
+  #notasTableWrap tbody td:first-child button{display:none;}
+  #notasTableWrap .badge,#notasTableWrap tbody td:last-child span{white-space:normal;font-size:11px;text-align:center;line-height:1.25;display:inline-block;}
+  #notasToolbar{padding-bottom:76px;}
+  #notasSaveBar{display:flex;align-items:center;gap:10px;position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:60;background:var(--surface);border-top:1px solid var(--border2);padding:8px 12px;}
+  #notasSaveBar #btn-guardar-notas{flex:1;min-height:48px;order:2;}
+  #notasSaveBar #notas-unsaved-indicator{order:1;font-size:12px;max-width:40%;}
+  #notasSaveBar:has(#btn-guardar-notas:disabled){display:none;}
+}
+
+/* ── Asistencia "Tomar lista": solo celular ── */
+.att-view-toggle,.att-hoy{display:none;}
+@media (max-width:700px){
+  .att-view-toggle{display:flex;background:var(--gray-bg);border-radius:12px;padding:3px;margin:0 0 12px;}
+  .att-view-toggle button{flex:1;min-height:42px;border:0;border-radius:10px;background:transparent;color:var(--gray-text);font:inherit;font-size:14px;font-weight:600;cursor:pointer;}
+  .att-view-toggle button.on{background:var(--surface);color:var(--accent);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.15);}
+  #attRoot[data-view="hoy"] .att-hoy{display:block;}
+  #attRoot[data-view="hoy"] .att-pl,#attRoot[data-view="hoy"] .att-stats{display:none !important;}
+  .ah-date{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:4px;margin-bottom:12px;}
+  .ah-nav{width:44px;height:44px;border:0;background:transparent;border-radius:10px;color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .ah-nav:disabled{opacity:.35;cursor:default;}
+  .ah-nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  .ah-date-t{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;}
+  .ah-date-t b{font-size:16px;}
+  .ah-date-t span{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ah-count{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:8px 0;margin-bottom:12px;text-align:center;font-size:11px;color:var(--text2);}
+  .ah-count div+div{border-left:1px solid var(--border);}
+  .ah-count b{display:block;font-size:18px;}
+  .ah-all{width:100%;min-height:48px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:12px;font:inherit;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;cursor:pointer;}
+  .ah-all:disabled{opacity:.45;cursor:default;}
+  .ah-all svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+  .ah-list{background:var(--surface);border:1px solid var(--border2);border-radius:12px;overflow:hidden;}
+  .ah-row{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 12px;min-height:54px;box-sizing:border-box;border-bottom:1px solid var(--border);}
+  .ah-row:last-child{border-bottom:0;}
+  .ah-name{flex:1;min-width:0;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ah-btn{display:flex;align-items:center;justify-content:center;width:46px;height:44px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--gray-text);font:inherit;font-size:15px;font-weight:700;cursor:pointer;padding:0;}
+  .ah-btn.P.on{background:var(--green-text);border-color:var(--green-text);color:var(--surface);}
+  .ah-btn.T.on{background:var(--amber-text);border-color:var(--amber-text);color:var(--surface);}
+  .ah-btn.A.on{background:var(--red-text);border-color:var(--red-text);color:var(--surface);}
+  .ah-hint{font-size:12px;color:var(--text3);text-align:center;margin:10px 0 4px;}
+  .ah-skip{background:var(--amber-bg);color:var(--amber-text);border-radius:12px;padding:14px;font-size:14px;line-height:1.4;display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+  .ah-skip button{min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--amber-text);background:transparent;color:var(--amber-text);font:inherit;font-weight:700;cursor:pointer;}
+}
+
 /* Celular: ningún texto por debajo de 11 px (en impresión/PDF no cambia nada) */
 @media (max-width:700px){
   .metric-card-label,.biblio-card-type,.sum-chip,
@@ -2486,6 +2604,37 @@ function com_students_email(i, val) {
 // ═══════════════════════════════════════════════════════
 // SECCIÓN: NOTAS
 // ═══════════════════════════════════════════════════════
+// Notas en celular: una columna por vez (el resto se oculta con CSS según data-col)
+let notasCol = 'p1';
+function setNotasCol(c) {
+  notasCol = c;
+  const w = document.getElementById('notasTableWrap'); if (w) w.dataset.col = c;
+  document.querySelectorAll('.notas-col-toggle button').forEach(b => {
+    const on = b.getAttribute('onclick').includes("'" + c + "'");
+    b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on));
+  });
+}
+// En celular la tabla muestra una sola columna de notas: los encabezados de 2 columnas pasan a 1
+const notasMobileMQ = window.matchMedia('(max-width:700px)');
+function fixNotasHeader() {
+  document.querySelectorAll('#notasTableWrap thead tr.group-row th[data-cs]').forEach(th => { th.colSpan = notasMobileMQ.matches ? 1 : Number(th.dataset.cs); });
+}
+notasMobileMQ.addEventListener('change', fixNotasHeader);
+// Enter en una nota pasa a la misma columna del estudiante siguiente
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || !e.target.matches || !e.target.matches('#tbody input.nota')) return;
+  const m = /^(p1|p2|final)_(\d+)$/.exec(e.target.id); if (!m) return;
+  e.preventDefault();
+  for (let j = Number(m[2]) + 1; ; j++) {
+    const nx = document.getElementById(m[1] + '_' + j);
+    if (!nx) { e.target.blur(); return; }
+    if (!nx.disabled) { nx.focus(); nx.select && nx.select(); return; }
+  }
+});
+document.addEventListener('focusin', e => {
+  if (e.target.matches && e.target.matches('#tbody input.nota')) e.target.setAttribute('enterkeyhint', 'next');
+});
+
 function renderNotasSection(panel, com, headerHTML, secTabsHTML) {
   if (_renderedComId === com.id && activeSection === 'notas' && document.getElementById('tbody')) {
     updateStats(com); renderTable(); return;
@@ -2494,22 +2643,26 @@ function renderNotasSection(panel, com, headerHTML, secTabsHTML) {
   initNotasDraft(com);
 
   panel.innerHTML = headerHTML + secTabsHTML + `
-    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+    <div class="stats" id="notasStats" style="grid-template-columns:repeat(5,1fr)">
       <div class="stat"><div class="stat-val" id="stat-total">${com.students.length}</div><div class="stat-lbl">Estudiantes</div></div>
       <div class="stat"><div class="stat-val" id="stat-promo" style="color:var(--green-text)">0</div><div class="stat-lbl">Promocionados</div><div class="stat-pct u-hint" id="stat-promo-pct">—</div></div>
       <div class="stat"><div class="stat-val" id="stat-aprobado" style="color:var(--blue-text)">0</div><div class="stat-lbl">Van a final</div><div class="stat-pct u-hint" id="stat-aprobado-pct">—</div></div>
       <div class="stat"><div class="stat-val" id="stat-reprobado" style="color:var(--red-text)">0</div><div class="stat-lbl">Recursan</div><div class="stat-pct u-hint" id="stat-reprobado-pct">—</div></div>
       <div class="stat"><div class="stat-val" id="stat-ausente" style="color:var(--gray-text)">0</div><div class="stat-lbl">Ausentes</div><div class="stat-pct u-hint" id="stat-ausente-pct">—</div></div>
     </div>
-    <div class="table-wrap">
+    <div class="notas-col-toggle" role="tablist" aria-label="Columna de notas">
+      ${[['p1','1er parcial'],['p2','2do parcial'],['rec','Recup.'],['final','Final']].map(([k,t]) =>
+        `<button type="button" role="tab" aria-selected="${notasCol===k}" class="${notasCol===k?'on':''}" onclick="setNotasCol('${k}')">${t}</button>`).join('')}
+    </div>
+    <div class="table-wrap" id="notasTableWrap" data-col="${notasCol}">
       <table>
         <thead>
           <tr class="group-row">
             <th class="left" style="min-width:185px;border-right:0.5px solid var(--border)" rowspan="2">Apellido y nombre</th>
-            <th class="u-bdr" colspan="2">1er parcial</th>
-            <th class="u-bdr" colspan="2">2do parcial</th>
+            <th class="u-bdr" colspan="2" data-cs="2">1er parcial</th>
+            <th class="u-bdr" colspan="2" data-cs="2">2do parcial</th>
             <th class="u-bdr" rowspan="2">Recuperatorio</th>
-            <th class="u-bdr" colspan="2">Nota final</th>
+            <th class="u-bdr" colspan="2" data-cs="2">Nota final</th>
             <th rowspan="2">Situación</th>
           </tr>
           <tr class="col-row">
@@ -2534,16 +2687,18 @@ function renderNotasSection(panel, com, headerHTML, secTabsHTML) {
         </tfoot>
       </table>
     </div>
-    <div class="toolbar">
+    <div class="toolbar" id="notasToolbar">
       <button class="danger" onclick="clearNotes()">
         <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
         Limpiar notas
       </button>
+      <span id="notasSaveBar">
       <button class="primary" id="btn-guardar-notas" onclick="guardarNotas()" disabled>
         <svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         Guardar notas
       </button>
       <span id="notas-unsaved-indicator" style="display:none;font-size:12px;color:var(--text3);align-self:center">Cambios sin guardar</span>
+      </span>
       <button class="primary" onclick="openExportNotasMenu(this)">
         <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Exportar notas
@@ -2553,6 +2708,7 @@ function renderNotasSection(panel, com, headerHTML, secTabsHTML) {
 
   updateStats(com);
   renderTable();
+  fixNotasHeader();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2603,6 +2759,8 @@ function renderAsistenciaSection(panel, com, headerHTML, secTabsHTML) {
 
   // ── Render ──
   let html = headerHTML + secTabsHTML;
+  html += '<div id="attRoot" data-view="' + attView + '">';
+  if (allDates.length) html += attToggleHTML();
 
   // Stats
   html += '<div class="att-stats">';
@@ -2616,12 +2774,15 @@ function renderAsistenciaSection(panel, com, headerHTML, secTabsHTML) {
     html += '<div class="empty" style="padding:3rem 2rem;text-align:center">';
     html += '<p style="font-size:13px;color:var(--text2);margin-bottom:1rem">No hay fechas de cursada.<br>Configurá los días en <strong>Planificación</strong> para generarlas automáticamente.</p>';
         html += '<button onclick="switchSection(&quot;planificacion&quot;)">Ir a Planificación</button>';
-    html += '</div>';
+    html += '</div></div>';
     panel.innerHTML = html;
     return;
   }
 
 
+
+  // Modo "Hoy" (solo se ve en celular)
+  html += attHoyHTML(com, allDates);
 
   // ── Attendance table ──
   // Group dates by month for header
@@ -2702,13 +2863,13 @@ function renderAsistenciaSection(panel, com, headerHTML, secTabsHTML) {
     }
   });
 
-  html += '<div style="display:flex;gap:8px;margin-bottom:.75rem;flex-wrap:wrap;align-items:center">';
+  html += '<div class="att-actions att-pl" style="display:flex;gap:8px;margin-bottom:.75rem;flex-wrap:wrap;align-items:center">';
   html += '<button class="u-btn-sm" onclick="attMarkAllDate()"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Marcar todos P en fecha...</button>';
   html += '<button class="u-btn-sm" onclick="attAddDatePrompt()"><svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Agregar fecha</button>';
   html += '<button class="u-btn-sm" onclick="exportAsistenciaPDF()"><svg class="icon" viewBox="0 0 24 24" style="stroke:var(--red-text)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Exportar PDF</button>';
   html += '</div>';
 
-  html += '<div class="att-table-wrap"><table class="att-table" style="min-width:' + (180 + allDates.length*54) + 'px">';
+  html += '<div class="att-table-wrap att-pl"><table class="att-table" style="min-width:' + (180 + allDates.length*54) + 'px">';
   html += '<thead><tr><th class="att-name" style="text-align:left;padding-left:10px;letter-spacing:0.05em">ESTUDIANTES</th>' + dateCols + '<th class="att-pct">%</th></tr></thead>';
   html += '<tbody>' + rows + '</tbody>';
   if (n) {
@@ -2719,7 +2880,7 @@ function renderAsistenciaSection(panel, com, headerHTML, secTabsHTML) {
   }
   html += '</table></div>';
 
-  html += '<div style="margin-top:10px;font-size:12px;color:var(--text3);display:flex;gap:16px;flex-wrap:wrap;align-items:center">';
+  html += '<div class="att-pl" style="margin-top:10px;font-size:12px;color:var(--text3);display:flex;gap:16px;flex-wrap:wrap;align-items:center">';
   html += '<span style="font-weight:800;color:var(--green-text)">P</span> Presente &nbsp;';
   html += '<span style="font-weight:800;color:var(--red-text)">A</span> Ausente &nbsp;';
   html += '<span style="font-weight:800;color:var(--amber-text)">T</span> Tarde &nbsp;';
@@ -2739,10 +2900,110 @@ function renderAsistenciaSection(panel, com, headerHTML, secTabsHTML) {
     console.log('[ASISTENCIA DEBUG] Records en memoria para', s0.name, ':', JSON.stringify((att.records[s0.dni]||{})));
     console.log('[ASISTENCIA DEBUG] Render por fecha:', rowDebug.join(' | '));
   }
+  html += '</div>';
   panel.innerHTML = html;
 }
 
+// ── Asistencia en celular: modo "Hoy" (tomar lista de una clase) ──
+let attView = 'hoy', attDateSel = null, attDateCom = null;
+const two = n => String(n).padStart(2, '0');
+const isoDate = d => d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate());
 
+function attToggleHTML() {
+  const b = (v, t) => '<button type="button" role="tab" aria-selected="' + (attView === v) + '" class="' + (attView === v ? 'on' : '') + '" onclick="attSetView(\'' + v + '\')">' + t + '</button>';
+  return '<div class="att-view-toggle" role="tablist" aria-label="Vista de asistencia">' + b('hoy', 'Tomar lista') + b('planilla', 'Planilla') + '</div>';
+}
+function attSetView(v) { attView = v; renderPanel(); }
+
+function attPickDate(com, sorted) {
+  if (attDateCom !== com.id || !sorted.includes(attDateSel)) {
+    attDateCom = com.id;
+    const today = isoDate(new Date());
+    attDateSel = sorted.includes(today) ? today : (sorted.filter(d => d <= today).pop() || sorted[0]);
+  }
+  return attDateSel;
+}
+
+function attHoyHTML(com, dates) {
+  const att = com.attendance, skip = com.skipWeeks || {};
+  const sorted = dates.slice().sort();
+  if (!sorted.length) return '';
+  const date = attPickDate(com, sorted);
+  const i = sorted.indexOf(date);
+  const dd = new Date(date + 'T12:00:00');
+  const label = DIAS[dd.getDay()].slice(0, 3) + ' ' + two(dd.getDate()) + '/' + two(dd.getMonth() + 1);
+  let sub = 'Clase ' + (i + 1) + ' de ' + sorted.length;
+  try {
+    const planned = com.planning ? getClassDates(com.planning).map(isoDate) : [];
+    const pi = planned.indexOf(date);
+    const cl = pi >= 0 && com.planning.clases ? com.planning.clases[pi] : null;
+    const tema = cl ? (cl.tipo === 'examen' ? 'EXAMEN' : (cl.tema || '')) : '';
+    if (tema) sub += ' · ' + tema;
+  } catch (e) {}
+
+  let h = '<div class="att-hoy" id="attHoy">';
+  h += '<div class="ah-date">';
+  h += '<button type="button" class="ah-nav" aria-label="Clase anterior"' + (i <= 0 ? ' disabled' : '') + ' onclick="attGoDate(-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>';
+  h += '<div class="ah-date-t"><b>' + label + '</b><span>' + escHtml(sub) + '</span></div>';
+  h += '<button type="button" class="ah-nav" aria-label="Clase siguiente"' + (i >= sorted.length - 1 ? ' disabled' : '') + ' onclick="attGoDate(1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>';
+  h += '</div>';
+
+  if (skip[date]) {
+    const tipo = skip[date] === 'vacaciones' ? 'vacaciones' : skip[date] === 'licencia' ? 'licencia' : 'feriado';
+    h += '<div class="ah-skip">Esta fecha está marcada como <b>' + tipo + '</b> y no cuenta para la asistencia.'
+      + '<button type="button" onclick="openSkipMenu(\'' + date + '\', this)">Cambiar estado</button></div>';
+    h += '</div>';
+    return h;
+  }
+  if (!com.students.length) { h += '<div class="ah-skip">Todavía no hay estudiantes. Importá el listado desde Estudiantes.</div></div>'; return h; }
+
+  let nP = 0, nT = 0, nA = 0, nN = 0;
+  let rows = '';
+  com.students.forEach(s => {
+    const v = (att.records[s.id] || {})[date] || '';
+    if (v === 'P') nP++; else if (v === 'T') nT++; else if (v === 'A') nA++; else nN++;
+    const sid = String(s.id).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const btn = (k, name) => '<button type="button" class="ah-btn ' + k + (v === k ? ' on' : '') + '" aria-label="' + name + '" aria-pressed="' + (v === k) + '" onclick="attSet(\'' + sid + '\',\'' + date + '\',\'' + k + '\')">' + k + '</button>';
+    rows += '<div class="ah-row"><span class="ah-name">' + escHtml(s.name) + '</span>' + btn('P', 'Presente') + btn('T', 'Tarde') + btn('A', 'Ausente') + '</div>';
+  });
+  h += '<div class="ah-count"><div><b style="color:var(--green-text)">' + nP + '</b>Presentes</div><div><b style="color:var(--amber-text)">' + nT + '</b>Tarde</div><div><b style="color:var(--red-text)">' + nA + '</b>Ausentes</div><div><b style="color:var(--gray-text)">' + nN + '</b>Sin marcar</div></div>';
+  h += '<button type="button" class="ah-all" onclick="attMarkRest()" ' + (nN ? '' : 'disabled') + '><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Marcar presentes a quienes faltan marcar</button>';
+  h += '<div class="ah-list">' + rows + '</div>';
+  h += '<div class="ah-hint">Se guarda solo al marcar. Tocá otra vez para borrar la marca.</div>';
+  h += '</div>';
+  return h;
+}
+function attRefreshHoy() {
+  const com = getActive(); const el = document.getElementById('attHoy');
+  if (!com || !el) return;
+  el.outerHTML = attHoyHTML(com, com.attendance.dates);
+}
+function attGoDate(delta) {
+  const com = getActive(); if (!com) return;
+  const sorted = com.attendance.dates.slice().sort();
+  const i = sorted.indexOf(attDateSel) + delta;
+  if (i < 0 || i >= sorted.length) return;
+  attDateSel = sorted[i];
+  attRefreshHoy();
+}
+function attSet(sid, date, v) {
+  const com = getActive(); if (!com) return;
+  if (!com.attendance.records[sid]) com.attendance.records[sid] = {};
+  const cur = com.attendance.records[sid][date] || '';
+  com.attendance.records[sid][date] = cur === v ? '' : v;
+  saveState();
+  attRefreshHoy();
+}
+function attMarkRest() {
+  const com = getActive(); if (!com || !attDateSel) return;
+  let n = 0;
+  com.students.forEach(s => {
+    if (!com.attendance.records[s.id]) com.attendance.records[s.id] = {};
+    if (!com.attendance.records[s.id][attDateSel]) { com.attendance.records[s.id][attDateSel] = 'P'; n++; }
+  });
+  saveState(); attRefreshHoy();
+  showToast(n + (n === 1 ? ' estudiante marcado presente' : ' estudiantes marcados presentes'));
+}
 
 function exportAsistenciaPDF() {
   const com = getActive(); if (!com) return;

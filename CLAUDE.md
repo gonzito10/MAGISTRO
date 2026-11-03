@@ -145,7 +145,12 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
       y trabajos entregados (`openStudentSummary` / `studentSummaryHTML`).
 - [x] Bienvenida con avance automático (o toque) y aviso sin conexión en el login del portal.
 - [x] Selector de curso en celular: botón único + hoja inferior (maqueta "A" elegida por el docente).
-- [ ] Pendiente de diseño en celular: modo "Hoy" en Asistencia y Notas por columna (hay maquetas en el lienzo "Magistro: maquetas celular").
+- [x] Asistencia en celular: modo "Tomar lista" (por defecto) con la clase más cercana, flechas
+      entre clases y botones P/T/A grandes (`attHoyHTML`, `attSet`, `attMarkRest`); "Planilla" queda
+      como vista aparte. "Marcar presentes" solo completa a quienes no tienen marca. En escritorio no cambia.
+- [x] Notas en celular: una columna por vez (1er parcial / 2do / Recup. / Final) con CSS por `data-col`
+      en `#notasTableWrap`; resumen en una fila, Enter pasa al estudiante siguiente y la barra "Guardar notas"
+      aparece fija solo cuando hay cambios sin guardar. En escritorio no cambia.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo
