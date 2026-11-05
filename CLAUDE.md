@@ -45,7 +45,11 @@ public/              Las tres páginas HTML
 public/manifest.webmanifest  Manifest de la PWA (nombre, colores, íconos, accesos directos)
 public/sw.js         Service worker: cachea solo estáticos, NUNCA /api/*; maneja `push` y `notificationclick`
 public/pwa.js        Registra el service worker (lo cargan las tres páginas)
-public/tokens.css    Paleta de colores compartida (claro + body.dark-mode); la cargan las tres páginas
+public/tokens.css    Paleta de colores compartida: tema Amanecer en :root / body.dark-mode, y los otros 7 temas como
+                     html[data-theme="clave"] (claro) y html[data-theme="clave"] body.dark-mode (oscuro); también
+                     los estilos del selector (.tema-grid / .tema-card). La cargan las tres páginas
+public/temas.js      Lista de temas y selector compartido (MagistroTemas). Se carga sin defer en el <head> de
+                     docente y portal para aplicar el tema guardado antes del primer dibujo
 public/a11y.js       Hace enfocables y activables con teclado los controles hechos con <div onclick>
 public/icons/        Íconos 192, 512, maskable y apple-touch (acanto sobre terracota)
 ```
@@ -86,7 +90,7 @@ Plantilla en `.env.example`. **Nunca** subir `.env` ni secretos al repo.
   puede eliminar cualquier posteo). Los avisos del docente se editan en `com.tablon`. No hay marca "editado".
 - Docente: sección **Mensajes** (conversaciones) y moderación en Inicio (comentar y eliminar). Al publicar un
   aviso se llama a `POST /api/docente/mensajes/aviso-publicado` para notificar a los estudiantes.
-- Push: en iPhone requiere iOS ≥ 16.4 y la app agregada a la pantalla de inicio. Service worker `VERSION` = v4.
+- Push: en iPhone requiere iOS ≥ 16.4 y la app agregada a la pantalla de inicio. Service worker `VERSION` = v5.
 - Identidad del estudiante = solo DNI (decisión de Gonzalo). Riesgo conocido: quien sepa un DNI puede leer y
   escribir los mensajes de esa persona. Pendiente: evaluar una clave personal (Ley 25.326).
 
@@ -146,8 +150,9 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
   usa en una institución, evaluar código de invitación.
 - Los estudiantes entran solo con DNI: no hay recuperación de contraseña porque
   no hay contraseña.
-- Tema de color e ícono de la UI quedan en el navegador del docente, no en la
-  base (`app_config` existe pero el front no lo usa para eso todavía).
+- Tema de color (paleta y modo claro/oscuro) e ícono de la UI quedan en el navegador, no en la base
+  (docente: `gd_config` en localStorage; estudiante: `magistro_theme` y `magistro_dark`). `app_config` existe
+  pero el front no lo usa para eso todavía, así que el docente tiene que volver a elegir en cada dispositivo.
 
 ## Estado actual y próximos pasos
 
@@ -185,6 +190,16 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [x] Mensajes con estudiantes, tablón abierto a estudiantes (posteos y comentarios) y avisos push (ver sección
       "Mensajes, tablón y avisos push"). **Falta en producción**: `npm run migrate` sobre Neon y cargar las
       variables VAPID en Vercel. Sin contadores de no leídos todavía.
+- [x] Temas a elección en lugar de solo claro/oscuro: 8 paletas (Amanecer, Pizarra, Bosque, Aurora, Océano,
+      Coral, Carbón, Menta), cada una con versión clara y oscura. Docente: Configuración → Paleta de colores
+      (antes la paleta solo valía en modo claro). Estudiante: botón "Colores" (barra lateral en escritorio,
+      hoja "Más" en celular). Los colores viven en `tokens.css`; la pestaña activa del docente usa
+      `--tab-bg` / `--tab-fg`. Para agregar un tema: `temas.js` + bloques claro y oscuro en `tokens.css` + subir `VERSION`.
+      Cambios visibles en el docente: en modo oscuro el acento de Amanecer pasó a `#e2793f` (igual al portal) y
+      la pestaña activa tiene fondo oscuro (antes quedaba durazno); el hover de `button.primary` ahora sigue al tema.
+- [ ] Contraste de los temas **claros** (valores heredados, no se tocaron): el acento de Menta sobre blanco da
+      ≈3,0:1 (no llega a 4,5:1 para texto) y Coral, Pizarra y Amanecer rondan 4,2–4,8:1. Los oscuros sí cumplen.
+      Decidir si se oscurecen esos acentos (cambia lo que el docente ya ve en escritorio).
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo

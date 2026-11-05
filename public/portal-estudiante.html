@@ -10,6 +10,7 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="/icons/icon-192.png">
+<script src="/temas.js"></script>
 <script src="/pwa.js" defer></script>
 <script src="/a11y.js" defer></script>
 <title>Portal de Estudiantes — MAGISTRO</title>
@@ -17,7 +18,17 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body.dark-mode{--accent:#e2793f;}
+/* Ventana "Colores" (la grilla .tema-grid / .tema-card está en tokens.css) */
+.tema-overlay{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px}
+.tema-overlay.open{display:flex}
+.tema-modal{width:100%;max-width:520px;max-height:85vh;overflow:auto;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:20px}
+.tema-modal h2{font-family:'Fraunces',serif;font-size:18px;margin-bottom:4px}
+.tema-modal .tema-sub{font-size:12.5px;color:var(--text2);margin-bottom:14px}
+.tema-cerrar{width:100%;margin-top:14px;min-height:44px;padding:10px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+@media (max-width:700px){
+  .tema-overlay{align-items:flex-end;padding:0}
+  .tema-modal{max-width:none;max-height:80vh;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+}
 html,body{height:100%}
 body{
   font-family:'Segoe UI',system-ui,sans-serif;background-color:var(--bg);color:var(--text);font-size:14px;
@@ -355,6 +366,10 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
       </div>
 
       <div class="nav-bottom">
+        <div class="nav-item" onclick="abrirTemas()" id="tema-item" aria-haspopup="dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          Colores
+        </div>
         <div class="nav-item" onclick="toggleDarkModeStudent()" id="dark-toggle-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="dark-toggle-icon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           <span id="dark-toggle-label">Modo oscuro</span>
@@ -369,6 +384,15 @@ table.simple th{color:var(--text3);font-size:11px;text-transform:uppercase;lette
 
   <div class="more-backdrop" id="moreBackdrop" onclick="closeMore()"></div>
   <div class="more-sheet" id="moreSheet" role="menu" aria-label="Más opciones"></div>
+
+  <div class="tema-overlay" id="temaOverlay" onclick="if(event.target===this)cerrarTemas()">
+    <div class="tema-modal" role="dialog" aria-modal="true" aria-labelledby="temaTitulo">
+      <h2 id="temaTitulo">Colores</h2>
+      <p class="tema-sub">Elegí la paleta que más te guste. Se guarda solo en este dispositivo y cada una tiene su versión clara y oscura.</p>
+      <div id="temaGrid"></div>
+      <button type="button" class="tema-cerrar" onclick="cerrarTemas()">Listo</button>
+    </div>
+  </div>
 
   <main class="main" id="main-content"></main>
 </div>
@@ -592,6 +616,11 @@ function buildMoreSheet(){
   dark.lastChild.textContent = darkLabel;
   dark.onclick = () => { toggleDarkModeStudent(); closeMore(); };
   sheet.appendChild(dark);
+  const col = document.createElement('div');
+  col.className = 'nav-item'; col.setAttribute('role','menuitem');
+  col.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><span>Colores</span>';
+  col.onclick = () => { closeMore(); abrirTemas(); };
+  sheet.appendChild(col);
   const out = document.createElement('div');
   out.className = 'nav-item'; out.setAttribute('role','menuitem'); out.style.color = 'var(--red-text)';
   out.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Cerrar sesión</span>';
@@ -1066,10 +1095,41 @@ function renderTextos(){
 function applyDarkModeStudent(on){
   document.body.classList.toggle('dark-mode', on);
   document.getElementById('dark-toggle-label').textContent = on ? 'Modo claro' : 'Modo oscuro';
+  if (window.MagistroTemas) MagistroTemas.actualizarBarra();
   document.getElementById('dark-toggle-icon').innerHTML = on
     ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>'
     : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
 }
+// ── Colores (paleta elegida por el estudiante; solo en este navegador, ver temas.js y tokens.css) ──
+let _temaOpener = null;
+function abrirTemas(){
+  _temaOpener = document.activeElement;
+  MagistroTemas.montarSelector(document.getElementById('temaGrid'), function (clave) {
+    try { localStorage.setItem('magistro_theme', clave); } catch(e){}
+  });
+  const ov = document.getElementById('temaOverlay');
+  ov.classList.add('open');
+  const sel = ov.querySelector('.tema-card[aria-pressed="true"]') || ov.querySelector('.tema-card');
+  if (sel) sel.focus();
+}
+function cerrarTemas(){
+  const ov = document.getElementById('temaOverlay');
+  if (!ov || !ov.classList.contains('open')) return;
+  ov.classList.remove('open');
+  if (_temaOpener && _temaOpener.focus) { try { _temaOpener.focus(); } catch(e){} }
+}
+document.addEventListener('keydown', e => {
+  const ov = document.getElementById('temaOverlay');
+  if (!ov || !ov.classList.contains('open')) return;
+  if (e.key === 'Escape') { cerrarTemas(); return; }
+  if (e.key !== 'Tab') return;                       // el foco no se escapa de la ventana
+  const f = ov.querySelectorAll('button');
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+
 // Si el estudiante nunca eligió, se sigue la preferencia del sistema
 function toggleDarkModeStudent(){
   const on = !document.body.classList.contains('dark-mode');
