@@ -148,6 +148,10 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
   no hay contraseña.
 - Tema de color e ícono de la UI quedan en el navegador del docente, no en la
   base (`app_config` existe pero el front no lo usa para eso todavía).
+- Trámites → Declaración Jurada de Cargos: los datos del formulario (nombre, DNI, domicilio, teléfono, correo y cargos)
+  se guardan **solo en el navegador** (`localStorage`, clave `magistro_ddjj_<id del docente>`), nunca en el servidor.
+  Son datos personales del propio docente (Ley 25.326): quedan en ese dispositivo hasta que los borre ("Borrar datos
+  guardados") o limpie el navegador, y cerrar sesión no los quita. No viajan con el estado ni entran en `data`.
 
 ## Estado actual y próximos pasos
 
@@ -185,6 +189,13 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [x] Mensajes con estudiantes, tablón abierto a estudiantes (posteos y comentarios) y avisos push (ver sección
       "Mensajes, tablón y avisos push"). **Falta en producción**: `npm run migrate` sobre Neon y cargar las
       variables VAPID en Vercel. Sin contadores de no leídos todavía.
+- [x] Trámites (Declaración Jurada de Cargos): el formulario recuerda los datos y los cargos del docente
+      (`ddjjGuardar` / `ddjjLeerGuardado`, por docente y por dispositivo), valida antes de generar el PDF
+      (nombre, DNI de 7–8 números, correo, al menos un cargo) y en celular (≤700 px) la tabla de 14 columnas
+      pasa a una tarjeta por cargo con "Agregar cargo" / "Quitar cargo". Escritorio: mismo formulario de 8
+      renglones. El PDF siempre trae al menos 8 renglones (en blanco para completar a mano).
+- [ ] Trámites: decidir si los datos de la DDJJ deben guardarse en el servidor (para usarlos desde otro
+      dispositivo): requeriría una tabla/columna nueva, `npm run migrate` y revisar la Ley 25.326.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
       iPhone: Safari → Compartir → "Agregar a inicio").
 - [x] Modo oscuro: sigue la preferencia del sistema (y sus cambios) hasta que el usuario lo
