@@ -1132,56 +1132,100 @@ img.acanto-themed {
   .tb-edit-f button{min-height:44px}
 }
 
-/* ── Trámites: Declaración Jurada de Cargos ── */
+/* ── Trámites: Declaración Jurada de Cargos (asistente de 3 pasos) ── */
 .ddjj-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px}
-.ddjj-modal{background:var(--bg);color:var(--text);border-radius:14px;width:100%;max-width:1000px;padding:32px 32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.ddjj-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
-.ddjj-head h2{font-size:17px;font-weight:700;margin:0 0 3px}
-.ddjj-head p{font-size:12px;color:var(--text2);margin:0}
-.ddjj-x{background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--text2);font-size:20px;line-height:1}
+.ddjj-modal{background:var(--bg);color:var(--text);border-radius:14px;width:100%;max-width:1000px;padding:28px 32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.ddjj-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.ddjj-head h2{font-size:19px;font-weight:700;margin:0 0 3px}
+.ddjj-head p{font-size:13px;color:var(--text2);margin:0}
+.ddjj-x{background:none;border:none;cursor:pointer;min-width:44px;min-height:44px;border-radius:8px;color:var(--text2);font-size:20px;line-height:1}
+.dj-pasos{list-style:none;margin:0 0 22px;padding:0;display:flex;gap:12px}
+.dj-pasos li{flex:1;border-top:4px solid var(--border2);padding-top:10px;display:flex;align-items:center;gap:10px}
+.dj-pasos li.hecho,.dj-pasos li.actual{border-top-color:var(--accent)}
+.dj-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--text3);color:var(--text2);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;flex-shrink:0}
+.dj-pasos li.actual .dj-num{border-color:var(--accent);color:var(--accent)}
+.dj-pasos li.hecho .dj-num{background:var(--accent);border-color:var(--accent);color:#fff}
+.dj-pasos b{display:block;font-size:14px}
+.dj-pasos small{display:block;font-size:12px;color:var(--text2)}
+.dj-progreso{display:none}
+.dj-titulo{font-size:16px;font-weight:700;margin:0 0 14px;outline:none}
 .ddjj-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 .ddjj-span2{grid-column:1/3}
-.ddjj-in{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:13px;box-sizing:border-box}
-.ddjj-mb{margin-bottom:22px}
-.ddjj-sub{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px}
-.ddjj-wrap{overflow-x:auto;margin-bottom:6px}
-.ddjj-tabla{width:100%;border-collapse:collapse;font-size:11px}
-.ddjj-tabla th{background:var(--surface2);font-size:10px;font-weight:600;padding:5px 4px;border:1px solid var(--border);text-align:center;color:var(--text)}
-.ddjj-tabla input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);font-size:11px;box-sizing:border-box;min-width:30px}
-.ddjj-tabla .ddjj-c-w input{min-width:100px}
-.ddjj-tabla .ddjj-c-n input{text-align:center}
-.ddjj-firma{display:block;text-align:center;font-size:11px;color:var(--text3)}
-.ddjj-quitar{display:none}
-.ddjj-add{font-size:12px;color:var(--accent);background:none;border:1px dashed var(--accent);border-radius:6px;padding:5px 14px;cursor:pointer;margin:0 0 20px}
-.ddjj-legal{background:var(--surface2);border-radius:8px;padding:12px 14px;margin:12px 0 24px;font-size:11px;color:var(--text2);line-height:1.6}
-.ddjj-error{background:var(--red-bg);color:var(--red-text);border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:14px}
-.ddjj-btns{display:flex;justify-content:flex-end;gap:10px}
-.ddjj-nota{font-size:11px;color:var(--text3);margin:12px 0 0;text-align:right}
-.ddjj-link{background:none;border:none;padding:0;font:inherit;font-size:11px;color:var(--accent);text-decoration:underline;cursor:pointer;min-height:0}
+.ddjj-in{width:100%;padding:7px 10px;min-height:44px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text);font-size:14px;box-sizing:border-box}
+.dj-cols{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start}
+.dj-lista{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dj-card{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:14px 16px}
+.dj-card.abierta{border:2px solid var(--accent);padding:16px 18px}
+.dj-cab{display:flex;align-items:center;gap:12px}
+.dj-n{width:30px;height:30px;border-radius:50%;background:var(--tab-bg);color:var(--tab-fg);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.abierta .dj-n{background:var(--accent);color:#fff}
+.dj-cab-txt{flex:1;min-width:0}
+.dj-cab-txt b{display:block;font-size:14px;overflow-wrap:anywhere}
+.dj-cab-txt span{display:block;font-size:13px;color:var(--text2);margin-top:2px;overflow-wrap:anywhere}
+.dj-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dj-chip{font-size:12px;background:var(--surface2);color:var(--text2);border-radius:999px;padding:3px 10px}
+.dj-sec{min-height:44px;padding:0 14px;font-size:13px}
+.dj-quitar{min-height:44px;padding:0 12px;font-size:13px;color:var(--red-text);border-color:transparent;background:none}
+.dj-ed{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+.dj-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dj-ed label.u-lbl11{margin-bottom:4px}
+.dj-fs{margin:0;border:1px solid var(--border2);border-radius:10px;padding:8px 14px 12px;min-width:0}
+.dj-fs legend{font-size:12px;font-weight:600;color:var(--text2);padding:0 6px}
+.dj-tps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.dj-tps label{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:700;color:var(--text2)}
+.dj-tps input{text-align:center;padding:7px 4px}
+.dj-pills{display:flex;flex-wrap:wrap;gap:8px}
+.dj-pill{min-height:44px;min-width:64px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--border2);background:var(--surface)}
+.dj-pill[aria-pressed="true"]{border:2px solid var(--accent);background:var(--tab-bg);color:var(--tab-fg);font-weight:700}
+.dj-pill[aria-pressed="true"]::before{content:"✓ "}
+.dj-hora{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.dj-hora[hidden]{display:none}
+.dj-hora .dj-dia{width:84px;font-size:13px;font-weight:600}
+.dj-hora label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.dj-hora input{width:auto;min-width:110px}
+.dj-add{min-height:48px;font-size:14px;color:var(--accent);background:none;border:2px dashed var(--accent);border-radius:12px;cursor:pointer}
+.dj-aside{display:flex;flex-direction:column;gap:14px}
+.dj-aside h3{font-size:16px;margin:0 0 10px}
+.dj-aside dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:8px 12px;font-size:13px}
+.dj-aside dt{color:var(--text2)}.dj-aside dd{margin:0;font-weight:700;text-align:right}
+.dj-priv{background:var(--surface2);border-radius:12px;padding:14px 16px;font-size:12px;line-height:1.6;color:var(--text2)}
+.dj-priv strong{color:var(--text)}
+.dj-rev dl{margin:8px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+.dj-rev dt{color:var(--text2)}.dj-rev dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.dj-ok{list-style:none;margin:0;padding:12px 14px;border-radius:12px;background:var(--green-bg);color:var(--green-text);font-size:13px;font-weight:600;display:flex;flex-direction:column;gap:6px}
+.dj-ok li.falta{color:var(--amber-text)}
+.ddjj-legal{background:var(--surface2);border-radius:8px;padding:12px 14px;margin:0;font-size:12px;color:var(--text2);line-height:1.6}
+.ddjj-error{background:var(--red-bg);color:var(--red-text);border-radius:8px;padding:10px 12px;font-size:13px;margin-top:14px}
+.ddjj-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+.ddjj-btns button{min-height:44px}
+.ddjj-nota{font-size:12px;color:var(--text2);margin:12px 0 0;text-align:right}
+.ddjj-link{background:none;border:none;padding:0;font:inherit;font-size:12px;color:var(--accent);text-decoration:underline;cursor:pointer;min-height:0}
 .ddjj-link:hover{background:none}
-@media (max-width:700px){
+@media(max-width:700px){
   .ddjj-overlay{padding:0;align-items:stretch}
-  .ddjj-modal{max-width:none;border-radius:0;min-height:100%;padding:16px 16px calc(24px + env(safe-area-inset-bottom))}
-  .ddjj-head{margin-bottom:16px}
-  .ddjj-x{min-width:44px;min-height:44px}
+  .ddjj-modal{max-width:none;border-radius:0;min-height:100%;padding:8px 16px calc(24px + env(safe-area-inset-bottom));box-sizing:border-box}
+  .ddjj-head{margin-bottom:8px;align-items:center}
+  .ddjj-head h2{font-size:18px}
+  .ddjj-head p{display:none}
+  .dj-pasos{display:none}
+  .dj-progreso{display:block;margin-bottom:16px}
+  .dj-barras{display:flex;gap:6px}
+  .dj-barras i{flex:1;height:4px;border-radius:2px;background:var(--border2)}
+  .dj-barras i.on{background:var(--accent)}
+  .dj-progreso p{margin:8px 0 0;font-size:13px;color:var(--text2)}
+  .dj-progreso p b{color:var(--text)}
   .ddjj-grid3{grid-template-columns:1fr}
   .ddjj-span2{grid-column:auto}
-  .ddjj-in,.ddjj-tabla input{font-size:16px;min-height:44px;padding:6px 10px}
-  .ddjj-wrap{overflow:visible}
-  .ddjj-tabla,.ddjj-tabla tbody{display:block}
-  .ddjj-tabla{min-width:0}  /* anula table{min-width:840px} */
-  .ddjj-tabla thead{display:none}
-  .ddjj-tabla tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px;margin-bottom:12px;border:1px solid var(--border2);border-radius:12px;background:var(--surface)}
-  .ddjj-tabla td{display:block;padding:0;min-width:0}
-  .ddjj-tabla td::before{content:attr(data-label);display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px}
-  .ddjj-tabla td.ddjj-c-w,.ddjj-tabla td.ddjj-c-last{grid-column:1/-1}
-  .ddjj-tabla td.ddjj-c-last::before{display:none}
-  .ddjj-tabla input{min-width:0}
-  .ddjj-firma{display:none}
-  .ddjj-quitar{display:block;width:100%;min-height:44px;font-size:13px;color:var(--red-text)}
-  .ddjj-add{display:block;width:100%;min-height:44px;font-size:14px;margin-bottom:20px}
-  .ddjj-btns{flex-direction:column-reverse}
-  .ddjj-btns button{width:100%;justify-content:center;min-height:44px}
+  .ddjj-in{font-size:16px}
+  .dj-cols{grid-template-columns:minmax(0,1fr)}
+  .dj-aside{display:none}
+  .dj-card.abierta{padding:14px}
+  .dj-2{grid-template-columns:minmax(0,1fr)}
+  .dj-hora .dj-dia{width:100%}
+  .dj-hora label{flex:1}
+  .dj-hora input{min-width:0;flex:1}
+  .ddjj-btns{flex-direction:column-reverse;margin-top:16px}
+  .ddjj-btns button{width:100%;justify-content:center;min-height:48px}
   .ddjj-nota{text-align:left}
 }
 </style>
@@ -6485,9 +6529,11 @@ function renderTramitesSection(panel) {
 }
 
 // ── Declaración Jurada de Cargos ──────────────────────────────────────────────
-// Los datos del formulario se guardan SOLO en este dispositivo (localStorage, una clave por docente:
+// Asistente de 3 pasos: 1 Tus datos · 2 Tus cargos · 3 Revisar y generar.
+// Los datos se guardan SOLO en este dispositivo (localStorage, una clave por docente:
 // magistro_ddjj_<id>). No viajan al servidor ni forman parte de `data`: no hace falta migrar nada.
-const DDJJ_FILAS_MIN = 8; // el formulario impreso siempre trae al menos 8 renglones
+// El formato guardado no cambió (v:1, filas con los mismos campos; cada día es un texto, p. ej. "8 a 12").
+const DDJJ_FILAS_MIN = 8; // el formulario impreso siempre trae al menos 8 renglones (se completan en el PDF)
 const DDJJ_ROTULOS = {
   establecimiento:'Establecimiento y distrito', cargo:'Cargo',
   hsT:'Hs. cátedra T', hsP:'Hs. cátedra P', hsS:'Hs. cátedra S',
@@ -6495,7 +6541,11 @@ const DDJJ_ROTULOS = {
   lunes:'Lunes', martes:'Martes', miercoles:'Miércoles', jueves:'Jueves', viernes:'Viernes', sabado:'Sábado'
 };
 const DDJJ_CAMPOS_FILA = Object.keys(DDJJ_ROTULOS);
+const DDJJ_DIAS = [['lunes','Lun','Lunes'],['martes','Mar','Martes'],['miercoles','Mié','Miércoles'],
+                   ['jueves','Jue','Jueves'],['viernes','Vie','Viernes'],['sabado','Sáb','Sábado']];
+const DDJJ_PASOS = [['Tus datos','Nombre, DNI y contacto'],['Tus cargos','Horarios por cargo'],['Revisar y generar','Fecha y PDF']];
 let _ddjjOpener = null;
+let _dj = null; // estado del asistente: { paso, datos, anio, fecha, filas, abierta }
 
 function ddjjFilaVacia() { const f = {}; DDJJ_CAMPOS_FILA.forEach(k => { f[k] = ''; }); return f; }
 function ddjjFilaTieneDatos(f) { return DDJJ_CAMPOS_FILA.some(k => String(f[k] || '').trim()); }
@@ -6513,58 +6563,241 @@ function ddjjGuardar(datos, filas) {
   } catch (e) { return false; }
 }
 
-function ddjjLeerFormulario() {
-  const val = id => ((document.getElementById(id) || {}).value || '').trim();
-  const filas = [];
-  document.querySelectorAll('#ddjj_tbody tr').forEach(tr => {
-    const f = ddjjFilaVacia();
-    tr.querySelectorAll('input[data-campo]').forEach(inp => { f[inp.dataset.campo] = inp.value; });
-    filas.push(f);
-  });
-  return {
-    datos: { nombre: val('ddjj_nombre'), dni: val('ddjj_dni'), domicilio: val('ddjj_domicilio'), tel: val('ddjj_tel'), email: val('ddjj_email') },
-    filas, anio: val('ddjj_anio'), fecha: (document.getElementById('ddjj_fecha') || {}).value || ''
-  };
+// Horario de un día: texto "8 a 12" / "8:30 a 12:15" <-> par de horas para <input type="time">.
+// Si lo guardado no tiene ese formato (texto libre de antes), se conserva tal cual en un campo de texto.
+function ddjjParseHorario(s) {
+  s = String(s || '').trim(); if (!s) return { d:'', h:'' };
+  const m = s.match(/^(\d{1,2})(?:[:.](\d{2}))?\s*(?:hs\.?)?\s*(?:a|al?|-|–|—)\s*(\d{1,2})(?:[:.](\d{2}))?\s*(?:hs\.?)?$/i);
+  if (!m) return { raw:s };
+  const t = (h, mi) => { h = +h; mi = +(mi || 0); return (h > 23 || mi > 59) ? null : String(h).padStart(2,'0') + ':' + String(mi).padStart(2,'0'); };
+  const d = t(m[1], m[2]), h = t(m[3], m[4]);
+  return (d && h) ? { d, h } : { raw:s };
 }
+function ddjjFmtHorario(d, h) {
+  const f = t => { const p = t.split(':'); return String(+p[0]) + (p[1] === '00' ? '' : ':' + p[1]); };
+  return f(d) + ' a ' + f(h);
+}
+function ddjjDiasTexto(f) { return DDJJ_DIAS.filter(d => String(f[d[0]] || '').trim()).map(d => ({ ab:d[1], txt:String(f[d[0]]).trim() })); }
 
-function ddjjValidar(d, filas) {
-  const dniNum = d.dni.replace(/\D/g, '');
-  if (!d.nombre) return { id:'ddjj_nombre', msg:'Completá tu apellido y nombre.' };
-  if (dniNum.length < 7 || dniNum.length > 8) return { id:'ddjj_dni', msg:'El DNI debe tener 7 u 8 números.' };
-  if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return { id:'ddjj_email', msg:'El correo electrónico no parece válido.' };
-  if (!filas.some(ddjjFilaTieneDatos)) return { selector:'#ddjj_tbody input', msg:'Cargá al menos un cargo (establecimiento, cargo y horarios).' };
+// ── Lectura de lo que está en pantalla hacia el estado ──
+function ddjjLeerEditor() {
+  const ed = document.getElementById('ddjj_editor'); if (!ed) return null;
+  const f = ddjjFilaVacia(); let err = null;
+  ed.querySelectorAll('input[data-campo]').forEach(i => { f[i.dataset.campo] = i.value.trim(); });
+  DDJJ_DIAS.forEach(([k, , largo]) => {
+    const b = ed.querySelector('[data-dia="' + k + '"]');
+    if (b.getAttribute('aria-pressed') !== 'true') { f[k] = ''; return; }
+    const raw = ed.querySelector('[data-dia-raw="' + k + '"]');
+    if (raw) { f[k] = raw.value.trim(); return; }
+    const d = ed.querySelector('[data-dia-d="' + k + '"]').value, h = ed.querySelector('[data-dia-h="' + k + '"]').value;
+    if (d && h && h > d) f[k] = ddjjFmtHorario(d, h);
+    else if (!err) err = { msg: d && h ? 'El ' + largo + ': la hora de fin tiene que ser posterior a la de inicio.' : 'Completá desde y hasta del ' + largo + '.',
+                           selector:'#ddjj_editor [data-fila-dia="' + k + '"] input' };
+  });
+  return { f, err };
+}
+function ddjjSync() { // devuelve un error de horario si lo hay (solo paso 2)
+  const val = id => ((document.getElementById(id) || {}).value || '').trim();
+  if (!_dj) return null;
+  if (_dj.paso === 1) {
+    _dj.datos = { nombre:val('ddjj_nombre'), dni:val('ddjj_dni'), domicilio:val('ddjj_domicilio'), tel:val('ddjj_tel'), email:val('ddjj_email') };
+  } else if (_dj.paso === 2) {
+    const r = ddjjLeerEditor();
+    if (r) { _dj.filas[_dj.abierta] = r.f; return r.err; }
+  } else if (_dj.paso === 3) {
+    _dj.anio = val('ddjj_anio'); _dj.fecha = (document.getElementById('ddjj_fecha') || {}).value || '';
+  }
   return null;
 }
+function ddjjLimpiarFilas() { // saca los cargos vacíos (queda al menos uno para escribir)
+  _dj.filas = _dj.filas.filter(ddjjFilaTieneDatos);
+  if (!_dj.filas.length) _dj.filas.push(ddjjFilaVacia());
+  _dj.abierta = -1;
+}
+function ddjjLeerFormulario() { // lo usa generarPDFDDJJ
+  ddjjSync();
+  return { datos:_dj.datos, filas:_dj.filas.filter(ddjjFilaTieneDatos), anio:_dj.anio, fecha:_dj.fecha };
+}
+
+// ── Validación ──
+function ddjjValidarDatos(d) {
+  const dniNum = d.dni.replace(/\D/g, '');
+  if (!d.nombre) return { paso:1, id:'ddjj_nombre', msg:'Completá tu apellido y nombre.' };
+  if (dniNum.length < 7 || dniNum.length > 8) return { paso:1, id:'ddjj_dni', msg:'El DNI debe tener 7 u 8 números.' };
+  if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return { paso:1, id:'ddjj_email', msg:'El correo electrónico no parece válido.' };
+  return null;
+}
+function ddjjValidarCargos(filas) {
+  if (!filas.some(ddjjFilaTieneDatos)) return { paso:2, selector:'#ddjj_editor input, .dj-add', msg:'Cargá al menos un cargo (establecimiento, cargo y horarios).' };
+  return null;
+}
+function ddjjValidar(d, filas) { return ddjjValidarDatos(d) || ddjjValidarCargos(filas); }
 function ddjjMostrarError(err) {
+  if (err.paso && err.paso !== _dj.paso) ddjjIr(err.paso, true);
   const box = document.getElementById('ddjj_error');
   box.textContent = err.msg; box.hidden = false;
   const el = err.id ? document.getElementById(err.id) : document.querySelector(err.selector);
   if (el) { el.focus(); el.scrollIntoView({ block:'center' }); }
 }
 
-function ddjjFilaHTML(f, i) {
-  const celda = (campo, cls, extra) =>
-    `<td data-label="${DDJJ_ROTULOS[campo]}" class="${cls}"><input type="text" data-campo="${campo}" value="${escHtml(f[campo])}" ` +
-    `aria-label="${DDJJ_ROTULOS[campo]}, cargo ${i + 1}"${extra || ''}></td>`;
-  const num = ' inputmode="numeric"';
-  return `<tr>
-    ${celda('establecimiento','ddjj-c-w')}${celda('cargo','ddjj-c-w')}
-    ${['hsT','hsP','hsS','modT','modP','modS'].map(c => celda(c,'ddjj-c-n',num)).join('')}
-    ${['lunes','martes','miercoles','jueves','viernes','sabado'].map(c => celda(c,'ddjj-c-n')).join('')}
-    <td class="ddjj-c-last"><span class="ddjj-firma">(firma)</span>
-      <button type="button" class="ddjj-quitar" onclick="ddjjQuitarFila(${i})" aria-label="Quitar cargo ${i + 1}">Quitar cargo</button></td>
-  </tr>`;
+// ── Pantallas ──
+function ddjjCampo(id, rotulo, tipo, valor, extra) {
+  return `<label class="u-lbl11" for="${id}">${rotulo}</label><input class="ddjj-in" id="${id}" type="${tipo}" value="${escHtml(valor)}"${extra || ''}>`;
 }
-function ddjjRender(filas) { document.getElementById('ddjj_tbody').innerHTML = filas.map(ddjjFilaHTML).join(''); }
+function ddjjPaso1HTML() {
+  const d = _dj.datos;
+  return `
+    <div class="ddjj-grid3"><div class="ddjj-span2">${ddjjCampo('ddjj_nombre','DECLARACIÓN JURADA DE (Apellido y Nombre)','text',d.nombre,' autocomplete="name" placeholder="Apellido y Nombre completos"')}</div></div>
+    <div class="ddjj-grid3">
+      <div>${ddjjCampo('ddjj_dni','DNI N°','text',d.dni,' inputmode="numeric" placeholder="00.000.000"')}</div>
+      <div>${ddjjCampo('ddjj_tel','TELÉFONO','tel',d.tel,' autocomplete="tel" placeholder="Teléfono de contacto"')}</div>
+      <div>${ddjjCampo('ddjj_email','CORREO ELECTRÓNICO','email',d.email,' autocomplete="email" placeholder="correo@ejemplo.com"')}</div>
+    </div>
+    <div class="ddjj-grid3"><div class="ddjj-span2">${ddjjCampo('ddjj_domicilio','DOMICILIO','text',d.domicilio,' autocomplete="street-address" placeholder="Calle, número, ciudad"')}</div></div>`;
+}
+function ddjjResumenCargoHTML(f, i) {
+  const hs = ['hsT','hsP','hsS'].reduce((a, k) => a + (parseInt(f[k], 10) || 0), 0);
+  const mo = ['modT','modP','modS'].reduce((a, k) => a + (parseInt(f[k], 10) || 0), 0);
+  const cant = [hs ? hs + ' hs cátedra' : '', mo ? mo + ' módulos' : ''].filter(Boolean).join(' · ');
+  const sub = [f.cargo, cant].filter(Boolean).join(' · ');
+  const chips = ddjjDiasTexto(f).map(x => `<span class="dj-chip">${x.ab} ${escHtml(x.txt)}</span>`).join('');
+  return `<div class="dj-card"><div class="dj-cab"><span class="dj-n">${i + 1}</span>
+    <div class="dj-cab-txt"><b>${escHtml(f.establecimiento || 'Sin establecimiento')}</b>${sub ? '<span>' + escHtml(sub) + '</span>' : ''}</div>
+    <button type="button" class="dj-sec" onclick="ddjjEditar(${i})" aria-label="Editar cargo ${i + 1}">Editar</button>
+    <button type="button" class="dj-quitar" onclick="ddjjQuitarFila(${i})" aria-label="Quitar cargo ${i + 1}">Quitar</button></div>
+    ${chips ? '<div class="dj-chips">' + chips + '</div>' : ''}</div>`;
+}
+function ddjjEditorHTML(f, i) {
+  const inp = (c, ex, cls) => `<input class="ddjj-in${cls || ''}" type="text" data-campo="${c}" value="${escHtml(f[c])}" aria-label="${DDJJ_ROTULOS[c]}, cargo ${i + 1}"${ex || ''}>`;
+  const tps = (pref, tit) => `<fieldset class="dj-fs"><legend>${tit}</legend><div class="dj-tps">${['T','P','S'].map(l =>
+    `<label><span aria-hidden="true">${l}</span>${inp(pref + l, ' inputmode="numeric" maxlength="3"')}</label>`).join('')}</div></fieldset>`;
+  const pills = DDJJ_DIAS.map(([k, ab]) => `<button type="button" class="dj-pill" data-dia="${k}" aria-pressed="${String(f[k] || '').trim() ? 'true' : 'false'}" onclick="ddjjToggleDia(this)">${ab}</button>`).join('');
+  const horas = DDJJ_DIAS.map(([k, , largo]) => {
+    const on = !!String(f[k] || '').trim(), p = ddjjParseHorario(f[k]);
+    const campos = p.raw !== undefined
+      ? `<input class="ddjj-in" type="text" data-dia-raw="${k}" value="${escHtml(p.raw)}" aria-label="Horario del ${largo}, cargo ${i + 1}">`
+      : `<label>Desde <input class="ddjj-in" type="time" data-dia-d="${k}" value="${p.d || ''}"></label><label>Hasta <input class="ddjj-in" type="time" data-dia-h="${k}" value="${p.h || ''}"></label>`;
+    return `<div class="dj-hora" data-fila-dia="${k}"${on ? '' : ' hidden'}><span class="dj-dia">${largo}</span>${campos}</div>`;
+  }).join('');
+  return `<div class="dj-card abierta" id="ddjj_editor"><div class="dj-cab"><span class="dj-n">${i + 1}</span>
+      <div class="dj-cab-txt"><b>Cargo ${i + 1}</b></div><span style="font-size:12px;font-weight:600;color:var(--accent)">Editando</span>
+      <button type="button" class="dj-quitar" onclick="ddjjQuitarFila(${i})" aria-label="Quitar cargo ${i + 1}">Quitar</button></div>
+    <div class="dj-ed">
+      <div class="dj-2"><div><label class="u-lbl11">Establecimiento y distrito</label>${inp('establecimiento')}</div>
+        <div><label class="u-lbl11">Cargo</label>${inp('cargo')}</div></div>
+      <div class="dj-2">${tps('hs','Cantidad Hs. Cátedra')}${tps('mod','Cantidad Módulos')}</div>
+      <fieldset class="dj-fs"><legend>Horario de prestación de servicios · tocá los días</legend>
+        <div class="dj-pills">${pills}</div>${horas}</fieldset>
+    </div></div>`;
+}
+function ddjjResumenAsideHTML() {
+  const fs = _dj.filas.filter(ddjjFilaTieneDatos), suma = ks => fs.reduce((a, f) => a + ks.reduce((b, k) => b + (parseInt(f[k], 10) || 0), 0), 0);
+  const dias = DDJJ_DIAS.filter(d => fs.some(f => String(f[d[0]] || '').trim())).map(d => d[1]).join(' · ') || '—';
+  return `<aside class="dj-aside" aria-label="Resumen">
+    <div class="dj-card"><h3>Resumen</h3><dl><dt>Cargos</dt><dd>${fs.length}</dd><dt>Hs. cátedra</dt><dd>${suma(['hsT','hsP','hsS'])}</dd>
+      <dt>Módulos</dt><dd>${suma(['modT','modP','modS'])}</dd><dt>Días con servicio</dt><dd>${dias}</dd></dl></div>
+    ${ddjjClave() ? '<div class="dj-priv"><strong>Guardado en este dispositivo.</strong> Tus datos y cargos no se envían a ningún servidor; la próxima vez aparecen cargados.</div>' : ''}</aside>`;
+}
+function ddjjPaso2HTML() {
+  const cards = _dj.filas.map((f, i) => i === _dj.abierta ? ddjjEditorHTML(f, i) : ddjjResumenCargoHTML(f, i)).join('');
+  return `<div class="dj-cols"><div class="dj-lista">${cards}
+    <button type="button" class="dj-add" onclick="ddjjAgregarFila()">+ Agregar otro cargo</button></div>${ddjjResumenAsideHTML()}</div>`;
+}
+function ddjjPaso3HTML() {
+  const d = _dj.datos, fs = _dj.filas.filter(ddjjFilaTieneDatos);
+  const datosOk = !ddjjValidarDatos(d), cargosOk = fs.length > 0;
+  const cargos = fs.map((f, i) => {
+    const dias = ddjjDiasTexto(f).map(x => x.ab + ' ' + x.txt).join(' · ');
+    return `<div class="dj-cab" style="align-items:flex-start;margin-top:10px"><span class="dj-n">${i + 1}</span><div class="dj-cab-txt"><b>${escHtml(f.establecimiento || 'Sin establecimiento')}</b>` +
+      `<span>${escHtml(f.cargo || '')}</span>${dias ? '<span>' + escHtml(dias) + '</span>' : ''}</div></div>`;
+  }).join('');
+  const ic = '<svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+  return `<div class="dj-lista" style="max-width:640px">
+    <div class="dj-card dj-rev"><div class="dj-cab"><b style="flex:1;font-size:14px">Tus datos</b><button type="button" class="dj-sec" onclick="ddjjIr(1)">Editar</button></div>
+      <dl><dt>Nombre</dt><dd>${escHtml(d.nombre) || '—'}</dd><dt>DNI</dt><dd>${escHtml(d.dni) || '—'}</dd><dt>Domicilio</dt><dd>${escHtml(d.domicilio) || '—'}</dd>
+      <dt>Contacto</dt><dd>${escHtml([d.tel, d.email].filter(Boolean).join(' · ')) || '—'}</dd></dl></div>
+    <div class="dj-card dj-rev"><div class="dj-cab"><b style="flex:1;font-size:14px">Tus cargos (${fs.length})</b><button type="button" class="dj-sec" onclick="ddjjIr(2)">Editar</button></div>${cargos || '<p style="margin:8px 0 0;font-size:13px">Todavía no cargaste ningún cargo.</p>'}</div>
+    <div class="ddjj-grid3" style="margin:0">
+      <div>${ddjjCampo('ddjj_fecha','FECHA DE PRESENTACIÓN','date',_dj.fecha)}</div>
+      <div>${ddjjCampo('ddjj_anio','AÑO','text',_dj.anio,' inputmode="numeric" placeholder="' + new Date().getFullYear() + '"')}</div></div>
+    <ul class="dj-ok"><li class="${datosOk ? '' : 'falta'}">${datosOk ? '✓ Datos personales completos' : '! Faltan datos personales (nombre o DNI)'}</li>
+      <li class="${cargosOk ? '' : 'falta'}">${cargosOk ? '✓ ' + fs.length + (fs.length === 1 ? ' cargo cargado' : ' cargos cargados') : '! Falta cargar al menos un cargo'}</li>
+      <li>El PDF completa con renglones en blanco hasta 8, para llenar a mano.</li></ul>
+    <div class="ddjj-legal">Declaro bajo juramento que todos los datos consignados son veraces. Asimismo me notifico que cualquier falsedad u omisión dará motivo a las sanciones disciplinarias previstas en el Estatuto del Docente como así también estoy obligado a declarar dentro de las 48 hs. cualquier modificación que se produjera en el futuro con relación a cargos y/o actividades.</div>
+  </div>`;
+}
+
+function ddjjRender() {
+  const p = _dj.paso, guarda = !!ddjjClave();
+  const pasos = DDJJ_PASOS.map((s, i) => `<li class="${i + 1 < p ? 'hecho' : i + 1 === p ? 'actual' : ''}"${i + 1 === p ? ' aria-current="step"' : ''}>
+    <span class="dj-num">${i + 1 < p ? '✓' : i + 1}</span><span><b>${s[0]}</b><small>${s[1]}</small></span></li>`).join('');
+  const cuerpo = p === 1 ? ddjjPaso1HTML() : p === 2 ? ddjjPaso2HTML() : ddjjPaso3HTML();
+  document.querySelector('#ddjjOverlay .ddjj-modal').innerHTML = `
+    <div class="ddjj-head"><div><h2 id="ddjjTitulo">Declaración Jurada de Cargos</h2>
+      <p>Completalo en tres pasos.${guarda ? ' Lo que cargues queda guardado en este dispositivo.' : ''}</p></div>
+      <button type="button" class="ddjj-x" onclick="cerrarDDJJ()" aria-label="Cerrar">✕</button></div>
+    <ol class="dj-pasos" aria-label="Pasos">${pasos}</ol>
+    <div class="dj-progreso"><div class="dj-barras" aria-hidden="true">${[1,2,3].map(n => '<i class="' + (n <= p ? 'on' : '') + '"></i>').join('')}</div>
+      <p><b>Paso ${p} de 3</b> · ${DDJJ_PASOS[p - 1][0]}</p></div>
+    <h3 class="dj-titulo" id="ddjjPasoTitulo" tabindex="-1">${p}. ${DDJJ_PASOS[p - 1][0]}</h3>
+    ${cuerpo}
+    <div id="ddjj_error" class="ddjj-error" role="alert" hidden></div>
+    <div class="ddjj-btns">
+      ${p === 1 ? '<button type="button" onclick="cerrarDDJJ()">Cancelar</button>' : '<button type="button" onclick="ddjjIr(' + (p - 1) + ')">← Atrás</button>'}
+      ${guarda ? '<button type="button" onclick="ddjjGuardarYCerrar()">Guardar y cerrar</button>' : ''}
+      ${p < 3 ? '<button type="button" class="primary" onclick="ddjjSiguiente()">' + (p === 1 ? 'Siguiente: tus cargos →' : 'Siguiente: revisar →') + '</button>'
+        : `<button type="button" class="primary" onclick="generarPDFDDJJ()"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Generar PDF</button>`}
+    </div>
+    <p id="ddjj_nota" class="ddjj-nota">${ddjjNotaGuardado()}</p>`;
+}
+
+// ── Navegación ──
+function ddjjIr(n, sinSync) {
+  if (!sinSync) ddjjSync();
+  if (_dj.paso === 2 && n !== 2) ddjjLimpiarFilas();
+  _dj.paso = n;
+  if (n === 2) _dj.abierta = _dj.filas.some(ddjjFilaTieneDatos) ? -1 : 0;
+  ddjjRender();
+  const ov = document.getElementById('ddjjOverlay'); ov.scrollTop = 0;
+  const falta = n === 1 && !window.matchMedia('(max-width:700px)').matches
+    ? ['ddjj_nombre','ddjj_dni','ddjj_domicilio'].find(id => !document.getElementById(id).value.trim()) : null;
+  (falta ? document.getElementById(falta) : document.getElementById('ddjjPasoTitulo')).focus();
+}
+function ddjjSiguiente() {
+  const errHora = ddjjSync();
+  if (_dj.paso === 1) {
+    const e = ddjjValidarDatos(_dj.datos); if (e) { ddjjMostrarError(e); return; }
+    ddjjIr(2, true);
+  } else if (_dj.paso === 2) {
+    if (errHora) { ddjjMostrarError(errHora); return; }
+    const e = ddjjValidarCargos(_dj.filas); if (e) { ddjjMostrarError(e); return; }
+    ddjjIr(3, true);
+  }
+}
+function ddjjToggleDia(btn) {
+  const on = btn.getAttribute('aria-pressed') !== 'true';
+  btn.setAttribute('aria-pressed', String(on));
+  const fila = document.querySelector('#ddjj_editor [data-fila-dia="' + btn.dataset.dia + '"]');
+  fila.hidden = !on;
+  if (on && window.matchMedia('(min-width:701px)').matches) { const i = fila.querySelector('input'); if (i && !i.value) i.focus(); }
+}
+function ddjjEditar(i) { ddjjSync(); _dj.abierta = i; ddjjRender(); const e = document.getElementById('ddjj_editor'); if (e) e.scrollIntoView({ block:'start' }); }
 function ddjjAgregarFila() {
-  const filas = ddjjLeerFormulario().filas; filas.push(ddjjFilaVacia()); ddjjRender(filas);
-  const trs = document.querySelectorAll('#ddjj_tbody tr'), inp = trs[trs.length - 1].querySelector('input');
-  if (inp) { inp.focus(); inp.scrollIntoView({ block:'center' }); }
+  ddjjSync();
+  if (_dj.abierta >= 0 && !ddjjFilaTieneDatos(_dj.filas[_dj.abierta]) && _dj.filas.length > 1) _dj.filas.splice(_dj.abierta, 1);
+  _dj.filas.push(ddjjFilaVacia()); _dj.abierta = _dj.filas.length - 1;
+  ddjjRender();
+  const e = document.getElementById('ddjj_editor'), inp = e && e.querySelector('input'); if (inp) { inp.focus(); e.scrollIntoView({ block:'start' }); }
 }
 function ddjjQuitarFila(i) {
-  const filas = ddjjLeerFormulario().filas;
-  if (filas.length <= 1) filas[0] = ddjjFilaVacia(); else filas.splice(i, 1);
-  ddjjRender(filas);
+  ddjjSync();
+  if (ddjjFilaTieneDatos(_dj.filas[i]) && !confirm('¿Quitar este cargo? Lo que cargaste en él se pierde.')) return;
+  _dj.filas.splice(i, 1);
+  if (!_dj.filas.length) { _dj.filas.push(ddjjFilaVacia()); _dj.abierta = 0; }
+  else if (_dj.abierta === i) _dj.abierta = -1;
+  else if (_dj.abierta > i) _dj.abierta--;
+  ddjjRender();
+  const b = document.querySelector('.dj-add') || document.getElementById('ddjjPasoTitulo'); if (b) b.focus();
 }
 
 function ddjjNotaGuardado() {
@@ -6589,121 +6822,32 @@ function ddjjGuardarYCerrar() {
 }
 function cerrarDDJJ() {
   const ov = document.getElementById('ddjjOverlay'); if (!ov) return;
-  ov.remove(); document.removeEventListener('keydown', ddjjTecla);
+  ov.remove(); document.removeEventListener('keydown', ddjjTecla); _dj = null;
   if (_ddjjOpener && _ddjjOpener.focus) { try { _ddjjOpener.focus(); } catch (e) {} }
 }
 function ddjjTecla(e) {
   const ov = document.getElementById('ddjjOverlay'); if (!ov) return;
   if (e.key === 'Escape') { cerrarDDJJ(); return; }
-  if (e.key !== 'Tab') return; // el foco no se escapa del formulario
-  const f = ov.querySelectorAll('input,button'); if (!f.length) return;
+  if (e.key !== 'Tab') return; // el foco no se escapa del asistente
+  const f = [...ov.querySelectorAll('input,button')].filter(x => x.getClientRects().length); if (!f.length) return;
   const a = f[0], z = f[f.length - 1];
-  if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+  if (e.shiftKey && (document.activeElement === a || document.activeElement.id === 'ddjjPasoTitulo')) { e.preventDefault(); z.focus(); }
   else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
 }
 
 function abrirDDJJ() {
   _ddjjOpener = document.activeElement;
   const g = ddjjLeerGuardado() || {};
-  const movil = window.matchMedia('(max-width:700px)').matches;
-  // Escritorio: 8 renglones como siempre. Celular: solo los cargos guardados (o 2 vacíos) y "Agregar cargo".
-  const filas = (g.filas || []).map(f => Object.assign(ddjjFilaVacia(), f));
-  while (filas.length < (movil ? 2 : DDJJ_FILAS_MIN)) filas.push(ddjjFilaVacia());
-  const v = k => escHtml(g[k] || '');
-  const guarda = !!ddjjClave();
-
+  const filas = (g.filas || []).map(f => Object.assign(ddjjFilaVacia(), f)).filter(ddjjFilaTieneDatos);
+  if (!filas.length) filas.push(ddjjFilaVacia());
+  _dj = { paso:1, abierta:-1, anio:'', fecha:new Date().toISOString().slice(0, 10), filas,
+    datos: { nombre:g.nombre || docenteNombre || '', dni:g.dni || '', domicilio:g.domicilio || '', tel:g.tel || '', email:g.email || '' } };
   const overlay = document.createElement('div');
   overlay.id = 'ddjjOverlay'; overlay.className = 'ddjj-overlay';
-  overlay.innerHTML = `
-    <div class="ddjj-modal" role="dialog" aria-modal="true" aria-labelledby="ddjjTitulo" tabindex="-1">
-      <div class="ddjj-head">
-        <div>
-          <h2 id="ddjjTitulo">Declaración Jurada de Cargos</h2>
-          <p>Completá los datos. El PDF se generará con el formato oficial.</p>
-        </div>
-        <button type="button" class="ddjj-x" onclick="cerrarDDJJ()" aria-label="Cerrar">✕</button>
-      </div>
-
-      <div class="ddjj-grid3">
-        <div class="ddjj-span2">
-          <label class="u-lbl11" for="ddjj_nombre">DECLARACIÓN JURADA DE (Apellido y Nombre)</label>
-          <input class="ddjj-in" id="ddjj_nombre" type="text" autocomplete="name" placeholder="Apellido y Nombre completos" value="${escHtml(g.nombre || docenteNombre || '')}">
-        </div>
-        <div>
-          <label class="u-lbl11" for="ddjj_anio">AÑO</label>
-          <input class="ddjj-in" id="ddjj_anio" type="text" inputmode="numeric" placeholder="${new Date().getFullYear()}">
-        </div>
-      </div>
-      <div class="ddjj-grid3">
-        <div>
-          <label class="u-lbl11" for="ddjj_dni">DNI N°</label>
-          <input class="ddjj-in" id="ddjj_dni" type="text" inputmode="numeric" placeholder="00.000.000" value="${v('dni')}">
-        </div>
-        <div>
-          <label class="u-lbl11" for="ddjj_tel">TELÉFONO</label>
-          <input class="ddjj-in" id="ddjj_tel" type="tel" autocomplete="tel" placeholder="Teléfono de contacto" value="${v('tel')}">
-        </div>
-        <div>
-          <label class="u-lbl11" for="ddjj_email">CORREO ELECTRÓNICO</label>
-          <input class="ddjj-in" id="ddjj_email" type="email" autocomplete="email" placeholder="correo@ejemplo.com" value="${v('email')}">
-        </div>
-      </div>
-      <div class="ddjj-mb">
-        <label class="u-lbl11" for="ddjj_domicilio">DOMICILIO</label>
-        <input class="ddjj-in" id="ddjj_domicilio" type="text" autocomplete="street-address" placeholder="Calle, número, ciudad" value="${v('domicilio')}">
-      </div>
-
-      <div class="ddjj-sub">(1) Consignar hora en que empieza y termina cada clase o cargo.</div>
-      <div class="ddjj-wrap">
-        <table id="ddjj_tabla" class="ddjj-tabla">
-          <thead>
-            <tr>
-              <th rowspan="2">ESTABLECIMIENTO Y DISTRITO</th>
-              <th rowspan="2">CARGO</th>
-              <th colspan="3">Cantidad Hs. Cátedra</th>
-              <th colspan="3">Cantidad Módulos</th>
-              <th colspan="6">HORARIO DE PRESTACIÓN DE SERVICIOS (1)</th>
-              <th rowspan="2">CONFORMIDAD DEL SUPERIOR JERÁRQUICO</th>
-            </tr>
-            <tr>
-              <th>T</th><th>P</th><th>S</th><th>T</th><th>P</th><th>S</th>
-              <th>LUNES</th><th>MARTES</th><th>MIÉRCOLES</th><th>JUEVES</th><th>VIERNES</th><th>SÁBADO</th>
-            </tr>
-          </thead>
-          <tbody id="ddjj_tbody">${filas.map(ddjjFilaHTML).join('')}</tbody>
-        </table>
-      </div>
-      <button type="button" class="ddjj-add" onclick="ddjjAgregarFila()">+ Agregar cargo</button>
-
-      <div class="ddjj-grid3">
-        <div>
-          <label class="u-lbl11" for="ddjj_fecha">FECHA DE PRESENTACIÓN</label>
-          <input class="ddjj-in" id="ddjj_fecha" type="date" value="${new Date().toISOString().slice(0,10)}">
-        </div>
-      </div>
-
-      <div class="ddjj-legal">
-        Declaro bajo juramento que todos los datos consignados son veraces. Asimismo me notifico que cualquier falsedad u omisión dará motivo a las sanciones disciplinarias previstas en el Estatuto del Docente como así también estoy obligado a declarar dentro de las 48 hs. cualquier modificación que se produjera en el futuro con relación a cargos y/o actividades.
-      </div>
-
-      <div id="ddjj_error" class="ddjj-error" role="alert" hidden></div>
-
-      <div class="ddjj-btns">
-        <button type="button" onclick="cerrarDDJJ()">Cancelar</button>
-        ${guarda ? '<button type="button" onclick="ddjjGuardarYCerrar()">Guardar y cerrar</button>' : ''}
-        <button type="button" class="primary" onclick="generarPDFDDJJ()">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Generar PDF
-        </button>
-      </div>
-      <p id="ddjj_nota" class="ddjj-nota">${ddjjNotaGuardado()}</p>
-    </div>
-  `;
+  overlay.innerHTML = '<div class="ddjj-modal" role="dialog" aria-modal="true" aria-labelledby="ddjjTitulo" tabindex="-1"></div>';
   document.body.appendChild(overlay);
   document.addEventListener('keydown', ddjjTecla);
-  // Escritorio: foco en el primer dato que falta. Celular: foco en la ventana (un campo abriría el teclado y taparía el formulario)
-  const falta = ['ddjj_nombre','ddjj_dni','ddjj_domicilio'].find(id => !document.getElementById(id).value.trim());
-  (movil || !falta ? overlay.querySelector('.ddjj-modal') : document.getElementById(falta)).focus();
+  ddjjIr(1, true);
 }
 
 async function generarPDFDDJJ() {
