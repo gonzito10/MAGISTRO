@@ -1131,6 +1131,59 @@ img.acanto-themed {
   .tb-edit textarea{font-size:16px}
   .tb-edit-f button{min-height:44px}
 }
+
+/* ── Trámites: Declaración Jurada de Cargos ── */
+.ddjj-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px}
+.ddjj-modal{background:var(--bg);color:var(--text);border-radius:14px;width:100%;max-width:1000px;padding:32px 32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.ddjj-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.ddjj-head h2{font-size:17px;font-weight:700;margin:0 0 3px}
+.ddjj-head p{font-size:12px;color:var(--text2);margin:0}
+.ddjj-x{background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--text2);font-size:20px;line-height:1}
+.ddjj-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.ddjj-span2{grid-column:1/3}
+.ddjj-in{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:13px;box-sizing:border-box}
+.ddjj-mb{margin-bottom:22px}
+.ddjj-sub{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.ddjj-wrap{overflow-x:auto;margin-bottom:6px}
+.ddjj-tabla{width:100%;border-collapse:collapse;font-size:11px}
+.ddjj-tabla th{background:var(--surface2);font-size:10px;font-weight:600;padding:5px 4px;border:1px solid var(--border);text-align:center;color:var(--text)}
+.ddjj-tabla input{width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);font-size:11px;box-sizing:border-box;min-width:30px}
+.ddjj-tabla .ddjj-c-w input{min-width:100px}
+.ddjj-tabla .ddjj-c-n input{text-align:center}
+.ddjj-firma{display:block;text-align:center;font-size:11px;color:var(--text3)}
+.ddjj-quitar{display:none}
+.ddjj-add{font-size:12px;color:var(--accent);background:none;border:1px dashed var(--accent);border-radius:6px;padding:5px 14px;cursor:pointer;margin:0 0 20px}
+.ddjj-legal{background:var(--surface2);border-radius:8px;padding:12px 14px;margin:12px 0 24px;font-size:11px;color:var(--text2);line-height:1.6}
+.ddjj-error{background:var(--red-bg);color:var(--red-text);border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+.ddjj-btns{display:flex;justify-content:flex-end;gap:10px}
+.ddjj-nota{font-size:11px;color:var(--text3);margin:12px 0 0;text-align:right}
+.ddjj-link{background:none;border:none;padding:0;font:inherit;font-size:11px;color:var(--accent);text-decoration:underline;cursor:pointer;min-height:0}
+.ddjj-link:hover{background:none}
+@media (max-width:700px){
+  .ddjj-overlay{padding:0;align-items:stretch}
+  .ddjj-modal{max-width:none;border-radius:0;min-height:100%;padding:16px 16px calc(24px + env(safe-area-inset-bottom))}
+  .ddjj-head{margin-bottom:16px}
+  .ddjj-x{min-width:44px;min-height:44px}
+  .ddjj-grid3{grid-template-columns:1fr}
+  .ddjj-span2{grid-column:auto}
+  .ddjj-in,.ddjj-tabla input{font-size:16px;min-height:44px;padding:6px 10px}
+  .ddjj-wrap{overflow:visible}
+  .ddjj-tabla,.ddjj-tabla tbody{display:block}
+  .ddjj-tabla{min-width:0}  /* anula table{min-width:840px} */
+  .ddjj-tabla thead{display:none}
+  .ddjj-tabla tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px;margin-bottom:12px;border:1px solid var(--border2);border-radius:12px;background:var(--surface)}
+  .ddjj-tabla td{display:block;padding:0;min-width:0}
+  .ddjj-tabla td::before{content:attr(data-label);display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px}
+  .ddjj-tabla td.ddjj-c-w,.ddjj-tabla td.ddjj-c-last{grid-column:1/-1}
+  .ddjj-tabla td.ddjj-c-last::before{display:none}
+  .ddjj-tabla input{min-width:0}
+  .ddjj-firma{display:none}
+  .ddjj-quitar{display:block;width:100%;min-height:44px;font-size:13px;color:var(--red-text)}
+  .ddjj-add{display:block;width:100%;min-height:44px;font-size:14px;margin-bottom:20px}
+  .ddjj-btns{flex-direction:column-reverse}
+  .ddjj-btns button{width:100%;justify-content:center;min-height:44px}
+  .ddjj-nota{text-align:left}
+}
 </style>
 </head>
 <body>
@@ -1585,6 +1638,7 @@ let commissions = [];
 let activeId    = null;
 let activeSection = 'inicio'; // 'inicio' | 'estudiantes' | 'notas' | 'asistencia' | 'planificacion' | 'trabajos' | 'bibliografia'
 let docenteNombre = '';
+let docenteId = null; // id del docente con sesión (para guardar datos locales por docente)
 // Borrador de notas: mientras se editan p1/p2/recuperatorio/nota final manual,
 // los cambios viven acá (no en com.students) hasta que se toca "Guardar notas".
 // Así, cualquier otro saveState() de la app (cambiar de sección, tocar asistencia, etc.)
@@ -6294,6 +6348,7 @@ async function authLogin(ev){
     const data = await res.json();
     if (!res.ok) return showAuthError(data.error || 'No se pudo iniciar sesión.');
     docenteNombre = (data.docente && data.docente.nombre) || '';
+    docenteId = (data.docente && data.docente.id) || null;
     await enterApp();
   } catch(e) { showAuthError('Error de conexión con el servidor.'); }
   return false;
@@ -6312,6 +6367,7 @@ async function authRegister(ev){
     const data = await res.json();
     if (!res.ok) return showAuthError(data.error || 'No se pudo crear la cuenta.');
     docenteNombre = (data.docente && data.docente.nombre) || '';
+    docenteId = (data.docente && data.docente.id) || null;
     await enterApp();
   } catch(e) { showAuthError('Error de conexión con el servidor.'); }
   return false;
@@ -6349,6 +6405,7 @@ async function boot(){
       const me = await res.json();
       if (me.role === 'docente') {
         docenteNombre = (me.docente && me.docente.nombre) || '';
+        docenteId = (me.docente && me.docente.id) || null;
         await enterApp();
         return;
       }
@@ -6427,187 +6484,247 @@ function renderTramitesSection(panel) {
   `;
 }
 
-function abrirDDJJ() {
-  // Crear modal de carga de datos DDJJ
-  const overlay = document.createElement('div');
-  overlay.id = 'ddjjOverlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px';
+// ── Declaración Jurada de Cargos ──────────────────────────────────────────────
+// Los datos del formulario se guardan SOLO en este dispositivo (localStorage, una clave por docente:
+// magistro_ddjj_<id>). No viajan al servidor ni forman parte de `data`: no hace falta migrar nada.
+const DDJJ_FILAS_MIN = 8; // el formulario impreso siempre trae al menos 8 renglones
+const DDJJ_ROTULOS = {
+  establecimiento:'Establecimiento y distrito', cargo:'Cargo',
+  hsT:'Hs. cátedra T', hsP:'Hs. cátedra P', hsS:'Hs. cátedra S',
+  modT:'Módulos T', modP:'Módulos P', modS:'Módulos S',
+  lunes:'Lunes', martes:'Martes', miercoles:'Miércoles', jueves:'Jueves', viernes:'Viernes', sabado:'Sábado'
+};
+const DDJJ_CAMPOS_FILA = Object.keys(DDJJ_ROTULOS);
+let _ddjjOpener = null;
 
-  // Filas de cargos vacías iniciales
-  let filasCargos = [
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-    {establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''},
-  ];
+function ddjjFilaVacia() { const f = {}; DDJJ_CAMPOS_FILA.forEach(k => { f[k] = ''; }); return f; }
+function ddjjFilaTieneDatos(f) { return DDJJ_CAMPOS_FILA.some(k => String(f[k] || '').trim()); }
+function ddjjClave() { return docenteId ? 'magistro_ddjj_' + docenteId : null; }
+function ddjjLeerGuardado() {
+  const k = ddjjClave(); if (!k) return null;
+  try { const o = JSON.parse(localStorage.getItem(k) || 'null'); return (o && o.v === 1) ? o : null; } catch (e) { return null; }
+}
+function ddjjGuardar(datos, filas) {
+  const k = ddjjClave(); if (!k) return false;
+  try {
+    localStorage.setItem(k, JSON.stringify({ v:1, nombre:datos.nombre, dni:datos.dni, domicilio:datos.domicilio,
+      tel:datos.tel, email:datos.email, filas: filas.filter(ddjjFilaTieneDatos), guardado: new Date().toISOString() }));
+    return true;
+  } catch (e) { return false; }
+}
 
-  function buildFilasHTML() {
-    return filasCargos.map((f, i) => `
-      <tr>
-        <td><input type="text" value="${f.establecimiento}" oninput="ddjjFila(${i},'establecimiento',this.value)" style="${inputCeldaStyle}"></td>
-        <td><input type="text" value="${f.cargo}" oninput="ddjjFila(${i},'cargo',this.value)" style="${inputCeldaStyle}"></td>
-        <td><input type="text" value="${f.hsT}" oninput="ddjjFila(${i},'hsT',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.hsP}" oninput="ddjjFila(${i},'hsP',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.hsS}" oninput="ddjjFila(${i},'hsS',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.modT}" oninput="ddjjFila(${i},'modT',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.modP}" oninput="ddjjFila(${i},'modP',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.modS}" oninput="ddjjFila(${i},'modS',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.lunes}" oninput="ddjjFila(${i},'lunes',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.martes}" oninput="ddjjFila(${i},'martes',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.miercoles}" oninput="ddjjFila(${i},'miercoles',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.jueves}" oninput="ddjjFila(${i},'jueves',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.viernes}" oninput="ddjjFila(${i},'viernes',this.value)" style="${inputCeldaStyleC}"></td>
-        <td><input type="text" value="${f.sabado}" oninput="ddjjFila(${i},'sabado',this.value)" style="${inputCeldaStyleC}"></td>
-        <td style="text-align:center;font-size:11px;color:var(--text3)">(firma)</td>
-      </tr>
-    `).join('');
-  }
-
-  const inputStyle = 'width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text1);font-size:13px;box-sizing:border-box';
-  const inputCeldaStyle = 'width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text1);font-size:11px;box-sizing:border-box;min-width:100px';
-  const inputCeldaStyleC = 'width:100%;padding:3px 5px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text1);font-size:11px;box-sizing:border-box;text-align:center;min-width:30px';
-  const thStyle = 'background:var(--surface2,#f3f4f6);font-size:10px;font-weight:600;padding:5px 4px;border:1px solid var(--border);text-align:center;color:var(--text1)';
-
-  overlay.innerHTML = `
-    <div style="background:var(--bg);border-radius:14px;width:100%;max-width:1000px;padding:32px 32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.2)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
-        <div>
-          <h2 style="font-size:17px;font-weight:700;color:var(--text1);margin:0 0 3px">Declaración Jurada de Cargos</h2>
-          <p style="font-size:12px;color:var(--text2);margin:0">Completá los datos. El PDF se generará con el formato oficial.</p>
-        </div>
-        <button onclick="document.getElementById('ddjjOverlay').remove()" style="background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--text2);font-size:20px;line-height:1" title="Cerrar">✕</button>
-      </div>
-
-      <!-- Datos personales -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
-        <div style="grid-column:1/3">
-          <label class="u-lbl11">DECLARACIÓN JURADA DE (Apellido y Nombre)</label>
-          <input id="ddjj_nombre" type="text" style="${inputStyle}" placeholder="Apellido y Nombre completos">
-        </div>
-        <div>
-          <label class="u-lbl11">AÑO</label>
-          <input id="ddjj_anio" type="text" style="${inputStyle}" placeholder="${new Date().getFullYear()}">
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px">
-        <div style="grid-column:1/2">
-          <label class="u-lbl11">DNI N°</label>
-          <input id="ddjj_dni" type="text" style="${inputStyle}" placeholder="00.000.000">
-        </div>
-        <div style="grid-column:2/3">
-          <label class="u-lbl11">TELÉFONO</label>
-          <input id="ddjj_tel" type="text" style="${inputStyle}" placeholder="Teléfono de contacto">
-        </div>
-        <div style="grid-column:3/4">
-          <label class="u-lbl11">CORREO ELECTRÓNICO</label>
-          <input id="ddjj_email" type="text" style="${inputStyle}" placeholder="correo@ejemplo.com">
-        </div>
-      </div>
-      <div style="margin-bottom:22px">
-        <label class="u-lbl11">DOMICILIO</label>
-        <input id="ddjj_domicilio" type="text" style="${inputStyle}" placeholder="Calle, número, ciudad">
-      </div>
-
-      <!-- Tabla de cargos -->
-      <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px">(1) Consignar hora en que empieza y termina cada clase o cargo.</div>
-      <div style="overflow-x:auto;margin-bottom:6px">
-        <table id="ddjj_tabla" style="width:100%;border-collapse:collapse;font-size:11px">
-          <thead>
-            <tr>
-              <th rowspan="2" style="${thStyle}">ESTABLECIMIENTO Y DISTRITO</th>
-              <th rowspan="2" style="${thStyle}">CARGO</th>
-              <th colspan="3" style="${thStyle}">Cantidad Hs. Cátedra</th>
-              <th colspan="3" style="${thStyle}">Cantidad Módulos</th>
-              <th colspan="6" style="${thStyle}">HORARIO DE PRESTACIÓN DE SERVICIOS (1)</th>
-              <th rowspan="2" style="${thStyle}">CONFORMIDAD DEL SUPERIOR JERÁRQUICO</th>
-            </tr>
-            <tr>
-              <th style="${thStyle}">T</th><th style="${thStyle}">P</th><th style="${thStyle}">S</th>
-              <th style="${thStyle}">T</th><th style="${thStyle}">P</th><th style="${thStyle}">S</th>
-              <th style="${thStyle}">LUNES</th><th style="${thStyle}">MARTES</th><th style="${thStyle}">MIÉRCOLES</th>
-              <th style="${thStyle}">JUEVES</th><th style="${thStyle}">VIERNES</th><th style="${thStyle}">SÁBADO</th>
-            </tr>
-          </thead>
-          <tbody id="ddjj_tbody">
-            ${buildFilasHTML()}
-          </tbody>
-        </table>
-      </div>
-      <button onclick="agregarFilaDDJJ()" style="font-size:12px;color:var(--accent,#3a6ef5);background:none;border:1px dashed var(--accent,#3a6ef5);border-radius:6px;padding:5px 14px;cursor:pointer;margin-bottom:20px">+ Agregar fila</button>
-
-      <!-- Fecha y firma -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">
-        <div>
-          <label class="u-lbl11">FECHA DE PRESENTACIÓN</label>
-          <input id="ddjj_fecha" type="date" style="${inputStyle}" value="${new Date().toISOString().slice(0,10)}">
-        </div>
-      </div>
-
-      <!-- Texto legal -->
-      <div style="background:var(--surface2,#f8f9fa);border-radius:8px;padding:12px 14px;margin-bottom:24px;font-size:11px;color:var(--text2);line-height:1.6">
-        Declaro bajo juramento que todos los datos consignados son veraces. Asimismo me notifico que cualquier falsedad u omisión dará motivo a las sanciones disciplinarias previstas en el Estatuto del Docente como así también estoy obligado a declarar dentro de las 48 hs. cualquier modificación que se produjera en el futuro con relación a cargos y/o actividades.
-      </div>
-
-      <!-- Botones -->
-      <div style="display:flex;justify-content:flex-end;gap:10px">
-        <button onclick="document.getElementById('ddjjOverlay').remove()" style="padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--text1);cursor:pointer;font-size:13px">Cancelar</button>
-        <button onclick="generarPDFDDJJ()" style="padding:10px 22px;border:none;border-radius:8px;background:var(--accent,#3a6ef5);color:#fff;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Generar PDF
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(overlay);
-
-  // Funciones de edición de filas (globales temporales)
-  window.ddjjFila = function(i, campo, val) {
-    filasCargos[i][campo] = val;
-  };
-  window.agregarFilaDDJJ = function() {
-    filasCargos.push({establecimiento:'',cargo:'',hsT:'',hsP:'',hsS:'',modT:'',modP:'',modS:'',lunes:'',martes:'',miercoles:'',jueves:'',viernes:'',sabado:''});
-    document.getElementById('ddjj_tbody').innerHTML = buildFilasHTML();
+function ddjjLeerFormulario() {
+  const val = id => ((document.getElementById(id) || {}).value || '').trim();
+  const filas = [];
+  document.querySelectorAll('#ddjj_tbody tr').forEach(tr => {
+    const f = ddjjFilaVacia();
+    tr.querySelectorAll('input[data-campo]').forEach(inp => { f[inp.dataset.campo] = inp.value; });
+    filas.push(f);
+  });
+  return {
+    datos: { nombre: val('ddjj_nombre'), dni: val('ddjj_dni'), domicilio: val('ddjj_domicilio'), tel: val('ddjj_tel'), email: val('ddjj_email') },
+    filas, anio: val('ddjj_anio'), fecha: (document.getElementById('ddjj_fecha') || {}).value || ''
   };
 }
 
+function ddjjValidar(d, filas) {
+  const dniNum = d.dni.replace(/\D/g, '');
+  if (!d.nombre) return { id:'ddjj_nombre', msg:'Completá tu apellido y nombre.' };
+  if (dniNum.length < 7 || dniNum.length > 8) return { id:'ddjj_dni', msg:'El DNI debe tener 7 u 8 números.' };
+  if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return { id:'ddjj_email', msg:'El correo electrónico no parece válido.' };
+  if (!filas.some(ddjjFilaTieneDatos)) return { selector:'#ddjj_tbody input', msg:'Cargá al menos un cargo (establecimiento, cargo y horarios).' };
+  return null;
+}
+function ddjjMostrarError(err) {
+  const box = document.getElementById('ddjj_error');
+  box.textContent = err.msg; box.hidden = false;
+  const el = err.id ? document.getElementById(err.id) : document.querySelector(err.selector);
+  if (el) { el.focus(); el.scrollIntoView({ block:'center' }); }
+}
+
+function ddjjFilaHTML(f, i) {
+  const celda = (campo, cls, extra) =>
+    `<td data-label="${DDJJ_ROTULOS[campo]}" class="${cls}"><input type="text" data-campo="${campo}" value="${escHtml(f[campo])}" ` +
+    `aria-label="${DDJJ_ROTULOS[campo]}, cargo ${i + 1}"${extra || ''}></td>`;
+  const num = ' inputmode="numeric"';
+  return `<tr>
+    ${celda('establecimiento','ddjj-c-w')}${celda('cargo','ddjj-c-w')}
+    ${['hsT','hsP','hsS','modT','modP','modS'].map(c => celda(c,'ddjj-c-n',num)).join('')}
+    ${['lunes','martes','miercoles','jueves','viernes','sabado'].map(c => celda(c,'ddjj-c-n')).join('')}
+    <td class="ddjj-c-last"><span class="ddjj-firma">(firma)</span>
+      <button type="button" class="ddjj-quitar" onclick="ddjjQuitarFila(${i})" aria-label="Quitar cargo ${i + 1}">Quitar cargo</button></td>
+  </tr>`;
+}
+function ddjjRender(filas) { document.getElementById('ddjj_tbody').innerHTML = filas.map(ddjjFilaHTML).join(''); }
+function ddjjAgregarFila() {
+  const filas = ddjjLeerFormulario().filas; filas.push(ddjjFilaVacia()); ddjjRender(filas);
+  const trs = document.querySelectorAll('#ddjj_tbody tr'), inp = trs[trs.length - 1].querySelector('input');
+  if (inp) { inp.focus(); inp.scrollIntoView({ block:'center' }); }
+}
+function ddjjQuitarFila(i) {
+  const filas = ddjjLeerFormulario().filas;
+  if (filas.length <= 1) filas[0] = ddjjFilaVacia(); else filas.splice(i, 1);
+  ddjjRender(filas);
+}
+
+function ddjjNotaGuardado() {
+  if (!ddjjClave()) return '';
+  const g = ddjjLeerGuardado();
+  let fecha = '';
+  if (g && g.guardado) { const d = new Date(g.guardado); fecha = ` Guardado el ${d.toLocaleDateString('es-AR')}.`; }
+  return `Al guardar o generar el PDF, tus datos quedan guardados solo en este dispositivo (no se envían al servidor).${fecha}` +
+    (g ? ` <button type="button" class="ddjj-link" onclick="ddjjBorrar()">Borrar datos guardados</button>` : '');
+}
+function ddjjBorrar() {
+  if (!confirm('¿Borrar los datos guardados de este dispositivo? Lo que ves en el formulario no se borra.')) return;
+  try { localStorage.removeItem(ddjjClave()); } catch (e) {}
+  document.getElementById('ddjj_nota').innerHTML = ddjjNotaGuardado();
+  showToast('Datos guardados borrados');
+}
+function ddjjGuardarYCerrar() {
+  const f = ddjjLeerFormulario();
+  if (ddjjGuardar(f.datos, f.filas)) showToast('Datos guardados en este dispositivo');
+  else showToast('No se pudieron guardar los datos en este navegador');
+  cerrarDDJJ();
+}
+function cerrarDDJJ() {
+  const ov = document.getElementById('ddjjOverlay'); if (!ov) return;
+  ov.remove(); document.removeEventListener('keydown', ddjjTecla);
+  if (_ddjjOpener && _ddjjOpener.focus) { try { _ddjjOpener.focus(); } catch (e) {} }
+}
+function ddjjTecla(e) {
+  const ov = document.getElementById('ddjjOverlay'); if (!ov) return;
+  if (e.key === 'Escape') { cerrarDDJJ(); return; }
+  if (e.key !== 'Tab') return; // el foco no se escapa del formulario
+  const f = ov.querySelectorAll('input,button'); if (!f.length) return;
+  const a = f[0], z = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+  else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+}
+
+function abrirDDJJ() {
+  _ddjjOpener = document.activeElement;
+  const g = ddjjLeerGuardado() || {};
+  const movil = window.matchMedia('(max-width:700px)').matches;
+  // Escritorio: 8 renglones como siempre. Celular: solo los cargos guardados (o 2 vacíos) y "Agregar cargo".
+  const filas = (g.filas || []).map(f => Object.assign(ddjjFilaVacia(), f));
+  while (filas.length < (movil ? 2 : DDJJ_FILAS_MIN)) filas.push(ddjjFilaVacia());
+  const v = k => escHtml(g[k] || '');
+  const guarda = !!ddjjClave();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'ddjjOverlay'; overlay.className = 'ddjj-overlay';
+  overlay.innerHTML = `
+    <div class="ddjj-modal" role="dialog" aria-modal="true" aria-labelledby="ddjjTitulo" tabindex="-1">
+      <div class="ddjj-head">
+        <div>
+          <h2 id="ddjjTitulo">Declaración Jurada de Cargos</h2>
+          <p>Completá los datos. El PDF se generará con el formato oficial.</p>
+        </div>
+        <button type="button" class="ddjj-x" onclick="cerrarDDJJ()" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="ddjj-grid3">
+        <div class="ddjj-span2">
+          <label class="u-lbl11" for="ddjj_nombre">DECLARACIÓN JURADA DE (Apellido y Nombre)</label>
+          <input class="ddjj-in" id="ddjj_nombre" type="text" autocomplete="name" placeholder="Apellido y Nombre completos" value="${escHtml(g.nombre || docenteNombre || '')}">
+        </div>
+        <div>
+          <label class="u-lbl11" for="ddjj_anio">AÑO</label>
+          <input class="ddjj-in" id="ddjj_anio" type="text" inputmode="numeric" placeholder="${new Date().getFullYear()}">
+        </div>
+      </div>
+      <div class="ddjj-grid3">
+        <div>
+          <label class="u-lbl11" for="ddjj_dni">DNI N°</label>
+          <input class="ddjj-in" id="ddjj_dni" type="text" inputmode="numeric" placeholder="00.000.000" value="${v('dni')}">
+        </div>
+        <div>
+          <label class="u-lbl11" for="ddjj_tel">TELÉFONO</label>
+          <input class="ddjj-in" id="ddjj_tel" type="tel" autocomplete="tel" placeholder="Teléfono de contacto" value="${v('tel')}">
+        </div>
+        <div>
+          <label class="u-lbl11" for="ddjj_email">CORREO ELECTRÓNICO</label>
+          <input class="ddjj-in" id="ddjj_email" type="email" autocomplete="email" placeholder="correo@ejemplo.com" value="${v('email')}">
+        </div>
+      </div>
+      <div class="ddjj-mb">
+        <label class="u-lbl11" for="ddjj_domicilio">DOMICILIO</label>
+        <input class="ddjj-in" id="ddjj_domicilio" type="text" autocomplete="street-address" placeholder="Calle, número, ciudad" value="${v('domicilio')}">
+      </div>
+
+      <div class="ddjj-sub">(1) Consignar hora en que empieza y termina cada clase o cargo.</div>
+      <div class="ddjj-wrap">
+        <table id="ddjj_tabla" class="ddjj-tabla">
+          <thead>
+            <tr>
+              <th rowspan="2">ESTABLECIMIENTO Y DISTRITO</th>
+              <th rowspan="2">CARGO</th>
+              <th colspan="3">Cantidad Hs. Cátedra</th>
+              <th colspan="3">Cantidad Módulos</th>
+              <th colspan="6">HORARIO DE PRESTACIÓN DE SERVICIOS (1)</th>
+              <th rowspan="2">CONFORMIDAD DEL SUPERIOR JERÁRQUICO</th>
+            </tr>
+            <tr>
+              <th>T</th><th>P</th><th>S</th><th>T</th><th>P</th><th>S</th>
+              <th>LUNES</th><th>MARTES</th><th>MIÉRCOLES</th><th>JUEVES</th><th>VIERNES</th><th>SÁBADO</th>
+            </tr>
+          </thead>
+          <tbody id="ddjj_tbody">${filas.map(ddjjFilaHTML).join('')}</tbody>
+        </table>
+      </div>
+      <button type="button" class="ddjj-add" onclick="ddjjAgregarFila()">+ Agregar cargo</button>
+
+      <div class="ddjj-grid3">
+        <div>
+          <label class="u-lbl11" for="ddjj_fecha">FECHA DE PRESENTACIÓN</label>
+          <input class="ddjj-in" id="ddjj_fecha" type="date" value="${new Date().toISOString().slice(0,10)}">
+        </div>
+      </div>
+
+      <div class="ddjj-legal">
+        Declaro bajo juramento que todos los datos consignados son veraces. Asimismo me notifico que cualquier falsedad u omisión dará motivo a las sanciones disciplinarias previstas en el Estatuto del Docente como así también estoy obligado a declarar dentro de las 48 hs. cualquier modificación que se produjera en el futuro con relación a cargos y/o actividades.
+      </div>
+
+      <div id="ddjj_error" class="ddjj-error" role="alert" hidden></div>
+
+      <div class="ddjj-btns">
+        <button type="button" onclick="cerrarDDJJ()">Cancelar</button>
+        ${guarda ? '<button type="button" onclick="ddjjGuardarYCerrar()">Guardar y cerrar</button>' : ''}
+        <button type="button" class="primary" onclick="generarPDFDDJJ()">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Generar PDF
+        </button>
+      </div>
+      <p id="ddjj_nota" class="ddjj-nota">${ddjjNotaGuardado()}</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.addEventListener('keydown', ddjjTecla);
+  // Escritorio: foco en el primer dato que falta. Celular: foco en la ventana (un campo abriría el teclado y taparía el formulario)
+  const falta = ['ddjj_nombre','ddjj_dni','ddjj_domicilio'].find(id => !document.getElementById(id).value.trim());
+  (movil || !falta ? overlay.querySelector('.ddjj-modal') : document.getElementById(falta)).focus();
+}
+
 async function generarPDFDDJJ() {
-  // Recopilar datos del formulario
-  const nombre   = document.getElementById('ddjj_nombre').value.trim();
-  const anio     = document.getElementById('ddjj_anio').value.trim() || new Date().getFullYear();
-  const dni      = document.getElementById('ddjj_dni').value.trim();
-  const domicilio= document.getElementById('ddjj_domicilio').value.trim();
-  const tel      = document.getElementById('ddjj_tel').value.trim();
-  const email    = document.getElementById('ddjj_email').value.trim();
-  const fechaRaw = document.getElementById('ddjj_fecha').value;
+  // Recopilar y validar los datos del formulario
+  const f = ddjjLeerFormulario();
+  const err = ddjjValidar(f.datos, f.filas);
+  if (err) { ddjjMostrarError(err); return; }
+  document.getElementById('ddjj_error').hidden = true;
+  ddjjGuardar(f.datos, f.filas); // recordar para la próxima vez (solo en este dispositivo)
+
+  const { nombre, dni, domicilio, tel, email } = f.datos;
+  const anio = f.anio || new Date().getFullYear();
+  const filas = f.filas.slice();
+  while (filas.length < DDJJ_FILAS_MIN) filas.push(ddjjFilaVacia()); // renglones en blanco para completar a mano
 
   // Formatear fecha
-  let fechaStr = fechaRaw;
-  if (fechaRaw) {
-    const [y,m,d] = fechaRaw.split('-');
+  let fechaStr = f.fecha;
+  if (f.fecha) {
+    const [y,m,d] = f.fecha.split('-');
     fechaStr = `${d}/${m}/${y}`;
   }
-
-  // Recopilar filas desde los inputs actuales
-  const tbody = document.getElementById('ddjj_tbody');
-  const filas = [];
-  tbody.querySelectorAll('tr').forEach(tr => {
-    const inputs = tr.querySelectorAll('input');
-    if (inputs.length >= 14) {
-      filas.push({
-        establecimiento: inputs[0].value,
-        cargo: inputs[1].value,
-        hsT: inputs[2].value, hsP: inputs[3].value, hsS: inputs[4].value,
-        modT: inputs[5].value, modP: inputs[6].value, modS: inputs[7].value,
-        lunes: inputs[8].value, martes: inputs[9].value, miercoles: inputs[10].value,
-        jueves: inputs[11].value, viernes: inputs[12].value, sabado: inputs[13].value
-      });
-    }
-  });
 
   // Verificar que jsPDF esté cargado
   if (typeof window.jspdf === 'undefined') {
