@@ -204,11 +204,14 @@ Vercel detecta Express solo (no hay `vercel.json`). Detalles y límites en el RE
 - [ ] Contraste de los temas **claros** (valores heredados, no se tocaron): el acento de Menta sobre blanco da
       ≈3,0:1 (no llega a 4,5:1 para texto) y Coral, Pizarra y Amanecer rondan 4,2–4,8:1. Los oscuros sí cumplen.
       Decidir si se oscurecen esos acentos (cambia lo que el docente ya ve en escritorio).
-- [x] Trámites (Declaración Jurada de Cargos): el formulario recuerda los datos y los cargos del docente
-      (`ddjjGuardar` / `ddjjLeerGuardado`, por docente y por dispositivo), valida antes de generar el PDF
-      (nombre, DNI de 7–8 números, correo, al menos un cargo) y en celular (≤700 px) la tabla de 14 columnas
-      pasa a una tarjeta por cargo con "Agregar cargo" / "Quitar cargo". Escritorio: mismo formulario de 8
-      renglones. El PDF siempre trae al menos 8 renglones (en blanco para completar a mano).
+- [x] Trámites (Declaración Jurada de Cargos): asistente de 3 pasos (Tus datos → Tus cargos → Revisar y generar; maqueta "A"
+      elegida por el docente). Estado en `_dj`; funciones `abrirDDJJ`, `ddjjRender`, `ddjjIr`, `ddjjSiguiente`, `ddjjSync`,
+      `ddjjEditorHTML`. Cada cargo es una tarjeta (una abierta por vez); los días se eligen con botones y se cargan Desde/Hasta
+      (`<input type="time">`) y se guardan como texto ("8 a 12", "8:30 a 10"): el formato guardado no cambió. Un horario viejo en
+      texto libre se conserva en un campo de texto. Recuerda los datos por docente y por dispositivo (`ddjjGuardar` /
+      `ddjjLeerGuardado`), valida por paso (nombre, DNI de 7–8 números, correo, al menos un cargo, horarios completos) y el PDF
+      siempre trae al menos 8 renglones (en blanco para completar a mano). Escritorio y celular usan el mismo asistente
+      (CSS en ≤700 px). Hs. cátedra y Módulos son campos numéricos T/P/S (sin botones +/−, para mantener 44 px en celular).
 - [ ] Trámites: decidir si los datos de la DDJJ deben guardarse en el servidor (para usarlos desde otro
       dispositivo): requeriría una tabla/columna nueva, `npm run migrate` y revisar la Ley 25.326.
 - [ ] Probar la instalación en un celular real (Android: Chrome → "Instalar app";
