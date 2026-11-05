@@ -5,7 +5,7 @@
  * - Recibe avisos push (mensajes y tablón): muestra la notificación y abre la app al tocarla.
  *   El texto de los mensajes nunca viaja en la notificación.
  * Para forzar una actualización de los archivos guardados, subí el número de VERSION. */
-const VERSION = 'v4';
+const VERSION = 'v5';
 const SHELL = 'magistro-shell-' + VERSION;
 const RUNTIME = 'magistro-runtime-' + VERSION;
 
@@ -15,6 +15,7 @@ const PRECACHE = [
   '/portal-estudiante.html',
   '/manifest.webmanifest',
   '/tokens.css',
+  '/temas.js',
   '/pwa.js',
   '/a11y.js',
   '/icons/icon-192.png',

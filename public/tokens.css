@@ -1,13 +1,16 @@
 /* Paleta compartida de Magistro (docente, portal y menú principal).
- * - :root = tema claro por defecto. En el panel del docente, el tema elegido
- *   (Configuración) pisa estas variables en línea sobre <html>.
- * - body.dark-mode = modo oscuro, lo activan docente.html y portal-estudiante.html.
- *   (--accent no se redefine acá: en el docente lo manda el tema elegido.)
+ * - :root = tema "Amanecer" claro (el de siempre). body.dark-mode = Amanecer oscuro.
+ * - Los otros 7 temas se activan con <html data-theme="clave"> y tienen versión clara
+ *   (html[data-theme]) y oscura (html[data-theme] body.dark-mode). Los elige el docente en
+ *   Configuración y el estudiante en "Colores" (ver temas.js, que guarda la elección).
+ * - --tab-bg / --tab-fg: pestaña activa del menú del docente.
+ * - Cada tema oscuro se verificó con contraste >= 4,5:1 para --text3 y --accent.
  * Si cambiás este archivo, subí VERSION en sw.js para que los celulares lo actualicen. */
 :root {
   --bg: #fdf6f0; --surface: #ffffff; --surface2: #fdf0e6; --sidebar-bg: #fff8f2;
   --border: rgba(140,60,10,0.12); --border2: rgba(140,60,10,0.22);
   --text: #2d1206; --text2: #7a4020; --text3: #8d6545; --accent: #c44a12;
+  --tab-bg: #fde8d8; --tab-fg: #c44a12;
   --green-bg: #eaf3de;  --green-text: #3b6d11;
   --blue-bg: #e6f1fb;   --blue-text: #185fa5;
   --red-bg: #fcebeb;    --red-text: #a32d2d;
@@ -20,7 +23,8 @@
 body.dark-mode {
   --bg: #1c1410; --surface: #2a201a; --surface2: #241b16; --sidebar-bg: #241b16;
   --border: rgba(255,200,150,0.12); --border2: rgba(255,200,150,0.22);
-  --text: #f3e9e0; --text2: #d9b99a; --text3: #a98567;
+  --text: #f3e9e0; --text2: #d9b99a; --text3: #a98567; --accent: #e2793f;
+  --tab-bg: #4a2a18; --tab-fg: #f2a273;
   --green-bg: #20321a;  --green-text: #8fd66b;
   --blue-bg: #16283a;   --blue-text: #7db8ef;
   --red-bg: #3a1f1f;    --red-text: #f28b8b;
@@ -29,3 +33,114 @@ body.dark-mode {
   --purple-bg: #2a2035; --purple-text: #c9a8f0;
   --teal-bg: #173028;   --teal-text: #7fd9c0;
 }
+
+/* ── Otros temas (generados a mano; claro y oscuro) ── */
+html[data-theme="pizarra"] {
+  --bg:#f0f5f8; --surface:#ffffff; --surface2:#e8f2f7; --sidebar-bg:#f5fafd;
+  --border:rgba(10,60,100,0.1); --border2:rgba(10,60,100,0.2);
+  --text:#0d1f2d; --text2:#2e5a78; --text3:#4d7086; --accent:#2e7d9f;
+  --tab-bg:#d0eaf5; --tab-fg:#2e7d9f;
+}
+html[data-theme="pizarra"] body.dark-mode {
+  --bg:#0f1a24; --surface:#172433; --surface2:#131f2b; --sidebar-bg:#131f2b;
+  --border:rgba(150,200,240,0.12); --border2:rgba(150,200,240,0.22);
+  --text:#e6eff6; --text2:#a9c6d9; --text3:#84a3b8; --accent:#44a9cc;
+  --tab-bg:#1d3446; --tab-fg:#7fd0ea;
+}
+html[data-theme="bosque"] {
+  --bg:#f2f8f5; --surface:#ffffff; --surface2:#e6f4ed; --sidebar-bg:#f5fbf7;
+  --border:rgba(10,80,50,0.1); --border2:rgba(10,80,50,0.2);
+  --text:#0d2018; --text2:#1e5c40; --text3:#45765d; --accent:#2d7a5b;
+  --tab-bg:#c8eedd; --tab-fg:#2d7a5b;
+}
+html[data-theme="bosque"] body.dark-mode {
+  --bg:#0f1a15; --surface:#172720; --surface2:#13211b; --sidebar-bg:#13211b;
+  --border:rgba(150,230,190,0.12); --border2:rgba(150,230,190,0.22);
+  --text:#e4f1ea; --text2:#a6cdb9; --text3:#81a68f; --accent:#3fb386;
+  --tab-bg:#1b3a2d; --tab-fg:#7fdcb4;
+}
+html[data-theme="aurora"] {
+  --bg:#faf5ff; --surface:#ffffff; --surface2:#f2eaff; --sidebar-bg:#fdf8ff;
+  --border:rgba(80,30,130,0.1); --border2:rgba(80,30,130,0.2);
+  --text:#1e0d3a; --text2:#5a3090; --text3:#7b5d99; --accent:#7c4dbd;
+  --tab-bg:#ead8ff; --tab-fg:#7c4dbd;
+}
+html[data-theme="aurora"] body.dark-mode {
+  --bg:#17111f; --surface:#231a30; --surface2:#1e1628; --sidebar-bg:#1e1628;
+  --border:rgba(210,170,255,0.12); --border2:rgba(210,170,255,0.22);
+  --text:#efe6f8; --text2:#c6aee3; --text3:#a38ac2; --accent:#a67ae6;
+  --tab-bg:#33244a; --tab-fg:#cdb0f5;
+}
+html[data-theme="oceano"] {
+  --bg:#edf5ff; --surface:#ffffff; --surface2:#dceeff; --sidebar-bg:#f5faff;
+  --border:rgba(5,40,100,0.1); --border2:rgba(5,40,100,0.2);
+  --text:#061830; --text2:#0d3d7a; --text3:#3e6ba1; --accent:#1565a8;
+  --tab-bg:#cce0f8; --tab-fg:#1565a8;
+}
+html[data-theme="oceano"] body.dark-mode {
+  --bg:#0b1622; --surface:#122436; --surface2:#0f1d2d; --sidebar-bg:#0f1d2d;
+  --border:rgba(140,190,250,0.12); --border2:rgba(140,190,250,0.22);
+  --text:#e3eefa; --text2:#a6c4e6; --text3:#82a4cc; --accent:#4a98e0;
+  --tab-bg:#183452; --tab-fg:#8cc3f5;
+}
+html[data-theme="coral"] {
+  --bg:#fff0f5; --surface:#ffffff; --surface2:#ffe0ec; --sidebar-bg:#fff8fb;
+  --border:rgba(120,20,60,0.1); --border2:rgba(120,20,60,0.2);
+  --text:#2d0818; --text2:#8a1a40; --text3:#95516a; --accent:#c44569;
+  --tab-bg:#fdd0e0; --tab-fg:#c44569;
+}
+html[data-theme="coral"] body.dark-mode {
+  --bg:#1f1218; --surface:#2d1a23; --surface2:#26161e; --sidebar-bg:#26161e;
+  --border:rgba(255,170,200,0.12); --border2:rgba(255,170,200,0.22);
+  --text:#f8e8ee; --text2:#e0b0c3; --text3:#bd8da0; --accent:#ee6a94;
+  --tab-bg:#4a2231; --tab-fg:#f7a8c2;
+}
+html[data-theme="carbon"] {
+  --bg:#f5f5f5; --surface:#ffffff; --surface2:#ebebeb; --sidebar-bg:#f8f8f8;
+  --border:rgba(0,0,0,0.1); --border2:rgba(0,0,0,0.2);
+  --text:#1a1a1a; --text2:#4a4a4a; --text3:#686868; --accent:#3a3a3a;
+  --tab-bg:#e0e0e0; --tab-fg:#1a1a1a;
+}
+html[data-theme="carbon"] body.dark-mode {
+  --bg:#141414; --surface:#1f1f1f; --surface2:#1a1a1a; --sidebar-bg:#1a1a1a;
+  --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.22);
+  --text:#ececec; --text2:#bdbdbd; --text3:#9c9c9c; --accent:#a8a8a8;
+  --tab-bg:#333333; --tab-fg:#e0e0e0;
+}
+html[data-theme="menta"] {
+  --bg:#f0fdf8; --surface:#ffffff; --surface2:#dcfaee; --sidebar-bg:#f5fefb;
+  --border:rgba(10,80,60,0.1); --border2:rgba(10,80,60,0.2);
+  --text:#0a2018; --text2:#147a50; --text3:#30795f; --accent:#2aa87a;
+  --tab-bg:#c0f0dc; --tab-fg:#2aa87a;
+}
+html[data-theme="menta"] body.dark-mode {
+  --bg:#0e1a17; --surface:#16282a; --surface2:#122123; --sidebar-bg:#122123;
+  --border:rgba(130,240,210,0.12); --border2:rgba(130,240,210,0.22);
+  --text:#e2f3ee; --text2:#a4d2c3; --text3:#80ab9c; --accent:#2ab98a;
+  --tab-bg:#17382f; --tab-fg:#80e5c0;
+}
+
+/* ── Selector de temas (docente: Configuración; estudiante: "Colores") ── */
+.tema-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
+.tema-card {
+  position:relative; display:block; width:100%; min-height:44px; padding:0; margin:0;
+  text-align:left; font:inherit; cursor:pointer; overflow:hidden;
+  background:var(--surface); color:var(--text);
+  border:1.5px solid var(--border2); border-radius:var(--radius-lg);
+  transition:border-color .15s, box-shadow .15s, transform .1s;
+}
+.tema-card:hover { transform:translateY(-2px); background:var(--surface); }
+.tema-card[aria-pressed="true"] { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+.tema-card:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.tema-sw { display:flex; height:36px; }
+.tema-sw > span { flex:1; }
+.tema-txt { display:block; padding:8px 10px; }
+.tema-nombre { display:block; font-size:12px; font-weight:600; color:var(--text); }
+.tema-desc { display:block; font-size:11px; color:var(--text3); }
+.tema-check {
+  display:none; position:absolute; top:6px; right:6px; width:20px; height:20px; line-height:20px;
+  text-align:center; font-size:12px; font-weight:700; border-radius:50%;
+  background:var(--accent); color:var(--bg);
+}
+.tema-card[aria-pressed="true"] .tema-check { display:block; }
+@media (prefers-reduced-motion: reduce) { .tema-card { transition:none; } .tema-card:hover { transform:none; } }
