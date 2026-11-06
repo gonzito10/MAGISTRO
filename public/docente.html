@@ -6888,48 +6888,29 @@ async function generarPDFDDJJ() {
   y += 9;
 
   // ── Tabla 0: Datos personales ──
-  const col1 = W * 0.42, col2 = W * 0.3, col3 = W * 0.28 - M;
+  const TW0 = W - 2*M; // ancho útil: las tres columnas tienen que terminar en el margen derecho
+  const col1 = TW0 * 0.38, col2 = TW0 * 0.22, col3 = TW0 - col1 - col2;
   const rowH = 9;
   const bx = M;
-
-  // Fila 1
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-  doc.rect(bx, y, col1, rowH);
-  doc.text('DECLARACIÓN JURADA DE:', bx + 2, y + 3.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(nombre, bx + 42, y + 3.5);
-
-  doc.rect(bx + col1, y, col2, rowH);
-  doc.setFont('helvetica', 'bold');
-  doc.text('DNI N°:', bx + col1 + 2, y + 3.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(dni, bx + col1 + 16, y + 3.5);
-
-  doc.rect(bx + col1 + col2, y, col3, rowH);
-  doc.setFont('helvetica', 'bold');
-  doc.text('AÑO:', bx + col1 + col2 + 2, y + 3.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(String(anio), bx + col1 + col2 + 14, y + 3.5);
+  // Etiqueta en negrita + valor a continuación; si el valor no entra en la celda se achica la letra (mínimo 5 pt)
+  function celdaDato(x, w, rotulo, valor) {
+    doc.rect(x, y, w, rowH);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+    doc.text(rotulo, x + 2, y + 5.6);
+    const x0 = x + 2 + doc.getTextWidth(rotulo + ' ');
+    doc.setFont('helvetica', 'normal');
+    let fs = 7.5; doc.setFontSize(fs);
+    while (fs > 5 && doc.getTextWidth(String(valor)) > x + w - 2 - x0) { fs -= 0.5; doc.setFontSize(fs); }
+    doc.text(String(valor), x0, y + 5.6);
+    doc.setFontSize(7.5);
+  }
+  celdaDato(bx, col1, 'DECLARACIÓN JURADA DE:', nombre);
+  celdaDato(bx + col1, col2, 'DNI N°:', dni);
+  celdaDato(bx + col1 + col2, col3, 'AÑO:', anio);
   y += rowH;
-
-  // Fila 2
-  doc.rect(bx, y, col1, rowH);
-  doc.setFont('helvetica', 'bold');
-  doc.text('DOMICILIO:', bx + 2, y + 3.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(domicilio, bx + 22, y + 3.5);
-
-  doc.rect(bx + col1, y, col2, rowH);
-  doc.setFont('helvetica', 'bold');
-  doc.text('TEL:', bx + col1 + 2, y + 3.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(tel, bx + col1 + 10, y + 3.5);
-
-  doc.rect(bx + col1 + col2, y, col3, rowH);
-  doc.setFont('helvetica', 'bold');
-  doc.text('CORREO ELECTRÓNICO:', bx + col1 + col2 + 2, y + 3.5);
-  doc.setFont('helvetica', 'normal');
-  doc.text(email, bx + col1 + col2 + 44, y + 3.5);
+  celdaDato(bx, col1, 'DOMICILIO:', domicilio);
+  celdaDato(bx + col1, col2, 'TEL:', tel);
+  celdaDato(bx + col1 + col2, col3, 'CORREO ELECTRÓNICO:', email);
   y += rowH + 3;
 
   // ── Tabla principal de cargos ──
