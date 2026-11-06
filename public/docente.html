@@ -1720,6 +1720,8 @@ const SIT_LABELS = [
   {key:'APROBADO / VA A FINAL',  label:'Aprobado / Va a final'},
   {key:'APROBADO',               label:'Aprobado (final rendido)'},
   {key:'DESAPROBADO',            label:'Desaprobado (final rendido)'},
+  {key:'RECUPERA 1 PARCIAL',     label:'Recupera 1er parcial'},
+  {key:'RECUPERA 2 PARCIAL',     label:'Recupera 2do parcial'},
   {key:'REPROBADO / RECURSA',    label:'Reprobado / Recursa'},
   {key:'RECURSA',                label:'Recursa (ausente)'},
   {key:'',                       label:'Sin situación / notas incompletas'},
@@ -4930,7 +4932,7 @@ function parseAndLoad(text, filename) {
 function toLetras(v){if(v===''||v===null||v===undefined)return '';if(String(v).toUpperCase()==='A')return 'AUSENTE';const n=Number(v);return(!isNaN(n)&&n>=0&&n<=10)?NUMS[n].toUpperCase():'';}
 function needsRec(p1,p2){if(!p1||!p2)return false;if(String(p1).toUpperCase()==='A'||String(p2).toUpperCase()==='A')return false;const n1=Number(p1),n2=Number(p2);if(isNaN(n1)||isNaN(n2))return false;return(n1+n2)<=7&&(n1>=4||n2>=4);}
 function calcFinal(p1,p2,rec){if(p1===''||p2==='')return '';if(String(p1).toUpperCase()==='A'||String(p2).toUpperCase()==='A')return 'A';const n1=Number(p1),n2=Number(p2);if(isNaN(n1)||isNaN(n2))return '';if(needsRec(p1,p2)){if(!rec)return '';if(rec==='Aprobado')return 4;if(rec==='Desaprobado')return Math.ceil((n1+n2)/2);}return Math.ceil((n1+n2)/2);}
-function calcSituacion(p1,p2,final,rec){if(final==='')return '';if(final==='A')return 'RECURSA';if(needsRec(p1,p2)&&!rec)return '';if(needsRec(p1,p2)&&rec==='Aprobado')return 'APROBADO / VA A FINAL';if(needsRec(p1,p2)&&rec==='Desaprobado')return 'REPROBADO / RECURSA';const f=Number(final);if(f>=7)return 'PROMOCIONADO';if(f>=4)return 'APROBADO / VA A FINAL';return 'REPROBADO / RECURSA';}
+function calcSituacion(p1,p2,final,rec){if(needsRec(p1,p2)&&!rec)return Number(p1)<4?'RECUPERA 1 PARCIAL':'RECUPERA 2 PARCIAL';if(final==='')return '';if(final==='A')return 'RECURSA';if(needsRec(p1,p2)&&rec==='Aprobado')return 'APROBADO / VA A FINAL';if(needsRec(p1,p2)&&rec==='Desaprobado')return 'REPROBADO / RECURSA';const f=Number(final);if(f>=7)return 'PROMOCIONADO';if(f>=4)return 'APROBADO / VA A FINAL';return 'REPROBADO / RECURSA';}
 // Nota final mostrada: si la situación es APROBADO/VA A FINAL, la nota final no se autocompleta
 // (el estudiante todavía tiene que rendir el final) y queda a cargo de una carga manual.
 function getFinalInfo(row){
@@ -4987,7 +4989,7 @@ function guardarNotas(){
 window.addEventListener('beforeunload', function(e){
   if(notasUnsaved){ e.preventDefault(); e.returnValue=''; }
 });
-function badgeClass(sit){if(sit==='PROMOCIONADO')return 'badge b-promo';if(sit==='APROBADO')return 'badge b-promo';if(sit==='APROBADO / VA A FINAL')return 'badge b-aprobado';if(sit==='DESAPROBADO')return 'badge b-reprobado';if(sit==='REPROBADO / RECURSA')return 'badge b-reprobado';if(sit==='RECURSA')return 'badge b-recursa';return 'badge b-ausente';}
+function badgeClass(sit){if(sit==='PROMOCIONADO')return 'badge b-promo';if(sit==='APROBADO')return 'badge b-promo';if(sit==='APROBADO / VA A FINAL')return 'badge b-aprobado';if(sit==='DESAPROBADO')return 'badge b-reprobado';if(sit==='REPROBADO / RECURSA')return 'badge b-reprobado';if(sit==='RECURSA')return 'badge b-recursa';if(/^RECUPERA /.test(sit))return 'badge b-recursa';return 'badge b-ausente';}
 function showNotaError(input){hideNotaError(input);const wrap=input.closest('.nota-wrap')||input.parentElement;const err=document.createElement('div');err.className='nota-err';err.textContent='Valor no válido. Ingresá un número del 0 al 10 o la letra A.';wrap.appendChild(err);input.classList.add('invalid');setTimeout(()=>hideNotaError(input),3000);}
 function hideNotaError(input){const wrap=input.closest('.nota-wrap')||input.parentElement;const existing=wrap.querySelector('.nota-err');if(existing)existing.remove();input.classList.remove('invalid');}
 function isValid(v){if(v==='')return true;if(String(v).toUpperCase()==='A')return true;const n=Number(v);return!isNaN(n)&&n>=0&&n<=10&&Number.isInteger(n);}
