@@ -6998,22 +6998,30 @@ async function generarPDFDDJJ() {
   doc.text(legalLines, bx, y);
   y += legalLines.length * 4 + 8;
 
-  // ── Tabla inferior: Fecha / Firma / Aclaración ──
-  const fW = TW / 3;
+  // ── Recuadros inferiores: Fecha / Firma / Aclaración ──
+  // Cada uno es una caja con su título arriba y espacio para escribir; firma y aclaración llevan una línea
+  // para escribir sobre ella y una leyenda debajo, así se entiende dónde firmar y dónde aclarar.
+  const boxH = 30, titH = 7;
+  const wF = TW * 0.22, wFi = TW * 0.40, wA = TW - wF - wFi;
+  const cajaFirma = (x, w, titulo, leyenda) => {
+    doc.rect(x, y, w, boxH);
+    doc.line(x, y + titH, x + w, y + titH);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+    doc.text(titulo, x + w/2, y + 4.7, {align:'center'});
+    const yl = y + boxH - 8; // línea sobre la que se escribe
+    doc.setLineWidth(0.3); doc.line(x + 8, yl, x + w - 8, yl); doc.setLineWidth(0.2);
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(6.5);
+    doc.text(leyenda, x + w/2, yl + 4, {align:'center'});
+  };
+  doc.setLineWidth(0.2);
+  doc.rect(bx, y, wF, boxH);
+  doc.line(bx, y + titH, bx + wF, y + titH);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
-  // Fila header
-  doc.rect(bx, y, fW*2, 7);
-  doc.text('FECHA de presentación:', bx + 2, y + 4.5);
-  doc.rect(bx + fW*2, y, fW, 7);
-  doc.text('Firma del agente', bx + fW*2 + fW/2, y + 4.5, {align:'center'});
-  y += 7;
-  // Fila valores
-  doc.rect(bx, y, fW*2, 12);
-  doc.setFont('helvetica', 'normal');
-  doc.text(fechaStr, bx + 2, y + 6);
-  doc.rect(bx + fW*2, y, fW, 12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Aclaración', bx + fW*2 + fW/2, y + 6, {align:'center'});
+  doc.text('FECHA de presentación', bx + wF/2, y + 4.7, {align:'center'});
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(fechaStr, bx + wF/2, y + titH + (boxH - titH)/2 + 1.5, {align:'center'});
+  cajaFirma(bx + wF, wFi, 'FIRMA DEL AGENTE', '(firma)');
+  cajaFirma(bx + wF + wFi, wA, 'ACLARACIÓN', '(apellido y nombre)');
 
   // Guardar
   const nombreFile = nombre ? nombre.replace(/\s+/g,'_') : 'docente';
